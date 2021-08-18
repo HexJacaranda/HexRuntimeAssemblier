@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -37,6 +37,18 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitStart([NotNull] Assemblier.StartContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitModifier_access([NotNull] Assemblier.Modifier_accessContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitModifier_life([NotNull] Assemblier.Modifier_lifeContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.methodArgument"/>.
 	/// </summary>
@@ -97,6 +109,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMethodIl([NotNull] Assemblier.MethodIlContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.methodLabel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMethodLabel([NotNull] Assemblier.MethodLabelContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
 	/// </summary>
@@ -164,6 +182,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitImplementList([NotNull] Assemblier.ImplementListContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.typeInherit"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypeInherit([NotNull] Assemblier.TypeInheritContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -193,6 +217,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTypeInteriorRef([NotNull] Assemblier.TypeInteriorRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.assemblyRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAssemblyRef([NotNull] Assemblier.AssemblyRefContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.typeRef"/>.
 	/// </summary>

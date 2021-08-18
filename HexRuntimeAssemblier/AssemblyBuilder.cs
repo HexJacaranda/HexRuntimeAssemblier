@@ -1,17 +1,15 @@
-﻿using Antlr4.Runtime.Misc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HexRuntimeAssemblier
 {
-    class AssemblyBuilder: AssemblierBaseListener
+    public class AssemblyBuilder
     {
         private AssemblyHeaderMD mCurrentAssembly;
-        private uint mClassDefToken = 0u;
-        private Dictionary<uint, Type> mTypeMapping;
+
+        private uint mTypeDefToken = 0u;
+        private Dictionary<uint, TypeMD> mTypeMapping;
         private Dictionary<string, uint> mTypeName2Token;
 
         private Dictionary<string, uint> mString2Token = new();
@@ -30,7 +28,13 @@ namespace HexRuntimeAssemblier
             }
             return token;
         }
-        public override void EnterAssemblyDef(Assemblier.AssemblyDefContext context)
+        public void ResolveStart(Assemblier.StartContext context)
+        {
+            ResolveAssemblyDef(context.GetChild<Assemblier.AssemblyDefContext>(0));
+            foreach (var classContext in context.children.OfType<Assemblier.ClassDefContext>())
+                ResolveClassDef(classContext);
+        }
+        public void ResolveAssemblyDef(Assemblier.AssemblyDefContext context)
         {
             var properties = context.children.OfType<Assemblier.PropertyContext>();
             var map = properties.ToDictionary(x => GetPropertyKey(x), x => GetPropertyValue(x));
@@ -45,9 +49,34 @@ namespace HexRuntimeAssemblier
             };
         }
 
-        public override void EnterClassDef(Assemblier.ClassDefContext context)
+        public void ResolveClassDef(Assemblier.ClassDefContext context)
         {
-            
+            TypeFlag flag = 0;
+            if (context.GetToken(Assemblier.MODIFIER_NEST) != null)
+                flag |= TypeFlag.Nested;
+            if (context.GetToken(Assemblier.MODIFIER_SEALED) != null)
+                flag |= TypeFlag.Sealed;
+            if (context.GetToken(Assemblier.MODIFIER_ABSTRACT) != null)
+                flag |= TypeFlag.Abstract;
+            if (context.GetToken(Assemblier.MODIFIER_INTERFACE) != null)
+                flag |= TypeFlag.Interface;
+
+            var type = new TypeMD();
+
+
+            var parent = context.Get<Assemblier.TypeInheritContext>();
+            if (parent != null)
+            {
+                var parentTypeRef = parent.Get<Assemblier.TypeRefContext>();
+                var assemblyRef = parentTypeRef.Get<Assemblier.AssemblyRefContext>();
+                if (assemblyRef == null)
+                {
+                    //It's a self reference
+                    type.ParentTypeRefToken = 
+                }
+            }
+
+
         }
     }
 }

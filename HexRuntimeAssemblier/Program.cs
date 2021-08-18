@@ -13,10 +13,9 @@ namespace HexRuntimeAssemblier
             var lexer = new AssemblierLexer(CharStreams.fromPath(args[1]));
 #endif
             var parser = new Assemblier(new CommonTokenStream(lexer));
-            var builder = new AssemblyBuilder();
-            parser.AddParseListener(builder);
 
-            parser.start();
+            var builder = new AssemblyBuilder();
+            builder.ResolveStart(parser.start());
         }
     }
 }

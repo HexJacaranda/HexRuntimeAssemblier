@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -40,6 +40,26 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitStart([NotNull] Assemblier.StartContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterModifier_access([NotNull] Assemblier.Modifier_accessContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitModifier_access([NotNull] Assemblier.Modifier_accessContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterModifier_life([NotNull] Assemblier.Modifier_lifeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitModifier_life([NotNull] Assemblier.Modifier_lifeContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodArgument"/>.
 	/// </summary>
@@ -140,6 +160,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitMethodIl([NotNull] Assemblier.MethodIlContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.methodLabel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMethodLabel([NotNull] Assemblier.MethodLabelContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.methodLabel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMethodLabel([NotNull] Assemblier.MethodLabelContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
 	/// </summary>
@@ -251,6 +281,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitImplementList([NotNull] Assemblier.ImplementListContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeInherit"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterTypeInherit([NotNull] Assemblier.TypeInheritContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeInherit"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitTypeInherit([NotNull] Assemblier.TypeInheritContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -300,6 +340,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitTypeInteriorRef([NotNull] Assemblier.TypeInteriorRefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.assemblyRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAssemblyRef([NotNull] Assemblier.AssemblyRefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.assemblyRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAssemblyRef([NotNull] Assemblier.AssemblyRefContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeRef"/>.
 	/// </summary>

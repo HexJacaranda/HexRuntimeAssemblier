@@ -1,11 +1,12 @@
 lexer grammar AssemblierLexer;
+
 options {
     language = CSharp;
 }
 
 WS : [ \t\n\r]+ -> skip;
 
-COLON: ';';
+SEMICOLON: ';';
 LBRACE: '<';
 RBRACE: '>';
 LMID: '[';
@@ -19,19 +20,22 @@ DOT: '.';
 COMMA: ',';
 REF: '&';
 JUNCTION: '::';
+COLON: ':';
 
 KEY_ASSEMBLY: '.assembly';
 
 KEY_CLASS: '.class';
 KEY_METHOD: '.method';
 KEY_PROPERTY: '.property';
+KEY_FIELD: '.field';
 
 KEY_INHERIT: 'inherits';
 KEY_IMPLEMENT: 'implements';
 
-MODIFIER_ACCESS: MODIFIER_PUBLIC | MODIFIER_PRIVATE | MODIFIER_PROTECTED | MODIFIER_INTERNAL;
-MODIFIER_LIFE: MODIFIER_INSTANCE | MODIFIER_STATIC;
-
+MODIFIER_INTERFACE: 'interface';
+MODIFIER_ABSTRACT: 'abstract';
+MODIFIER_VIRTUAL: 'virtual';
+MODIFIER_SEALED: 'sealed';
 MODIFIER_STATIC: 'static';
 MODIFIER_INSTANCE: 'instance';
 
@@ -73,8 +77,8 @@ METHOD_PROPERTY: 'get' | 'set';
 
 STRING: '"'.*?'"';
 HEX: '0x'[0-9a-fA-F]+;
-NUMBER: [0-9]+('.'[0-9]+)?;
 INT: [0-9]+;
+NUMBER: [0-9]+('.'[0-9]+)?;
 GUID: [0-9a-fA-F]+ '-' ([0-9a-fA-F]+ '-')+ [0-9a-fA-F]+;
 
 IDENTIFIER: [a-zA-Z_@][a-zA-Z0-9_]*;

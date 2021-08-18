@@ -1,4 +1,4 @@
-﻿public using System;
+﻿using System;
 using System.Collections.Generic;
 
 using MDToken = System.UInt32;
@@ -74,12 +74,6 @@ namespace HexRuntimeAssemblier
 		public char[] Sequence;
 	}
 
-	/* Attribute is a kind of special metadata. Its layout is described by referenced type.
-	   All supported field types: 
-	   1. primitive types (int, long, double...)
-	   2. string literal (stored as string token)
-	   3. type literal (stored as type reference token)
-	*/
 	class AtrributeMD
 	{
 		public MDRecordKinds ParentKind;
@@ -177,6 +171,18 @@ namespace HexRuntimeAssemblier
 		public IList<MDToken> AttributeTokens;
 	}
 
+	[Flags]
+	enum TypeFlag : UInt16
+    {
+		Sealed = 0x0001,
+		Abstract = 0x0002,
+		Struct = 0x0004,
+		Interface = 0x0008,
+		Attribute = 0x0010,
+		Generic = 0x0020,
+		Nested = 0x0040
+    }
+
 	class TypeMD
 	{
 		public MDToken ParentAssemblyToken;
@@ -188,7 +194,7 @@ namespace HexRuntimeAssemblier
 		public byte CoreType;
 		public byte Accessibility;
 
-		public UInt16 Flags;
+		public TypeFlag Flags;
 
 		public IList<MDToken> FieldTokens;
 		public IList<MDToken> MethodTokens;

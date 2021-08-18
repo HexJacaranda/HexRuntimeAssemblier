@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -46,6 +46,30 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitStart([NotNull] Assemblier.StartContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterModifier_access([NotNull] Assemblier.Modifier_accessContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitModifier_access([NotNull] Assemblier.Modifier_accessContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterModifier_life([NotNull] Assemblier.Modifier_lifeContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitModifier_life([NotNull] Assemblier.Modifier_lifeContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodArgument"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -166,6 +190,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMethodIl([NotNull] Assemblier.MethodIlContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.methodLabel"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterMethodLabel([NotNull] Assemblier.MethodLabelContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.methodLabel"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitMethodLabel([NotNull] Assemblier.MethodLabelContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -299,6 +335,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitImplementList([NotNull] Assemblier.ImplementListContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeInherit"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTypeInherit([NotNull] Assemblier.TypeInheritContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeInherit"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTypeInherit([NotNull] Assemblier.TypeInheritContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.type"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -358,6 +406,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitTypeInteriorRef([NotNull] Assemblier.TypeInteriorRefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.assemblyRef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterAssemblyRef([NotNull] Assemblier.AssemblyRefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.assemblyRef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitAssemblyRef([NotNull] Assemblier.AssemblyRefContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeRef"/>.
 	/// <para>The default implementation does nothing.</para>
