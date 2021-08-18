@@ -7,7 +7,7 @@ namespace HexRuntimeAssemblier
     public class AssemblyBuilder
     {
         private AssemblyHeaderMD mCurrentAssembly;
-
+        private ReferenceResolver mReferenceResolver;
         private uint mTypeDefToken = 0u;
         private Dictionary<uint, TypeMD> mTypeMapping;
         private Dictionary<string, uint> mTypeName2Token;
@@ -49,8 +49,29 @@ namespace HexRuntimeAssemblier
             };
         }
 
+        public uint ResolveClassRef(Assemblier.TypeRefContext context)
+        {
+            var assemblyRef = context.Get<Assemblier.AssemblyRefContext>();
+            if (assemblyRef == null)
+            {
+                string typeName = context.GetText();
+                if (!mTypeName2Token.TryGetValue(typeName, out var token))
+                {
+                    token = mTypeDefToken++;
+                    mTypeName2Token.Add(typeName, token);
+                }
+                return mReferenceResolver.AcquireInternalTypeReference(typeName, token);
+            }
+            else
+            {
+                return mReferenceResolver.ResolveTypeReference(assemblyRef.GetText(), context.GetText());
+            }
+        }
+
         public void ResolveClassDef(Assemblier.ClassDefContext context)
         {
+            var name = context.Get<Assemblier.TypeNameContext>();
+
             TypeFlag flag = 0;
             if (context.GetToken(Assemblier.MODIFIER_NEST) != null)
                 flag |= TypeFlag.Nested;
@@ -62,18 +83,11 @@ namespace HexRuntimeAssemblier
                 flag |= TypeFlag.Interface;
 
             var type = new TypeMD();
-
-
             var parent = context.Get<Assemblier.TypeInheritContext>();
             if (parent != null)
             {
                 var parentTypeRef = parent.Get<Assemblier.TypeRefContext>();
-                var assemblyRef = parentTypeRef.Get<Assemblier.AssemblyRefContext>();
-                if (assemblyRef == null)
-                {
-                    //It's a self reference
-                    type.ParentTypeRefToken = 
-                }
+                type.ParentTypeRefToken = ResolveClassRef(parentTypeRef);
             }
 
 

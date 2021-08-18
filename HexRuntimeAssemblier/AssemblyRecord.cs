@@ -65,6 +65,7 @@ namespace HexRuntimeAssemblier
 
 	class AssemblyRefMD
 	{
+		public const MDToken Self = 0u;
 		public Guid GUID;
 		public MDToken AssemblyName;
 	}
