@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using Antlr4.Runtime;
 
 namespace HexRuntimeAssemblier
 {
@@ -8,17 +10,29 @@ namespace HexRuntimeAssemblier
     {
         private AssemblyHeaderMD mCurrentAssembly;
         private ReferenceResolver mReferenceResolver;
-        private uint mTypeDefToken = 0u;
-        private Dictionary<uint, TypeMD> mTypeMapping;
-        private Dictionary<string, uint> mTypeName2Token;
-
+        private Dictionary<MDRecordKinds, DefinitionTable> mDefinitionTables;
         private Dictionary<string, uint> mString2Token = new();
         private uint mStringToken = 0u;
+
+        private DefinitionTable TypeDefTable => mDefinitionTables[MDRecordKinds.TypeDef];
+        private DefinitionTable FieldDefTable => mDefinitionTables[MDRecordKinds.FieldDef];
+        private DefinitionTable MethodDefTable => mDefinitionTables[MDRecordKinds.MethodDef];
+        private DefinitionTable PropertyDefTable => mDefinitionTables[MDRecordKinds.PropertyDef];
+        private DefinitionTable EventDefTable => mDefinitionTables[MDRecordKinds.EventDef];
 
         public static string GetPropertyKey(Assemblier.PropertyContext context)
             => context.GetChild<Assemblier.PropertyKeyContext>(0).GetText();
         public static string GetPropertyValue(Assemblier.PropertyContext context)
             => context.GetChild<Assemblier.PropertyValueContext>(0).GetText();
+        public static byte MapAccessbility(int tokenType) => tokenType switch
+        {
+            Assemblier.MODIFIER_PUBLIC => 0,
+            Assemblier.MODIFIER_PRIVATE => 1,
+            Assemblier.MODIFIER_PROTECTED => 2,
+            Assemblier.MODIFIER_INTERNAL => 3,
+            _ => throw new Exception()
+        };
+
         public uint GetTokenFromString(string value)
         {
             if (!mString2Token.TryGetValue(value, out var token))
@@ -28,16 +42,39 @@ namespace HexRuntimeAssemblier
             }
             return token;
         }
+        /// <summary>
+        /// Get the full qualified name of nested class or class member
+        /// </summary>
+        /// <returns></returns>
+        public string GetFullQualifiedName(ParserRuleContext memberContext, string referenceJunction, string shortName)
+        {
+            var stringBuilder = new StringBuilder();
+            var current = memberContext.Parent;
+            var currentClass = current as Assemblier.ClassDefContext;
+           
+            stringBuilder.Append(currentClass.typeName().GetText());
+            stringBuilder.Append(referenceJunction);
+            stringBuilder.Append(shortName);
+
+            while (current is Assemblier.ClassDefContext)
+            {
+                currentClass = current as Assemblier.ClassDefContext;
+                stringBuilder.Insert(0, '.');
+                stringBuilder.Insert(0, currentClass.typeName().GetText());
+                current = current.Parent;
+            }
+            
+            return stringBuilder.ToString();
+        }
         public void ResolveStart(Assemblier.StartContext context)
         {
-            ResolveAssemblyDef(context.GetChild<Assemblier.AssemblyDefContext>(0));
-            foreach (var classContext in context.children.OfType<Assemblier.ClassDefContext>())
+            ResolveAssemblyDef(context.assemblyDef());
+            foreach (var classContext in context.classDef())
                 ResolveClassDef(classContext);
         }
         public void ResolveAssemblyDef(Assemblier.AssemblyDefContext context)
         {
-            var properties = context.children.OfType<Assemblier.PropertyContext>();
-            var map = properties.ToDictionary(x => GetPropertyKey(x), x => GetPropertyValue(x));
+            var map = context.property().ToDictionary(x => GetPropertyKey(x), x => GetPropertyValue(x));
 
             mCurrentAssembly = new AssemblyHeaderMD
             {
@@ -48,49 +85,153 @@ namespace HexRuntimeAssemblier
                 GUID = Guid.Parse(map["guid"])
             };
         }
-
-        public uint ResolveClassRef(Assemblier.TypeRefContext context)
+        public uint ResolveType(Assemblier.TypeContext context)
         {
-            var assemblyRef = context.Get<Assemblier.AssemblyRefContext>();
+            var child = context.GetChild(0);
+            switch (child)
+            {
+                case Assemblier.TypeRefContext typeRef:
+                    return ResolveTypeRef(typeRef);
+                case Assemblier.TypeInteriorRefContext typeInteriorRef:
+                    {
+                        
+                        return 0u;
+                    }
+                case Assemblier.TypeArrayContext typeArray:
+                    {
+
+                        return 0u;
+                    }
+            }
+        }
+        public uint ResolveTypeRef(Assemblier.TypeRefContext context)
+        {
+            var assemblyRef = context.assemblyRef();
             if (assemblyRef == null)
             {
                 string typeName = context.GetText();
-                if (!mTypeName2Token.TryGetValue(typeName, out var token))
-                {
-                    token = mTypeDefToken++;
-                    mTypeName2Token.Add(typeName, token);
-                }
-                return mReferenceResolver.AcquireInternalTypeReference(typeName, token);
+                var defToken = TypeDefTable.GetDefinitionToken(
+                    typeName,
+                    () => new TypeMD());
+
+                return mReferenceResolver.AcquireInternalTypeReference(typeName, defToken);
             }
             else
             {
                 return mReferenceResolver.ResolveTypeReference(assemblyRef.GetText(), context.GetText());
             }
         }
-
-        public void ResolveClassDef(Assemblier.ClassDefContext context)
+        public uint ResolveFieldDef(Assemblier.FieldDefContext context)
         {
-            var name = context.Get<Assemblier.TypeNameContext>();
+            //Handle the type mapping    
+            var fieldShortName = context.IDENTIFIER().GetText();
+            var fieldFullQualifiedName = GetFullQualifiedName(context, "::", fieldShortName);
 
+            var fieldDefToken = TypeDefTable.GetDefinitionToken(fieldFullQualifiedName, () => new FieldMD());
+            var field = FieldDefTable[fieldDefToken] as FieldMD;
+
+            //Flags
+            FieldFlag flag = 0;
+            if (context.ExistToken(Assemblier.MODIFIER_THREAD_LOCAL))
+                flag |= FieldFlag.ThreadLocal;
+            if (context.ExistToken(Assemblier.MODIFIER_READONLY))
+                flag |= FieldFlag.ReadOnly;
+            if (context.ExistToken(Assemblier.MODIFIER_VOLATILE))
+                flag |= FieldFlag.Volatile;
+            if (context.ExistToken(Assemblier.MODIFIER_CONSTANT))
+                flag |= FieldFlag.Constant;
+
+            var accessToken = context.modifierAccess()
+                .GetUnderlyingTokenType();
+            field.Accessibility = MapAccessbility(accessToken);
+
+            var lifeToken = context.modifierLife()
+                .GetUnderlyingTokenType();
+            if (lifeToken == Assemblier.MODIFIER_STATIC)
+                flag |= FieldFlag.Static;
+
+
+            field.TypeRefToken = ResolveType(context.type());
+
+            return fieldDefToken;
+        }
+        public uint ResolveMethodDef(Assemblier.MethodDefContext context)
+        {
+            return 0u;
+        }
+        public uint ResolvePropertyDef(Assemblier.PropertyDefContext context)
+        {
+            return 0u;
+        }
+        public uint ResolveEventDef(Assemblier.EventDefContext context)
+        {
+            return 0u;
+        }
+        public uint ResolveClassDef(Assemblier.ClassDefContext context, bool isNest = false)
+        {
+            //Handle the type mapping    
+            var typeName = context.typeName().GetText();
+            var typeDefToken = TypeDefTable.GetDefinitionToken(typeName, () => new TypeMD() { 
+                NameToken = GetTokenFromString(typeName),
+                
+            });
+            var type = TypeDefTable[typeDefToken] as TypeMD;
+
+            //Handle flags
             TypeFlag flag = 0;
-            if (context.GetToken(Assemblier.MODIFIER_NEST) != null)
+            if (context.ExistToken(Assemblier.MODIFIER_NEST) && isNest)
                 flag |= TypeFlag.Nested;
-            if (context.GetToken(Assemblier.MODIFIER_SEALED) != null)
+            else
+                throw new BadModifierException("Nest modifier not consistent with declaration level");
+
+            if (context.ExistToken(Assemblier.MODIFIER_SEALED))
                 flag |= TypeFlag.Sealed;
-            if (context.GetToken(Assemblier.MODIFIER_ABSTRACT) != null)
+            if (context.ExistToken(Assemblier.MODIFIER_ABSTRACT))
                 flag |= TypeFlag.Abstract;
-            if (context.GetToken(Assemblier.MODIFIER_INTERFACE) != null)
+            if (context.ExistToken(Assemblier.MODIFIER_ATTRIBUTE))
+                flag |= TypeFlag.Attribute;
+
+            if (context.ExistToken(Assemblier.KEY_STRUCT))
+                flag |= TypeFlag.Struct;
+            else if (context.ExistToken(Assemblier.KEY_INTERFACE))
                 flag |= TypeFlag.Interface;
 
-            var type = new TypeMD();
-            var parent = context.Get<Assemblier.TypeInheritContext>();
-            if (parent != null)
+            //Accessbility
+            var accessToken = context.modifierAccess()
+                .GetUnderlyingTokenType();
+
+            type.Accessibility = MapAccessbility(accessToken);
+
+            //Inherit
+            var inheritContext = context.typeInherit();
+            if (inheritContext != null)
             {
-                var parentTypeRef = parent.Get<Assemblier.TypeRefContext>();
-                type.ParentTypeRefToken = ResolveClassRef(parentTypeRef);
+                var parentTypeRef = inheritContext.typeRef();
+                type.ParentTypeRefToken = ResolveTypeRef(parentTypeRef);
             }
 
+            //Interfaces
+            var implementsContext = context.implementList();
+            if (implementsContext != null)
+            {
+                type.InterfaceTokens = implementsContext
+                    .typeRefList()
+                    .typeRef()
+                    .Select(x => ResolveTypeRef(x))
+                    .ToList();
+            }
 
+            //Handle the body
+            var body = context.classBody();    
+            foreach (var member in body.classDef())
+                ResolveClassDef(member, true);
+
+            type.FieldTokens = body.fieldDef().Select(x => ResolveFieldDef(x)).ToList();
+            type.MethodTokens = body.methodDef().Select(x => ResolveMethodDef(x)).ToList();
+            type.PropertyTokens = body.propertyDef().Select(x => ResolvePropertyDef(x)).ToList();
+            type.EventTokens = body.eventDef().Select(x => ResolveEventDef(x)).ToList();
+
+            return typeDefToken;
         }
     }
 }

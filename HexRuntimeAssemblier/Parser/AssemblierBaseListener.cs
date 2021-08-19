@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -47,29 +47,29 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitStart([NotNull] Assemblier.StartContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// Enter a parse tree produced by <see cref="Assemblier.modifierAccess"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterModifier_access([NotNull] Assemblier.Modifier_accessContext context) { }
+	public virtual void EnterModifierAccess([NotNull] Assemblier.ModifierAccessContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.modifier_access"/>.
+	/// Exit a parse tree produced by <see cref="Assemblier.modifierAccess"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitModifier_access([NotNull] Assemblier.Modifier_accessContext context) { }
+	public virtual void ExitModifierAccess([NotNull] Assemblier.ModifierAccessContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// Enter a parse tree produced by <see cref="Assemblier.modifierLife"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterModifier_life([NotNull] Assemblier.Modifier_lifeContext context) { }
+	public virtual void EnterModifierLife([NotNull] Assemblier.ModifierLifeContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.modifier_life"/>.
+	/// Exit a parse tree produced by <see cref="Assemblier.modifierLife"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitModifier_life([NotNull] Assemblier.Modifier_lifeContext context) { }
+	public virtual void ExitModifierLife([NotNull] Assemblier.ModifierLifeContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodArgument"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -215,6 +215,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMethodOpcodeOperand([NotNull] Assemblier.MethodOpcodeOperandContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.methodProperty"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterMethodProperty([NotNull] Assemblier.MethodPropertyContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.methodProperty"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitMethodProperty([NotNull] Assemblier.MethodPropertyContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodBody"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -310,6 +322,42 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitPropertyDef([NotNull] Assemblier.PropertyDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.eventAdd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventAdd([NotNull] Assemblier.EventAddContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.eventAdd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventAdd([NotNull] Assemblier.EventAddContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.eventRemove"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventRemove([NotNull] Assemblier.EventRemoveContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.eventRemove"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventRemove([NotNull] Assemblier.EventRemoveContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.eventDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventDef([NotNull] Assemblier.EventDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.eventDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventDef([NotNull] Assemblier.EventDefContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeRefList"/>.
 	/// <para>The default implementation does nothing.</para>

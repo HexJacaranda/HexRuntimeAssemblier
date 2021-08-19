@@ -8,8 +8,8 @@ options {
 
 start: assemblyDef classDef*;
 
-modifier_access: MODIFIER_PUBLIC | MODIFIER_PRIVATE | MODIFIER_PROTECTED | MODIFIER_INTERNAL;
-modifier_life: MODIFIER_INSTANCE | MODIFIER_STATIC;
+modifierAccess: MODIFIER_PUBLIC | MODIFIER_PRIVATE | MODIFIER_PROTECTED | MODIFIER_INTERNAL;
+modifierLife: MODIFIER_INSTANCE | MODIFIER_STATIC;
 
 //Method
 //1. Argument
@@ -39,14 +39,15 @@ methodCode: METHOD_CODE
 
 methodIl: DOT IDENTIFIER methodOpcodeOperand*;
 methodLabel: DOT IDENTIFIER COLON;
-methodOpcodeOperand: HEX | NUMBER | INT | STRING | methodRef | fieldRef | type | typeName;
+methodOpcodeOperand: HEX | NUMBER | INT | STRING | methodRef | fieldRef | type ;
+methodProperty: PROPERTY_GET | PROPERTY_SET;
 
 methodBody: methodLocals? methodCode;
 methodDef: KEY_METHOD
-    modifier_access
-    modifier_life
-    MODIFIER_VIRTUAL?
-    METHOD_PROPERTY?  
+    methodProperty?
+    modifierAccess
+    modifierLife
+    MODIFIER_VIRTUAL? 
     methodReturnType methodName PARAM_BEGIN methodArgumentList PARAM_END methodSource
     BODY_BEGIN
         methodBody
@@ -55,8 +56,8 @@ methodDef: KEY_METHOD
 methodRef: methodReturnType typeRef JUNCTION methodName PARAM_BEGIN type* PARAM_END;
 
 //Field
-fieldDef: KEY_FIELD modifier_access modifier_life type IDENTIFIER;
-fieldRef: typeRef JUNCTION IDENTIFIER;
+fieldDef: KEY_FIELD modifierAccess modifierLife MODIFIER_THREAD_LOCAL? (MODIFIER_VOLATILE | MODIFIER_CONSTANT | MODIFIER_READONLY)? type IDENTIFIER;
+fieldRef: type typeRef JUNCTION IDENTIFIER;
 
 //Property
 propertyGet: PROPERTY_GET methodRef;
@@ -67,30 +68,39 @@ propertyDef: KEY_PROPERTY
         propertySet?
     BODY_END;
 
+//Event
+eventAdd: PROPERTY_GET methodRef;
+eventRemove: PROPERTY_SET methodRef;
+eventDef: KEY_EVENT
+    BODY_BEGIN
+        eventAdd?
+        eventRemove?
+    BODY_END;
+
 //Class
 typeRefList: (typeRef COMMA)* typeRef;
 implementList: KEY_IMPLEMENT typeRefList;
 typeInherit: KEY_INHERIT typeRef;
 
 //Type part
-type: (PRIMITIVE_TYPE | typeRef | typeArray | typeInteriorRef);
+assemblyRef: LMID IDENTIFIER RMID;
+typeName: (IDENTIFIER DOT)+ IDENTIFIER;
+typeRef: assemblyRef? typeName;
 
+type: (PRIMITIVE_TYPE | typeRef | typeArray | typeInteriorRef);
 typeArray: typeNestArray | typeMultidimensionArray;
-typeNestArray: ARRAY LBRACE type RBRACE;
-typeMultidimensionArray: ARRAY LBRACE type COMMA INT RBRACE;
+typeNestArray: type LMID RMID;
+typeMultidimensionArray: type LMID COMMA+ RMID;
 typeInteriorRef: (PRIMITIVE_TYPE | typeRef | typeArray) REF;
 
-assemblyRef: LMID IDENTIFIER RMID;
-typeRef: assemblyRef? typeName;
-typeName: (IDENTIFIER DOT)+ IDENTIFIER;
+classBody: (methodDef | propertyDef | eventDef | fieldDef | classDef)*;
 
-classBody: (methodDef | propertyDef | fieldDef SEMICOLON | classDef)*;
-
-classDef: KEY_CLASS 
+classDef: (KEY_STRUCT | KEY_CLASS | KEY_INTERFACE) 
 MODIFIER_NEST? 
-(MODIFIER_ABSTRACT | MODIFIER_SEALED | MODIFIER_INTERFACE)? 
-modifier_access 
-modifier_life typeName
+MODIFIER_ATTRIBUTE?
+(MODIFIER_ABSTRACT | MODIFIER_SEALED)? 
+modifierAccess 
+modifierLife typeName
 typeInherit?
 implementList?
 BODY_BEGIN

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Antlr4.Runtime;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Antlr4.Runtime.Tree;
-using Antlr4.Runtime;
+using System.Collections.Generic;
 
 namespace HexRuntimeAssemblier
 {
     public static class Helper
     {
-        public static ITerminalNode GetToken(this ParserRuleContext context, int tokenType) => context.GetToken(tokenType, 0);
-        public static T Get<T>(this ParserRuleContext context) where T : IParseTree => context.GetChild<T>(0);
+        public static bool ExistToken(this ParserRuleContext context, int tokenType) => context.GetToken(tokenType, 0) != null;
+        public static IEnumerable<T> OfType<T>(this ParserRuleContext context) => context.children.OfType<T>();
+        public static int GetUnderlyingTokenType(this ParserRuleContext context) => (context.children[0] as IToken).Type;
     }
 }

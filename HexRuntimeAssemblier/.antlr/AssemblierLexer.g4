@@ -6,7 +6,6 @@ options {
 
 WS : [ \t\n\r]+ -> skip;
 
-SEMICOLON: ';';
 LBRACE: '<';
 RBRACE: '>';
 LMID: '[';
@@ -24,20 +23,29 @@ COLON: ':';
 
 KEY_ASSEMBLY: '.assembly';
 
+KEY_INTERFACE: '.interface';
 KEY_CLASS: '.class';
+KEY_STRUCT: '.struct';
 KEY_METHOD: '.method';
 KEY_PROPERTY: '.property';
+KEY_EVENT: '.event';
 KEY_FIELD: '.field';
 
 KEY_INHERIT: 'inherits';
 KEY_IMPLEMENT: 'implements';
 
-MODIFIER_INTERFACE: 'interface';
+
 MODIFIER_ABSTRACT: 'abstract';
 MODIFIER_VIRTUAL: 'virtual';
 MODIFIER_SEALED: 'sealed';
 MODIFIER_STATIC: 'static';
 MODIFIER_INSTANCE: 'instance';
+
+MODIFIER_VOLATILE: 'volatile';
+MODIFIER_THREAD_LOCAL: 'threadlocal';
+MODIFIER_CONSTANT: 'const';
+MODIFIER_READONLY: 'readonly';
+MODIFIER_ATTRIBUTE: 'attribute';
 
 MODIFIER_NEST: 'nested';
 
@@ -73,7 +81,9 @@ METHOD_CODE: '.code';
 
 PROPERTY_GET: '.get';
 PROPERTY_SET: '.set';
-METHOD_PROPERTY: 'get' | 'set';
+
+EVENT_ADD: '.add';
+EVENT_REMOVE: '.remove';
 
 STRING: '"'.*?'"';
 HEX: '0x'[0-9a-fA-F]+;

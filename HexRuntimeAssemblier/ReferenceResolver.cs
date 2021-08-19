@@ -45,7 +45,7 @@ namespace HexRuntimeAssemblier
         }
         public uint ResovleMethodReference(string assembly, string typeReference, string methodReference)
         {
-            
+            return 0u;
         }
     }
 }

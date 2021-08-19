@@ -88,13 +88,23 @@ namespace HexRuntimeAssemblier
 		public MDToken NameToken;
 	}
 
+	[Flags]
+	enum FieldFlag : ushort
+	{
+		Volatile = 0x0001,
+		Static = 0x0002,
+		Constant = 0x0004,
+		ReadOnly = 0x0008,
+		ThreadLocal = 0x0010
+	}
+
 	class FieldMD
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken TypeRefToken;
 		public MDToken NameToken;
 		public byte Accessibility;
-		public UInt16 Flags;
+		public FieldFlag Flags;
 		public IList<MDToken> AttributeTokens;
 	}
 
@@ -107,7 +117,7 @@ namespace HexRuntimeAssemblier
 		public MDToken BackingFieldToken;
 		public MDToken NameToken;
 		public byte Accessibility;
-		public UInt16 Flags;
+		public ushort Flags;
 		public IList<MDToken> AttributeTokens;
 	}
 
@@ -120,7 +130,7 @@ namespace HexRuntimeAssemblier
 		public MDToken BackingFieldToken;
 		public MDToken NameToken;
 		public byte Accessibility;
-		public UInt16 Flags;
+		public ushort Flags;
 		public IList<MDToken> AttributeTokens;
 	}
 
@@ -163,7 +173,7 @@ namespace HexRuntimeAssemblier
 		public MDToken NameToken;
 		public byte Accessibility;
 
-		public UInt16 Flags;
+		public ushort Flags;
 
 		public MethodSignatureMD Signature;
 		public MDToken OverridesMethodRef;
@@ -173,7 +183,7 @@ namespace HexRuntimeAssemblier
 	}
 
 	[Flags]
-	enum TypeFlag : UInt16
+	enum TypeFlag : ushort
     {
 		Sealed = 0x0001,
 		Abstract = 0x0002,

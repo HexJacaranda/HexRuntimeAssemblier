@@ -11,11 +11,11 @@ namespace HexRuntimeAssemblier
         public uint AssemblyReferenceToken { get; }
         public uint GetTypeDefToken(string referenceName)
         {
-
+            return 0u;
         }
         public uint GetMemberDefToken(string referenceName, MDRecordKinds kind)
         {
-
+            return 0u;
         }
     }
 }
