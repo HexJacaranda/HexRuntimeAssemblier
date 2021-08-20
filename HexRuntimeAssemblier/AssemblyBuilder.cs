@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 
 namespace HexRuntimeAssemblier
 {
@@ -46,7 +47,7 @@ namespace HexRuntimeAssemblier
         /// Get the full qualified name of nested class or class member
         /// </summary>
         /// <returns></returns>
-        public string GetFullQualifiedName(ParserRuleContext memberContext, string referenceJunction, string shortName)
+        public static string GetFullQualifiedName(ParserRuleContext memberContext, string referenceJunction, string shortName)
         {
             var stringBuilder = new StringBuilder();
             var current = memberContext.Parent;
@@ -85,25 +86,54 @@ namespace HexRuntimeAssemblier
                 GUID = Guid.Parse(map["guid"])
             };
         }
+        public uint ResolveUnknownTypeForm(IParseTree context)
+        {
+            return context switch
+            {
+                Assemblier.TypeContext type => ResolveType(type),
+                Assemblier.PrimitiveTypeContext primitiveType => ResolvePrimitiveType(primitiveType),
+                Assemblier.ArrayTypeContext arrayType => ResolveArrayType(arrayType),
+                Assemblier.NestArrayTypeContext nestArrayType => ResolveArrayType(nestArrayType),
+                Assemblier.MultidimensionArrayTypeContext multidimensionArrayType => ResolveArrayType(multidimensionArrayType),
+                Assemblier.InteriorRefTypeContext interiorRefType => ResolveInteriorRefType(interiorRefType),
+                _ => throw new TypeResolveException("Unknown type representation"),
+            };
+        }
         public uint ResolveType(Assemblier.TypeContext context)
         {
             var child = context.GetChild(0);
-            switch (child)
+            return child switch
             {
-                case Assemblier.TypeRefContext typeRef:
-                    return ResolveTypeRef(typeRef);
-                case Assemblier.TypeInteriorRefContext typeInteriorRef:
-                    {
-                        
-                        return 0u;
-                    }
-                case Assemblier.TypeArrayContext typeArray:
-                    {
-
-                        return 0u;
-                    }
-            }
+                Assemblier.PrimitiveTypeContext primitiveType => ResolvePrimitiveType(primitiveType),
+                Assemblier.TypeRefContext typeRef => ResolveTypeRef(typeRef),
+                Assemblier.InteriorRefTypeContext interiorRefType => ResolveInteriorRefType(interiorRefType),
+                Assemblier.ArrayTypeContext arrayType => ResolveArrayType(arrayType),
+                _ => throw new TypeResolveException("Unknown type representation"),
+            };
         }
+        public uint ResolvePrimitiveType(Assemblier.PrimitiveTypeContext context)
+        {
+            //Primitive type always requires metadata from core library
+            return 0u;
+        }
+        public uint ResolveArrayType(Assemblier.ArrayTypeContext context)
+        {
+            //Will make new type
+            return 0u;
+        }
+        public uint ResolveArrayType(Assemblier.MultidimensionArrayTypeContext context)
+        {
+            return 0u;
+        }
+        public uint ResolveArrayType(Assemblier.NestArrayTypeContext context)
+        {
+            return 0u;
+        }
+        public uint ResolveInteriorRefType(Assemblier.InteriorRefTypeContext context)
+        {
+            return 0u;
+        }
+
         public uint ResolveTypeRef(Assemblier.TypeRefContext context)
         {
             var assemblyRef = context.assemblyRef();

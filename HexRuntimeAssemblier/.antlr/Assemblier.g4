@@ -87,11 +87,18 @@ assemblyRef: LMID IDENTIFIER RMID;
 typeName: (IDENTIFIER DOT)+ IDENTIFIER;
 typeRef: assemblyRef? typeName;
 
-type: (PRIMITIVE_TYPE | typeRef | typeArray | typeInteriorRef);
-typeArray: typeNestArray | typeMultidimensionArray;
-typeNestArray: type LMID RMID;
-typeMultidimensionArray: type LMID COMMA+ RMID;
-typeInteriorRef: (PRIMITIVE_TYPE | typeRef | typeArray) REF;
+primitiveType: PRIMITIVE_INT |
+        PRIMITIVE_LONG |
+        PRIMITIVE_SHORT |
+        PRIMITIVE_BYTE |
+        PRIMITIVE_CHAR |
+        PRIMITIVE_STRING;
+
+type: (primitiveType | typeRef | arrayType | interiorRefType);
+arrayType: nestArrayType | multidimensionArrayType;
+nestArrayType: ARRAY LBRACE type RBRACE;
+multidimensionArrayType: ARRAY LBRACE type COMMA INT RBRACE;
+interiorRefType: (primitiveType | typeRef | arrayType) REF;
 
 classBody: (methodDef | propertyDef | eventDef | fieldDef | classDef)*;
 

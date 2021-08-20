@@ -331,56 +331,6 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitTypeInherit([NotNull] Assemblier.TypeInheritContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.type"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterType([NotNull] Assemblier.TypeContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.type"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitType([NotNull] Assemblier.TypeContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.typeArray"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterTypeArray([NotNull] Assemblier.TypeArrayContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.typeArray"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitTypeArray([NotNull] Assemblier.TypeArrayContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.typeNestArray"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterTypeNestArray([NotNull] Assemblier.TypeNestArrayContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.typeNestArray"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitTypeNestArray([NotNull] Assemblier.TypeNestArrayContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.typeMultidimensionArray"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterTypeMultidimensionArray([NotNull] Assemblier.TypeMultidimensionArrayContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.typeMultidimensionArray"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitTypeMultidimensionArray([NotNull] Assemblier.TypeMultidimensionArrayContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.typeInteriorRef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterTypeInteriorRef([NotNull] Assemblier.TypeInteriorRefContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.typeInteriorRef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitTypeInteriorRef([NotNull] Assemblier.TypeInteriorRefContext context);
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.assemblyRef"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -390,6 +340,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitAssemblyRef([NotNull] Assemblier.AssemblyRefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeName"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterTypeName([NotNull] Assemblier.TypeNameContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeName"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitTypeName([NotNull] Assemblier.TypeNameContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeRef"/>.
 	/// </summary>
@@ -401,15 +361,65 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitTypeRef([NotNull] Assemblier.TypeRefContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.typeName"/>.
+	/// Enter a parse tree produced by <see cref="Assemblier.primitiveType"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterTypeName([NotNull] Assemblier.TypeNameContext context);
+	void EnterPrimitiveType([NotNull] Assemblier.PrimitiveTypeContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.typeName"/>.
+	/// Exit a parse tree produced by <see cref="Assemblier.primitiveType"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitTypeName([NotNull] Assemblier.TypeNameContext context);
+	void ExitPrimitiveType([NotNull] Assemblier.PrimitiveTypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.type"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterType([NotNull] Assemblier.TypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.type"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitType([NotNull] Assemblier.TypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.arrayType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterArrayType([NotNull] Assemblier.ArrayTypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.arrayType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitArrayType([NotNull] Assemblier.ArrayTypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.nestArrayType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterNestArrayType([NotNull] Assemblier.NestArrayTypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.nestArrayType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitNestArrayType([NotNull] Assemblier.NestArrayTypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.multidimensionArrayType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMultidimensionArrayType([NotNull] Assemblier.MultidimensionArrayTypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.multidimensionArrayType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMultidimensionArrayType([NotNull] Assemblier.MultidimensionArrayTypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.interiorRefType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterInteriorRefType([NotNull] Assemblier.InteriorRefTypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.interiorRefType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitInteriorRefType([NotNull] Assemblier.InteriorRefTypeContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.classBody"/>.
 	/// </summary>

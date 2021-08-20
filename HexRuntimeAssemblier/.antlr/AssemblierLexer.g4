@@ -58,13 +58,6 @@ CTOR: '.ctor' | '.cctor';
 ARRAY : 'array';
 VOID: 'void';
 
-PRIMITIVE_TYPE: PRIMITIVE_INT |
-        PRIMITIVE_LONG |
-        PRIMITIVE_SHORT |
-        PRIMITIVE_BYTE |
-        PRIMITIVE_CHAR |
-        PRIMITIVE_STRING;
-
 //Support for primitive type abbr. form
 PRIMITIVE_INT: 'int32';
 PRIMITIVE_LONG: 'int64';
