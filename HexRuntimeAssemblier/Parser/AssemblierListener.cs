@@ -301,6 +301,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitEventDef([NotNull] Assemblier.EventDefContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.inheritOrImplementType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterInheritOrImplementType([NotNull] Assemblier.InheritOrImplementTypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.inheritOrImplementType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitInheritOrImplementType([NotNull] Assemblier.InheritOrImplementTypeContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeRefList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -381,6 +391,26 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitType([NotNull] Assemblier.TypeContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterGenericParameterRef([NotNull] Assemblier.GenericParameterRefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitGenericParameterRef([NotNull] Assemblier.GenericParameterRefContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.arrayType"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -420,6 +450,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitInteriorRefType([NotNull] Assemblier.InteriorRefTypeContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterGenericList([NotNull] Assemblier.GenericListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitGenericList([NotNull] Assemblier.GenericListContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.classBody"/>.
 	/// </summary>

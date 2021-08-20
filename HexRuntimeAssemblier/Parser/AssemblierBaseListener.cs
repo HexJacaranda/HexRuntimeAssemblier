@@ -359,6 +359,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitEventDef([NotNull] Assemblier.EventDefContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.inheritOrImplementType"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterInheritOrImplementType([NotNull] Assemblier.InheritOrImplementTypeContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.inheritOrImplementType"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitInheritOrImplementType([NotNull] Assemblier.InheritOrImplementTypeContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeRefList"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -455,6 +467,30 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitType([NotNull] Assemblier.TypeContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterGenericParameterRef([NotNull] Assemblier.GenericParameterRefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitGenericParameterRef([NotNull] Assemblier.GenericParameterRefContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.arrayType"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -502,6 +538,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitInteriorRefType([NotNull] Assemblier.InteriorRefTypeContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterGenericList([NotNull] Assemblier.GenericListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitGenericList([NotNull] Assemblier.GenericListContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.classBody"/>.
 	/// <para>The default implementation does nothing.</para>

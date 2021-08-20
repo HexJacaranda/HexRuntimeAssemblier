@@ -194,6 +194,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitEventDef([NotNull] Assemblier.EventDefContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.inheritOrImplementType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitInheritOrImplementType([NotNull] Assemblier.InheritOrImplementTypeContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.typeRefList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -242,6 +248,18 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitType([NotNull] Assemblier.TypeContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGenericParameterRef([NotNull] Assemblier.GenericParameterRefContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.arrayType"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -265,6 +283,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitInteriorRefType([NotNull] Assemblier.InteriorRefTypeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.genericList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGenericList([NotNull] Assemblier.GenericListContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.classBody"/>.
 	/// </summary>

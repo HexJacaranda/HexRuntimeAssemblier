@@ -33,7 +33,7 @@ KEY_FIELD: '.field';
 
 KEY_INHERIT: 'inherits';
 KEY_IMPLEMENT: 'implements';
-
+KEY_GENERIC: 'generic';
 
 MODIFIER_ABSTRACT: 'abstract';
 MODIFIER_VIRTUAL: 'virtual';

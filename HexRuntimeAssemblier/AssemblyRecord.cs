@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using MDToken = System.UInt32;
 namespace HexRuntimeAssemblier
 {
-    enum MDRecordKinds
+	enum MDRecordKinds : int
 	{
 		String,
 		Argument,
 		GenericParameter,
 		TypeDef,
+		GenericInstantiationDef,
 		AttributeDef,
 		MethodDef,
 		FieldDef,
@@ -52,7 +53,8 @@ namespace HexRuntimeAssemblier
 	class TypeRefMD
 	{
 		public MDToken AssemblyToken;
-		public MDToken TypeDefToken;
+		public MDRecordKinds DefKind;
+		public MDToken Token;
 	}
 
 
@@ -88,6 +90,12 @@ namespace HexRuntimeAssemblier
 		public MDToken NameToken;
 	}
 
+	class GenericInstantiationMD
+	{
+		public MDToken CanonicalTypeRefToken;
+		public IList<MDToken> GenericParameterTokens;
+	};
+
 	[Flags]
 	enum FieldFlag : ushort
 	{
@@ -116,8 +124,6 @@ namespace HexRuntimeAssemblier
 		public MDToken GetterToken;
 		public MDToken BackingFieldToken;
 		public MDToken NameToken;
-		public byte Accessibility;
-		public ushort Flags;
 		public IList<MDToken> AttributeTokens;
 	}
 
@@ -129,8 +135,6 @@ namespace HexRuntimeAssemblier
 		public MDToken RemoverToken;
 		public MDToken BackingFieldToken;
 		public MDToken NameToken;
-		public byte Accessibility;
-		public ushort Flags;
 		public IList<MDToken> AttributeTokens;
 	}
 
@@ -172,13 +176,12 @@ namespace HexRuntimeAssemblier
 		public MDToken ParentTypeRefToken;
 		public MDToken NameToken;
 		public byte Accessibility;
-
 		public ushort Flags;
-
 		public MethodSignatureMD Signature;
 		public MDToken OverridesMethodRef;
 		public ILMD ILCodeMD;
 		public IList<NativeLinkMD> NativeLinks;
+		public IList<MDToken> GenericParameterTokens;
 		public IList<MDToken> AttributeTokens;
 	}
 

@@ -29,7 +29,7 @@ namespace HexRuntimeAssemblier
             var typeRefTable = mReferenceTables[MDRecordKinds.TypeRef];
             
             return typeRefTable.GetReferenceToken(typeReference, 
-                () => new TypeRefMD { AssemblyToken = externalAssembly.AssemblyReferenceToken, TypeDefToken = typeDefToken });
+                () => new TypeRefMD { AssemblyToken = externalAssembly.AssemblyReferenceToken, Token = typeDefToken });
         }
         /// <summary>
         /// Get internal type reference token
@@ -41,7 +41,7 @@ namespace HexRuntimeAssemblier
         {
             var typeRefTable = mReferenceTables[MDRecordKinds.TypeRef];
             return typeRefTable.GetReferenceToken(typeReference,
-                () => new TypeRefMD { AssemblyToken = AssemblyRefMD.Self, TypeDefToken = typeDefToken });
+                () => new TypeRefMD { AssemblyToken = AssemblyRefMD.Self, Token = typeDefToken });
         }
         public uint ResovleMethodReference(string assembly, string typeReference, string methodReference)
         {

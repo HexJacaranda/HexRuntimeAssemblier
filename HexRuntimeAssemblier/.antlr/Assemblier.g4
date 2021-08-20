@@ -14,7 +14,7 @@ modifierLife: MODIFIER_INSTANCE | MODIFIER_STATIC;
 //Method
 //1. Argument
 methodArgument: type IDENTIFIER;
-methodArgumentList: (methodArgument COMMA methodArgumentList) | ;
+methodArgumentList: (methodArgument (COMMA methodArgument)*)?;
 //2. Return type
 methodReturnType: VOID | type;
 //3. name
@@ -49,6 +49,7 @@ methodDef: KEY_METHOD
     modifierLife
     MODIFIER_VIRTUAL? 
     methodReturnType methodName PARAM_BEGIN methodArgumentList PARAM_END methodSource
+    genericList?
     BODY_BEGIN
         methodBody
     BODY_END;
@@ -62,25 +63,26 @@ fieldRef: type typeRef JUNCTION IDENTIFIER;
 //Property
 propertyGet: PROPERTY_GET methodRef;
 propertySet: PROPERTY_SET methodRef;
-propertyDef: KEY_PROPERTY
+propertyDef: KEY_PROPERTY type IDENTIFIER
     BODY_BEGIN
         propertyGet?
         propertySet?
     BODY_END;
 
 //Event
-eventAdd: PROPERTY_GET methodRef;
-eventRemove: PROPERTY_SET methodRef;
-eventDef: KEY_EVENT
+eventAdd: EVENT_ADD methodRef;
+eventRemove: EVENT_REMOVE methodRef;
+eventDef: KEY_EVENT type IDENTIFIER
     BODY_BEGIN
         eventAdd?
         eventRemove?
     BODY_END;
 
 //Class
-typeRefList: (typeRef COMMA)* typeRef;
+inheritOrImplementType: typeRef | genericInstantiation | genericParameterRef;
+typeRefList: (inheritOrImplementType COMMA)* inheritOrImplementType;
 implementList: KEY_IMPLEMENT typeRefList;
-typeInherit: KEY_INHERIT typeRef;
+typeInherit: KEY_INHERIT inheritOrImplementType;
 
 //Type part
 assemblyRef: LMID IDENTIFIER RMID;
@@ -94,11 +96,15 @@ primitiveType: PRIMITIVE_INT |
         PRIMITIVE_CHAR |
         PRIMITIVE_STRING;
 
-type: (primitiveType | typeRef | arrayType | interiorRefType);
+type: (primitiveType | typeRef | arrayType | interiorRefType | genericParameterRef);
+genericInstantiation: typeRef LBRACE type+ RBRACE;
+genericParameterRef: LMID INT RMID JUNCTION IDENTIFIER;
 arrayType: nestArrayType | multidimensionArrayType;
 nestArrayType: ARRAY LBRACE type RBRACE;
 multidimensionArrayType: ARRAY LBRACE type COMMA INT RBRACE;
 interiorRefType: (primitiveType | typeRef | arrayType) REF;
+
+genericList: KEY_GENERIC IDENTIFIER+;
 
 classBody: (methodDef | propertyDef | eventDef | fieldDef | classDef)*;
 
@@ -110,6 +116,7 @@ modifierAccess
 modifierLife typeName
 typeInherit?
 implementList?
+genericList?
 BODY_BEGIN
     classBody
 BODY_END;
