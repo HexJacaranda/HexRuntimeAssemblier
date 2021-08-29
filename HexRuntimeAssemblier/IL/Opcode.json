@@ -1,0 +1,182 @@
+[
+    {
+        "name": "LdFld",
+        "value": "0x01"
+    },
+    {
+        "name": "LdFldA",
+        "value": "0x02"
+    },
+    {
+        "name": "LdLoc",
+        "value": "0x03"
+    },
+    {
+        "name": "LdLocA",
+        "value": "0x04"
+    },
+    {
+        "name": "LdArg",
+        "value": "0x05"
+    },
+    {
+        "name": "LdArgA",
+        "value": "0x06"
+    },
+    {
+        "name": "LdElem",
+        "value": "0x07"
+    },
+    {
+        "name": "LdElemA",
+        "value": "0x08"
+    },
+    {
+        "name": "LdStr",
+        "value": "0x09"
+    },
+    {
+        "name": "LdC",
+        "value": "0x0A"
+    },
+    {
+        "name": "LdFn",
+        "value": "0x0B"
+    },
+    {
+        "name": "LdNull",
+        "value": "0x0C"
+    },
+    {
+        "name": "StFld",
+        "value": "0x20"
+    },
+    {
+        "name": "StLoc",
+        "value": "0x21"
+    },
+    {
+        "name": "StArg",
+        "value": "0x22"
+    },
+    {
+        "name": "StElem",
+        "value": "0x23"
+    },
+    {
+        "name": "StTA",
+        "value": "0x24"
+    },
+    {
+        "name": "Add",
+        "value": "0x30"
+    },
+    {
+        "name": "Sub",
+        "value": "0x31"
+    },
+    {
+        "name": "Mul",
+        "value": "0x32"
+    },
+    {
+        "name": "Div",
+        "value": "0x33"
+    },
+    {
+        "name": "Mod",
+        "value": "0x34"
+    },
+    {
+        "name": "And",
+        "value": "0x35"
+    },
+    {
+        "name": "Or",
+        "value": "0x36"
+    },
+    {
+        "name": "Xor",
+        "value": "0x37"
+    },
+    {
+        "name": "Not",
+        "value": "0x38"
+    },
+    {
+        "name": "Neg",
+        "value": "0x39"
+    },
+    {
+        "name": "Conv",
+        "value": "0x3A"
+    },
+    {
+        "name": "Call",
+        "value": "0x40"
+    },
+    {
+        "name": "CallVirt",
+        "value": "0x41"
+    },
+    {
+        "name": "Ret",
+        "value": "0x42"
+    },
+    {
+        "name": "Cmp",
+        "value": "0x43"
+    },
+    {
+        "name": "Jcc",
+        "value": "0x44"
+    },
+    {
+        "name": "Jmp",
+        "value": "0x45"
+    },
+    {
+        "name": "Throw",
+        "value": "0x46"
+    },
+    {
+        "name": "Try",
+        "value": "0x47"
+    },
+    {
+        "name": "Catch",
+        "value": "0x48"
+    },
+    {
+        "name": "Finally",
+        "value": "0x49"
+    },
+    {
+        "name": "Volatile",
+        "value": "0x50"
+    },
+    {
+        "name": "ArC",
+        "value": "0x51"
+    },
+    {
+        "name": "New",
+        "value": "0x60"
+    },
+    {
+        "name": "NewArr",
+        "value": "0x61"
+    },
+    {
+        "name": "Dup",
+        "value": "0xF0"
+    },
+    {
+        "name": "Pop",
+        "value": "0xF1"
+    },
+    {
+        "name": "Nop",
+        "value": "0xFF"
+    }
+]

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -103,24 +103,6 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMethodCode([NotNull] Assemblier.MethodCodeContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="Assemblier.methodIl"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMethodIl([NotNull] Assemblier.MethodIlContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="Assemblier.methodLabel"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMethodLabel([NotNull] Assemblier.MethodLabelContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMethodOpcodeOperand([NotNull] Assemblier.MethodOpcodeOperandContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.methodProperty"/>.
 	/// </summary>
@@ -242,6 +224,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitPrimitiveType([NotNull] Assemblier.PrimitiveTypeContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.genericParameterList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGenericParameterList([NotNull] Assemblier.GenericParameterListContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -325,4 +313,286 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAssemblyDef([NotNull] Assemblier.AssemblyDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLabel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLabel([NotNull] Assemblier.OpLabelContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdFld"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdFld([NotNull] Assemblier.OpLdFldContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdFldA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdFldA([NotNull] Assemblier.OpLdFldAContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdLoc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdLoc([NotNull] Assemblier.OpLdLocContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdLocA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdLocA([NotNull] Assemblier.OpLdLocAContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdArg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdArg([NotNull] Assemblier.OpLdArgContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdArgA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdArgA([NotNull] Assemblier.OpLdArgAContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdElem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdElem([NotNull] Assemblier.OpLdElemContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdElemA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdElemA([NotNull] Assemblier.OpLdElemAContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdStr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdStr([NotNull] Assemblier.OpLdStrContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opConstant"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpConstant([NotNull] Assemblier.OpConstantContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdC"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdC([NotNull] Assemblier.OpLdCContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdFn"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdFn([NotNull] Assemblier.OpLdFnContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdNull"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdNull([NotNull] Assemblier.OpLdNullContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opStFld"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpStFld([NotNull] Assemblier.OpStFldContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opStLoc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpStLoc([NotNull] Assemblier.OpStLocContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opStArg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpStArg([NotNull] Assemblier.OpStArgContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opStElem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpStElem([NotNull] Assemblier.OpStElemContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opStTA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpStTA([NotNull] Assemblier.OpStTAContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opAdd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpAdd([NotNull] Assemblier.OpAddContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opSub"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpSub([NotNull] Assemblier.OpSubContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opMul"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpMul([NotNull] Assemblier.OpMulContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opDiv"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpDiv([NotNull] Assemblier.OpDivContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opMod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpMod([NotNull] Assemblier.OpModContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opAnd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpAnd([NotNull] Assemblier.OpAndContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opOr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpOr([NotNull] Assemblier.OpOrContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opXor"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpXor([NotNull] Assemblier.OpXorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opNot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpNot([NotNull] Assemblier.OpNotContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opNeg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpNeg([NotNull] Assemblier.OpNegContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opConv"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpConv([NotNull] Assemblier.OpConvContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpCall([NotNull] Assemblier.OpCallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opCallVirt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpCallVirt([NotNull] Assemblier.OpCallVirtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opRet"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpRet([NotNull] Assemblier.OpRetContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpCmpCond([NotNull] Assemblier.OpCmpCondContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opCmp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpCmp([NotNull] Assemblier.OpCmpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opJcc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpJcc([NotNull] Assemblier.OpJccContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opJmp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpJmp([NotNull] Assemblier.OpJmpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opThrow"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpThrow([NotNull] Assemblier.OpThrowContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opTry"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpTry([NotNull] Assemblier.OpTryContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opCatch"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpCatch([NotNull] Assemblier.OpCatchContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opFinally"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpFinally([NotNull] Assemblier.OpFinallyContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opNew"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpNew([NotNull] Assemblier.OpNewContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opNewArr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpNewArr([NotNull] Assemblier.OpNewArrContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opDup"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpDup([NotNull] Assemblier.OpDupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opPop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpPop([NotNull] Assemblier.OpPopContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opNop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpNop([NotNull] Assemblier.OpNopContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.ilInstruction"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIlInstruction([NotNull] Assemblier.IlInstructionContext context);
 }

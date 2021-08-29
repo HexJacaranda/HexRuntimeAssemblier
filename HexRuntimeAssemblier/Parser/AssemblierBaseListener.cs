@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -178,42 +178,6 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMethodCode([NotNull] Assemblier.MethodCodeContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.methodIl"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterMethodIl([NotNull] Assemblier.MethodIlContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.methodIl"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitMethodIl([NotNull] Assemblier.MethodIlContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.methodLabel"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterMethodLabel([NotNull] Assemblier.MethodLabelContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.methodLabel"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitMethodLabel([NotNull] Assemblier.MethodLabelContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterMethodOpcodeOperand([NotNull] Assemblier.MethodOpcodeOperandContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitMethodOpcodeOperand([NotNull] Assemblier.MethodOpcodeOperandContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodProperty"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -455,6 +419,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitPrimitiveType([NotNull] Assemblier.PrimitiveTypeContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericParameterList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterGenericParameterList([NotNull] Assemblier.GenericParameterListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericParameterList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitGenericParameterList([NotNull] Assemblier.GenericParameterListContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.type"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -622,6 +598,570 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitAssemblyDef([NotNull] Assemblier.AssemblyDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLabel"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLabel([NotNull] Assemblier.OpLabelContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLabel"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLabel([NotNull] Assemblier.OpLabelContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdFld"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdFld([NotNull] Assemblier.OpLdFldContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdFld"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdFld([NotNull] Assemblier.OpLdFldContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdFldA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdFldA([NotNull] Assemblier.OpLdFldAContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdFldA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdFldA([NotNull] Assemblier.OpLdFldAContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdLoc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdLoc([NotNull] Assemblier.OpLdLocContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdLoc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdLoc([NotNull] Assemblier.OpLdLocContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdLocA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdLocA([NotNull] Assemblier.OpLdLocAContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdLocA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdLocA([NotNull] Assemblier.OpLdLocAContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdArg"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdArg([NotNull] Assemblier.OpLdArgContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdArg"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdArg([NotNull] Assemblier.OpLdArgContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdArgA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdArgA([NotNull] Assemblier.OpLdArgAContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdArgA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdArgA([NotNull] Assemblier.OpLdArgAContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdElem"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdElem([NotNull] Assemblier.OpLdElemContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdElem"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdElem([NotNull] Assemblier.OpLdElemContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdElemA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdElemA([NotNull] Assemblier.OpLdElemAContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdElemA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdElemA([NotNull] Assemblier.OpLdElemAContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdStr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdStr([NotNull] Assemblier.OpLdStrContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdStr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdStr([NotNull] Assemblier.OpLdStrContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opConstant"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpConstant([NotNull] Assemblier.OpConstantContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opConstant"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpConstant([NotNull] Assemblier.OpConstantContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdC"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdC([NotNull] Assemblier.OpLdCContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdC"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdC([NotNull] Assemblier.OpLdCContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdFn"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdFn([NotNull] Assemblier.OpLdFnContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdFn"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdFn([NotNull] Assemblier.OpLdFnContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdNull"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdNull([NotNull] Assemblier.OpLdNullContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdNull"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdNull([NotNull] Assemblier.OpLdNullContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStFld"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpStFld([NotNull] Assemblier.OpStFldContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStFld"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpStFld([NotNull] Assemblier.OpStFldContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStLoc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpStLoc([NotNull] Assemblier.OpStLocContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStLoc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpStLoc([NotNull] Assemblier.OpStLocContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStArg"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpStArg([NotNull] Assemblier.OpStArgContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStArg"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpStArg([NotNull] Assemblier.OpStArgContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStElem"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpStElem([NotNull] Assemblier.OpStElemContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStElem"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpStElem([NotNull] Assemblier.OpStElemContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStTA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpStTA([NotNull] Assemblier.OpStTAContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStTA"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpStTA([NotNull] Assemblier.OpStTAContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opAdd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpAdd([NotNull] Assemblier.OpAddContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opAdd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpAdd([NotNull] Assemblier.OpAddContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opSub"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpSub([NotNull] Assemblier.OpSubContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opSub"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpSub([NotNull] Assemblier.OpSubContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opMul"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpMul([NotNull] Assemblier.OpMulContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opMul"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpMul([NotNull] Assemblier.OpMulContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opDiv"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpDiv([NotNull] Assemblier.OpDivContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opDiv"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpDiv([NotNull] Assemblier.OpDivContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opMod"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpMod([NotNull] Assemblier.OpModContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opMod"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpMod([NotNull] Assemblier.OpModContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opAnd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpAnd([NotNull] Assemblier.OpAndContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opAnd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpAnd([NotNull] Assemblier.OpAndContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opOr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpOr([NotNull] Assemblier.OpOrContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opOr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpOr([NotNull] Assemblier.OpOrContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opXor"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpXor([NotNull] Assemblier.OpXorContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opXor"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpXor([NotNull] Assemblier.OpXorContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNot"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpNot([NotNull] Assemblier.OpNotContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNot"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpNot([NotNull] Assemblier.OpNotContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNeg"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpNeg([NotNull] Assemblier.OpNegContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNeg"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpNeg([NotNull] Assemblier.OpNegContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opConv"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpConv([NotNull] Assemblier.OpConvContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opConv"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpConv([NotNull] Assemblier.OpConvContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpCall([NotNull] Assemblier.OpCallContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpCall([NotNull] Assemblier.OpCallContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCallVirt"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpCallVirt([NotNull] Assemblier.OpCallVirtContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCallVirt"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpCallVirt([NotNull] Assemblier.OpCallVirtContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opRet"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpRet([NotNull] Assemblier.OpRetContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opRet"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpRet([NotNull] Assemblier.OpRetContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpCmpCond([NotNull] Assemblier.OpCmpCondContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpCmpCond([NotNull] Assemblier.OpCmpCondContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCmp"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpCmp([NotNull] Assemblier.OpCmpContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCmp"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpCmp([NotNull] Assemblier.OpCmpContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opJcc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpJcc([NotNull] Assemblier.OpJccContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opJcc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpJcc([NotNull] Assemblier.OpJccContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opJmp"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpJmp([NotNull] Assemblier.OpJmpContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opJmp"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpJmp([NotNull] Assemblier.OpJmpContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opThrow"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpThrow([NotNull] Assemblier.OpThrowContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opThrow"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpThrow([NotNull] Assemblier.OpThrowContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opTry"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpTry([NotNull] Assemblier.OpTryContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opTry"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpTry([NotNull] Assemblier.OpTryContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCatch"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpCatch([NotNull] Assemblier.OpCatchContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCatch"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpCatch([NotNull] Assemblier.OpCatchContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opFinally"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpFinally([NotNull] Assemblier.OpFinallyContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opFinally"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpFinally([NotNull] Assemblier.OpFinallyContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNew"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpNew([NotNull] Assemblier.OpNewContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNew"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpNew([NotNull] Assemblier.OpNewContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNewArr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpNewArr([NotNull] Assemblier.OpNewArrContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNewArr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpNewArr([NotNull] Assemblier.OpNewArrContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opDup"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpDup([NotNull] Assemblier.OpDupContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opDup"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpDup([NotNull] Assemblier.OpDupContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opPop"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpPop([NotNull] Assemblier.OpPopContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opPop"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpPop([NotNull] Assemblier.OpPopContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNop"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpNop([NotNull] Assemblier.OpNopContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNop"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpNop([NotNull] Assemblier.OpNopContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.ilInstruction"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterIlInstruction([NotNull] Assemblier.IlInstructionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.ilInstruction"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitIlInstruction([NotNull] Assemblier.IlInstructionContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

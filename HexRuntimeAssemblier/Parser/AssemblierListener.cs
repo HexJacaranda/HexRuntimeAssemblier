@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\I525976\source\repos\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
+// Generated from c:\Users\Hex\source\repos\HexJacaranda\HexRuntimeAssemblier\HexRuntimeAssemblier\.antlr\Assemblier.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -150,36 +150,6 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitMethodCode([NotNull] Assemblier.MethodCodeContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.methodIl"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterMethodIl([NotNull] Assemblier.MethodIlContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.methodIl"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitMethodIl([NotNull] Assemblier.MethodIlContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.methodLabel"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterMethodLabel([NotNull] Assemblier.MethodLabelContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.methodLabel"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitMethodLabel([NotNull] Assemblier.MethodLabelContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterMethodOpcodeOperand([NotNull] Assemblier.MethodOpcodeOperandContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.methodOpcodeOperand"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitMethodOpcodeOperand([NotNull] Assemblier.MethodOpcodeOperandContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodProperty"/>.
 	/// </summary>
@@ -381,6 +351,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitPrimitiveType([NotNull] Assemblier.PrimitiveTypeContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.genericParameterList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterGenericParameterList([NotNull] Assemblier.GenericParameterListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.genericParameterList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitGenericParameterList([NotNull] Assemblier.GenericParameterListContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -520,4 +500,474 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitAssemblyDef([NotNull] Assemblier.AssemblyDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLabel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLabel([NotNull] Assemblier.OpLabelContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLabel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLabel([NotNull] Assemblier.OpLabelContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdFld"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdFld([NotNull] Assemblier.OpLdFldContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdFld"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdFld([NotNull] Assemblier.OpLdFldContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdFldA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdFldA([NotNull] Assemblier.OpLdFldAContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdFldA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdFldA([NotNull] Assemblier.OpLdFldAContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdLoc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdLoc([NotNull] Assemblier.OpLdLocContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdLoc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdLoc([NotNull] Assemblier.OpLdLocContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdLocA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdLocA([NotNull] Assemblier.OpLdLocAContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdLocA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdLocA([NotNull] Assemblier.OpLdLocAContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdArg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdArg([NotNull] Assemblier.OpLdArgContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdArg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdArg([NotNull] Assemblier.OpLdArgContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdArgA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdArgA([NotNull] Assemblier.OpLdArgAContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdArgA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdArgA([NotNull] Assemblier.OpLdArgAContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdElem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdElem([NotNull] Assemblier.OpLdElemContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdElem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdElem([NotNull] Assemblier.OpLdElemContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdElemA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdElemA([NotNull] Assemblier.OpLdElemAContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdElemA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdElemA([NotNull] Assemblier.OpLdElemAContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdStr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdStr([NotNull] Assemblier.OpLdStrContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdStr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdStr([NotNull] Assemblier.OpLdStrContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opConstant"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpConstant([NotNull] Assemblier.OpConstantContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opConstant"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpConstant([NotNull] Assemblier.OpConstantContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdC"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdC([NotNull] Assemblier.OpLdCContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdC"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdC([NotNull] Assemblier.OpLdCContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdFn"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdFn([NotNull] Assemblier.OpLdFnContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdFn"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdFn([NotNull] Assemblier.OpLdFnContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdNull"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdNull([NotNull] Assemblier.OpLdNullContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdNull"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdNull([NotNull] Assemblier.OpLdNullContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStFld"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpStFld([NotNull] Assemblier.OpStFldContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStFld"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpStFld([NotNull] Assemblier.OpStFldContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStLoc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpStLoc([NotNull] Assemblier.OpStLocContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStLoc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpStLoc([NotNull] Assemblier.OpStLocContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStArg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpStArg([NotNull] Assemblier.OpStArgContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStArg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpStArg([NotNull] Assemblier.OpStArgContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStElem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpStElem([NotNull] Assemblier.OpStElemContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStElem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpStElem([NotNull] Assemblier.OpStElemContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opStTA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpStTA([NotNull] Assemblier.OpStTAContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opStTA"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpStTA([NotNull] Assemblier.OpStTAContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opAdd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpAdd([NotNull] Assemblier.OpAddContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opAdd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpAdd([NotNull] Assemblier.OpAddContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opSub"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpSub([NotNull] Assemblier.OpSubContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opSub"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpSub([NotNull] Assemblier.OpSubContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opMul"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpMul([NotNull] Assemblier.OpMulContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opMul"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpMul([NotNull] Assemblier.OpMulContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opDiv"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpDiv([NotNull] Assemblier.OpDivContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opDiv"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpDiv([NotNull] Assemblier.OpDivContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opMod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpMod([NotNull] Assemblier.OpModContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opMod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpMod([NotNull] Assemblier.OpModContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opAnd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpAnd([NotNull] Assemblier.OpAndContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opAnd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpAnd([NotNull] Assemblier.OpAndContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opOr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpOr([NotNull] Assemblier.OpOrContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opOr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpOr([NotNull] Assemblier.OpOrContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opXor"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpXor([NotNull] Assemblier.OpXorContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opXor"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpXor([NotNull] Assemblier.OpXorContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpNot([NotNull] Assemblier.OpNotContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpNot([NotNull] Assemblier.OpNotContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNeg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpNeg([NotNull] Assemblier.OpNegContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNeg"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpNeg([NotNull] Assemblier.OpNegContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opConv"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpConv([NotNull] Assemblier.OpConvContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opConv"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpConv([NotNull] Assemblier.OpConvContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpCall([NotNull] Assemblier.OpCallContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpCall([NotNull] Assemblier.OpCallContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCallVirt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpCallVirt([NotNull] Assemblier.OpCallVirtContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCallVirt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpCallVirt([NotNull] Assemblier.OpCallVirtContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opRet"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpRet([NotNull] Assemblier.OpRetContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opRet"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpRet([NotNull] Assemblier.OpRetContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpCmpCond([NotNull] Assemblier.OpCmpCondContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpCmpCond([NotNull] Assemblier.OpCmpCondContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCmp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpCmp([NotNull] Assemblier.OpCmpContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCmp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpCmp([NotNull] Assemblier.OpCmpContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opJcc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpJcc([NotNull] Assemblier.OpJccContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opJcc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpJcc([NotNull] Assemblier.OpJccContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opJmp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpJmp([NotNull] Assemblier.OpJmpContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opJmp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpJmp([NotNull] Assemblier.OpJmpContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opThrow"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpThrow([NotNull] Assemblier.OpThrowContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opThrow"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpThrow([NotNull] Assemblier.OpThrowContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opTry"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpTry([NotNull] Assemblier.OpTryContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opTry"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpTry([NotNull] Assemblier.OpTryContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCatch"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpCatch([NotNull] Assemblier.OpCatchContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCatch"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpCatch([NotNull] Assemblier.OpCatchContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opFinally"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpFinally([NotNull] Assemblier.OpFinallyContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opFinally"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpFinally([NotNull] Assemblier.OpFinallyContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNew"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpNew([NotNull] Assemblier.OpNewContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNew"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpNew([NotNull] Assemblier.OpNewContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNewArr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpNewArr([NotNull] Assemblier.OpNewArrContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNewArr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpNewArr([NotNull] Assemblier.OpNewArrContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opDup"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpDup([NotNull] Assemblier.OpDupContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opDup"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpDup([NotNull] Assemblier.OpDupContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opPop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpPop([NotNull] Assemblier.OpPopContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opPop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpPop([NotNull] Assemblier.OpPopContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opNop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpNop([NotNull] Assemblier.OpNopContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opNop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpNop([NotNull] Assemblier.OpNopContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.ilInstruction"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterIlInstruction([NotNull] Assemblier.IlInstructionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.ilInstruction"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitIlInstruction([NotNull] Assemblier.IlInstructionContext context);
 }

@@ -47,7 +47,7 @@ namespace HexRuntimeAssemblier
 	class MDIndexTable
 	{
 		public MDRecordKinds Kind;
-		public IList<Int32> Offsets;
+		public Int32[] Offsets;
 	}
 
 	class TypeRefMD
@@ -93,7 +93,7 @@ namespace HexRuntimeAssemblier
 	class GenericInstantiationMD
 	{
 		public MDToken CanonicalTypeRefToken;
-		public IList<MDToken> GenericParameterTokens;
+		public MDToken[] GenericParameterTokens;
 	};
 
 	[Flags]
@@ -113,7 +113,7 @@ namespace HexRuntimeAssemblier
 		public MDToken NameToken;
 		public byte Accessibility;
 		public FieldFlag Flags;
-		public IList<MDToken> AttributeTokens;
+		public MDToken[] AttributeTokens;
 	}
 
 	class PropertyMD
@@ -124,7 +124,7 @@ namespace HexRuntimeAssemblier
 		public MDToken GetterToken;
 		public MDToken BackingFieldToken;
 		public MDToken NameToken;
-		public IList<MDToken> AttributeTokens;
+		public MDToken[] AttributeTokens;
 	}
 
 	class EventMD
@@ -135,7 +135,7 @@ namespace HexRuntimeAssemblier
 		public MDToken RemoverToken;
 		public MDToken BackingFieldToken;
 		public MDToken NameToken;
-		public IList<MDToken> AttributeTokens;
+		public MDToken[] AttributeTokens;
 	}
 
 	class ArgumentMD
@@ -144,13 +144,13 @@ namespace HexRuntimeAssemblier
 		public MDToken NameToken;
 		public MDToken DefaultStringValueToken;
 		public Int64 DefaultValue;
-		public IList<MDToken> AttributeTokens;
+		public MDToken[] AttributeTokens;
 	}
 
 	class MethodSignatureMD
 	{
 		public MDToken ReturnTypeRefToken;
-		public IList<MDToken> ArgumentTokens;
+		public MDToken[] ArgumentTokens;
 	}
 
 	class LocalVariableMD
@@ -161,9 +161,8 @@ namespace HexRuntimeAssemblier
 
 	class ILMD
 	{
-
-		public IList<LocalVariableMD> LocalVariables;
-		public IList<byte> IL;
+		public LocalVariableMD[] LocalVariables;
+		public byte[] IL;
 	}
 
 	class NativeLinkMD
@@ -171,18 +170,29 @@ namespace HexRuntimeAssemblier
 
 	}
 
+	[Flags]
+	enum MethodFlag : ushort
+	{
+		Virtual = 0x0001,
+		Static = 0x0002,
+		Override = 0x0004,
+		Final = 0x0008,
+		Generic = 0x0010,
+		RTSpecial = 0x0020
+	}
+
 	class MethodMD
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken NameToken;
 		public byte Accessibility;
-		public ushort Flags;
+		public MethodFlag Flags;
 		public MethodSignatureMD Signature;
 		public MDToken OverridesMethodRef;
 		public ILMD ILCodeMD;
-		public IList<NativeLinkMD> NativeLinks;
-		public IList<MDToken> GenericParameterTokens;
-		public IList<MDToken> AttributeTokens;
+		public NativeLinkMD[] NativeLinks;
+		public MDToken[] GenericParameterTokens;
+		public MDToken[] AttributeTokens;
 	}
 
 	[Flags]
@@ -210,12 +220,12 @@ namespace HexRuntimeAssemblier
 
 		public TypeFlag Flags;
 
-		public IList<MDToken> FieldTokens;
-		public IList<MDToken> MethodTokens;
-		public IList<MDToken> PropertyTokens;
-		public IList<MDToken> EventTokens;
-		public IList<MDToken> InterfaceTokens;
-		public IList<MDToken> GenericParameterTokens;
-		public IList<MDToken> AttributeTokens;
+		public MDToken[] FieldTokens;
+		public MDToken[] MethodTokens;
+		public MDToken[] PropertyTokens;
+		public MDToken[] EventTokens;
+		public MDToken[] InterfaceTokens;
+		public MDToken[] GenericParameterTokens;
+		public MDToken[] AttributeTokens;
 	}
 }

@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31613.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexRuntimeAssemblier", "HexRuntimeAssemblier\HexRuntimeAssemblier.csproj", "{4BE205DB-B351-44C3-97F7-CB82CCF55133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblierTest", "AssemblierTest\AssemblierTest.csproj", "{1C498D8F-DC1D-4876-9362-34DD8FC7E2CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblierTest", "AssemblierTest\AssemblierTest.csproj", "{1C498D8F-DC1D-4876-9362-34DD8FC7E2CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILAssemblierParserCodeGenerator", "ILAssemblierParserCodeGenerator\ILAssemblierParserCodeGenerator.csproj", "{9433B00B-B125-48B1-9ADF-3B09F2D1F4D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1C498D8F-DC1D-4876-9362-34DD8FC7E2CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C498D8F-DC1D-4876-9362-34DD8FC7E2CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C498D8F-DC1D-4876-9362-34DD8FC7E2CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9433B00B-B125-48B1-9ADF-3B09F2D1F4D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9433B00B-B125-48B1-9ADF-3B09F2D1F4D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9433B00B-B125-48B1-9ADF-3B09F2D1F4D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9433B00B-B125-48B1-9ADF-3B09F2D1F4D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

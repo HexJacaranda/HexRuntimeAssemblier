@@ -4,17 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using HexRuntimeAssemblier.IL;
 
 namespace HexRuntimeAssemblier
 {
-    public class AssemblyBuilder
+    public class AssemblyBuilder : IAssemblyResolver
     {
         private AssemblyHeaderMD mCurrentAssembly;
-        private ReferenceResolver mReferenceResolver;
-        private Dictionary<MDRecordKinds, DefinitionTable> mDefinitionTables;
-        private Dictionary<string, uint> mString2Token = new();
+        private readonly ReferenceResolver mReferenceResolver;
+        private readonly Dictionary<MDRecordKinds, DefinitionTable> mDefinitionTables;
+        private readonly Dictionary<string, uint> mString2Token = new();
         private uint mStringToken = 0u;
 
+        #region TableAlias
         private DefinitionTable TypeDefTable => mDefinitionTables[MDRecordKinds.TypeDef];
         private DefinitionTable FieldDefTable => mDefinitionTables[MDRecordKinds.FieldDef];
         private DefinitionTable MethodDefTable => mDefinitionTables[MDRecordKinds.MethodDef];
@@ -22,7 +24,28 @@ namespace HexRuntimeAssemblier
         private DefinitionTable EventDefTable => mDefinitionTables[MDRecordKinds.EventDef];
         private DefinitionTable GenericParameterDefTable => mDefinitionTables[MDRecordKinds.GenericParameter];
         private DefinitionTable GenericInstantiationDefTable => mDefinitionTables[MDRecordKinds.GenericInstantiationDef];
+        #endregion
 
+        #region NameHelper
+        private static string GetFullQualifiedNameOf(Assemblier.MethodDefContext context, string typeFullQualifiedName)
+        {
+            var methodShortName = context.methodName().GetText();
+            var returnType = context.methodReturnType().GetText();
+            var arguments = context.methodArgumentList().methodArgument();
+            var genericArguments = context.genericList()?.IDENTIFIER();
+            string methodSignature = string.Empty;
+            if (genericArguments != null && genericArguments.Length > 0)
+            {
+                methodSignature = $"{methodShortName}<{genericArguments?.Length}>" +
+                $"({string.Join(',', arguments.Select(x => x.type().GetText()))})";
+            }
+            else
+            {
+                methodSignature = $"{methodShortName}({string.Join(',', arguments.Select(x => x.type().GetText()))})";
+            }
+            return $"{returnType} {typeFullQualifiedName}::{methodSignature}";
+        }
+        #endregion
         public static string GetPropertyKey(Assemblier.PropertyContext context)
             => context.GetChild<Assemblier.PropertyKeyContext>(0).GetText();
         public static string GetPropertyValue(Assemblier.PropertyContext context)
@@ -35,7 +58,11 @@ namespace HexRuntimeAssemblier
             Assemblier.MODIFIER_INTERNAL => 3,
             _ => throw new Exception()
         };
-
+        /// <summary>
+        /// Get generated token from managed string
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public uint GetTokenFromString(string value)
         {
             if (!mString2Token.TryGetValue(value, out var token))
@@ -150,7 +177,7 @@ namespace HexRuntimeAssemblier
             {
                 //Multidimension-Array generic ref, need to get from the core library
                 CanonicalTypeRefToken = 0u,
-                GenericParameterTokens = new List<uint> { elementRefToken }
+                GenericParameterTokens = new uint[] { elementRefToken }
             });
         }
         public uint ResolveArrayType(Assemblier.NestArrayTypeContext context)
@@ -162,7 +189,7 @@ namespace HexRuntimeAssemblier
             {
                 //Array generic ref, need to get from the core library
                 CanonicalTypeRefToken = 0u,
-                GenericParameterTokens = new List<uint> { elementRefToken }
+                GenericParameterTokens = new uint[] { elementRefToken }
             });
         }
         public uint ResolveInteriorRefType(Assemblier.InteriorRefTypeContext context)
@@ -174,7 +201,7 @@ namespace HexRuntimeAssemblier
             {
                 //interior generic ref, need to get from the core library
                 CanonicalTypeRefToken = 0u,
-                GenericParameterTokens = new List<uint> { internalRefToken }
+                GenericParameterTokens = new uint[] { internalRefToken }
             });
         }
         public uint ResolveGenericParameterRef(Assemblier.GenericParameterRefContext context)
@@ -189,7 +216,7 @@ namespace HexRuntimeAssemblier
         {
             var canonical = context.typeRef();
             var canonicalRefToken = ResolveTypeRef(canonical);
-            var parameterTypeTokens = context.type().Select(x => ResolveType(x)).ToList();
+            var parameterTypeTokens = context.genericParameterList().type().Select(x => ResolveType(x)).ToArray();
 
             return GenericInstantiationDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
             {
@@ -206,7 +233,10 @@ namespace HexRuntimeAssemblier
             var fieldShortName = context.IDENTIFIER().GetText();
             var fieldFullQualifiedName = GetFullQualifiedName(context, "::", fieldShortName);
 
-            var fieldDefToken = FieldDefTable.GetDefinitionToken(fieldFullQualifiedName, () => new FieldMD());
+            var fieldDefToken = FieldDefTable.GetDefinitionToken(fieldFullQualifiedName, () => new FieldMD()
+            {
+                NameToken = GetTokenFromString(fieldShortName)
+            });
             var field = FieldDefTable[fieldDefToken] as FieldMD;
 
             //Flags
@@ -233,17 +263,43 @@ namespace HexRuntimeAssemblier
             field.ParentTypeRefToken = mReferenceResolver.AcquireInternalTypeReference(typeFullQualifiedName, typeDefToken);
             return fieldDefToken;
         }
-        public uint ResolveMethodDef(Assemblier.MethodDefContext context)
-        {
-            //Handle the type mapping    
+        public uint ResolveMethodDef(
+            Assemblier.MethodDefContext context,
+            string typeFullQualifiedName,
+            uint typeDefToken)
+        {  
+            var methodFullQualifiedName = GetFullQualifiedNameOf(context, typeFullQualifiedName);
             var methodShortName = context.methodName().GetText();
-            var arguments = context.methodArgumentList().methodArgument();
-            var methodSignature = $"{methodShortName}({string.Join(',', arguments.Select(x => x.type().GetText()))})";
-            var methodFullQualifiedName = GetFullQualifiedName(context, "::", methodSignature);
 
-            var fieldDefToken = TypeDefTable.GetDefinitionToken(methodFullQualifiedName, () => new FieldMD());
-            var field = FieldDefTable[fieldDefToken] as FieldMD;
-            return 0u;
+            var methodDefToken = MethodDefTable.GetDefinitionToken(methodFullQualifiedName, () => new MethodMD()
+            {
+                NameToken = GetTokenFromString(methodShortName)
+            });
+            var method = MethodDefTable[methodDefToken] as MethodMD;
+
+            //Parent ref
+            method.ParentTypeRefToken = mReferenceResolver.AcquireInternalTypeReference(typeFullQualifiedName, typeDefToken);
+
+            MethodFlag flag = 0;
+            if (context.ExistToken(Assemblier.MODIFIER_VIRTUAL))
+                flag |= MethodFlag.Virtual;
+            if (context.modifierLife().GetUnderlyingTokenType() == Assemblier.MODIFIER_STATIC)
+                flag |= MethodFlag.Static;
+            if (context.methodProperty() != null)
+                flag |= MethodFlag.RTSpecial;
+            method.Flags = flag;
+
+            if (context.methodSource().methodImport() != null)
+            {
+                //TODO: import from external native dynamic library
+            }
+
+            var access = context.modifierAccess().GetUnderlyingTokenType();
+            method.Accessibility = MapAccessbility(access);
+
+            method.ILCodeMD = new ILAssemblier(context.methodBody(), this).Generate();
+            
+            return methodDefToken;
         }
         public uint ResolvePropertyDef(
             Assemblier.PropertyDefContext context, 
@@ -284,8 +340,6 @@ namespace HexRuntimeAssemblier
             uint typeDefToken)
         {
             var adder = context.eventAdd();
-            
-
             uint addMethodRef = uint.MaxValue;
             if (adder != null)
                 addMethodRef = ResolveMethodRef(adder.methodRef());
@@ -301,7 +355,7 @@ namespace HexRuntimeAssemblier
             if (addMethodRef == uint.MaxValue && removeMethodRef == uint.MaxValue)
             {
                 //Not exist
-                throw new TypeResolveException($"Property [{fullQualifiedName}] contains no valid setter or getter");
+                throw new TypeResolveException($"Event [{fullQualifiedName}] contains no valid setter or getter");
             }
 
             return PropertyDefTable.GetDefinitionToken(fullQualifiedName, () => new EventMD
@@ -359,7 +413,7 @@ namespace HexRuntimeAssemblier
                         return GenericParameterDefTable.GetDefinitionToken(fullQualifiedName,
                             () => new GenericParamterMD { NameToken = GetTokenFromString(fullQualifiedName) });
                     })
-                    .ToList();
+                    .ToArray();
             }
 
             //Inherit
@@ -378,7 +432,7 @@ namespace HexRuntimeAssemblier
                     .typeRefList()
                     .inheritOrImplementType()
                     .Select(x => ResolveUnknownTypeForm(x.GetUnderlyingType()))
-                    .ToList();
+                    .ToArray();
             }
 
             //Handle the body
@@ -386,12 +440,14 @@ namespace HexRuntimeAssemblier
             foreach (var member in body.classDef())
                 ResolveClassDef(member, true);
 
-            type.FieldTokens = body.fieldDef().Select(x => ResolveFieldDef(x)).ToList();
-            type.MethodTokens = body.methodDef().Select(x => ResolveMethodDef(x)).ToList();
+            type.FieldTokens = body.fieldDef().Select(
+                x => ResolveFieldDef(x, typeFullQualifiedName, typeDefToken)).ToArray();
+            type.MethodTokens = body.methodDef().Select(
+                x => ResolveMethodDef(x, typeFullQualifiedName, typeDefToken)).ToArray();
             type.PropertyTokens = body.propertyDef().Select(
-                x => ResolvePropertyDef(x, typeFullQualifiedName, typeDefToken)).ToList();
+                x => ResolvePropertyDef(x, typeFullQualifiedName, typeDefToken)).ToArray();
             type.EventTokens = body.eventDef().Select(
-                x => ResolveEventDef(x, typeFullQualifiedName, typeDefToken)).ToList();
+                x => ResolveEventDef(x, typeFullQualifiedName, typeDefToken)).ToArray();
 
             return typeDefToken;
         }
@@ -414,7 +470,9 @@ namespace HexRuntimeAssemblier
         }
         public uint ResolveMethodRef(Assemblier.MethodRefContext context)
         {
-            return 0u;
+            var typeRef = context.typeRef();
+            var assemblyRef = typeRef.assemblyRef();
+            return 0;
         }
         public uint ResolveFieldRef(Assemblier.FieldRefContext context)
         {
