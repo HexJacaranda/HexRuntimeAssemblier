@@ -87,10 +87,16 @@ typeName: (IDENTIFIER DOT)+ IDENTIFIER;
 typeRef: assemblyRef? typeName;
 
 primitiveType: PRIMITIVE_INT |
+        PRIMITIVE_UINT
         PRIMITIVE_LONG |
+        PRIMITIVE_ULONG |
         PRIMITIVE_SHORT |
+        PRIMITIVE_USHORT |
         PRIMITIVE_BYTE |
+        PRIMITIVE_UBYTE |
         PRIMITIVE_CHAR |
+        PRIMITIVE_R4 |
+        PRIMITIVE_R8 |
         PRIMITIVE_STRING |
         PRIMITIVE_BOOL;
 

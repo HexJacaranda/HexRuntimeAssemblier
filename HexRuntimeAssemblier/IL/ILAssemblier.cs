@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HexRuntimeAssemblier.IL
@@ -13,6 +14,10 @@ namespace HexRuntimeAssemblier.IL
         readonly BinaryWriter mILWriter;
         readonly Assemblier.MethodBodyContext mAST;
         readonly IAssemblyResolver mResolver;
+        readonly Dictionary<string, short> mLocalMap = new();
+        readonly Dictionary<string, short> mArgumentMap = new();
+        readonly Dictionary<string, int> mLabelMap = new();
+        readonly List<(int Index, string LabelName)> mOffsetTable = new();
         public ILAssemblier(Assemblier.MethodBodyContext body, IAssemblyResolver assemblyResolver)
         {
             mAST = body;

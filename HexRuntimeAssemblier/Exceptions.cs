@@ -52,4 +52,27 @@ namespace HexRuntimeAssemblier
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+
+
+    [Serializable]
+    public class UnknownTokenException : Exception
+    {
+        public UnknownTokenException() { }
+        public UnknownTokenException(string message) : base(message) { }
+        public UnknownTokenException(string message, Exception inner) : base(message, inner) { }
+        protected UnknownTokenException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+    [Serializable]
+    public class DuplicateLabelException : Exception
+    {
+        public DuplicateLabelException() { }
+        public DuplicateLabelException(string message) : base(message) { }
+        public DuplicateLabelException(string message, Exception inner) : base(message, inner) { }
+        protected DuplicateLabelException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

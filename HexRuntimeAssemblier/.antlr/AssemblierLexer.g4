@@ -63,10 +63,16 @@ VOID: 'void';
 
 //Support for primitive type abbr. form
 PRIMITIVE_INT: 'int32';
+PRIMITIVE_UINT: 'uint32';
 PRIMITIVE_LONG: 'int64';
+PRIMITIVE_ULONG: 'uint64';
 PRIMITIVE_SHORT: 'int16';
+PRIMITIVE_USHORT: 'uint16';
 PRIMITIVE_BYTE: 'int8';
+PRIMITIVE_UBYTE: 'uint8';
 PRIMITIVE_CHAR: 'char';
+PRIMITIVE_R4: 'float';
+PRIMITIVE_R8: 'double';
 PRIMITIVE_STRING: 'string';
 PRIMITIVE_BOOL: 'bool';
 
