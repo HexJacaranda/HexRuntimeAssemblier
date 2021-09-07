@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using HexRuntimeAssemblier.Interfaces;
+using HexRuntimeAssemblier.Meta;
+using HexRuntimeAssemblier.Reference;
 
 namespace HexRuntimeAssemblier.IL
 {
@@ -18,7 +21,7 @@ namespace HexRuntimeAssemblier.IL
         readonly Dictionary<string, short> mArgumentMap = new();
         readonly Dictionary<string, int> mLabelMap = new();
         readonly List<(int Index, string LabelName)> mOffsetTable = new();
-        public ILAssemblier(Assemblier.MethodBodyContext body, IAssemblyResolver assemblyResolver)
+        public ILAssemblier(Assemblier.MethodBodyContext body, IAssemblyBuilder assemblyResolver)
         {
             mAST = body;
             mResolver = assemblyResolver;
@@ -32,7 +35,7 @@ namespace HexRuntimeAssemblier.IL
             result.LocalVariables = locals.Select(x => new LocalVariableMD
             {
                 NameToken = mResolver.GetTokenFromString(x.IDENTIFIER().GetText()),
-                TypeRefToken = mResolver.ResolveTypeRef(x.typeRef())
+                TypeRefToken = mResolver.re(x.typeRef())
             }).ToArray();
 
             //Parse the IL code

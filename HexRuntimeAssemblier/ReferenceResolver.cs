@@ -45,7 +45,29 @@ namespace HexRuntimeAssemblier
         }
         public uint ResovleMethodReference(string assembly, string typeReference, string methodReference)
         {
+            if (!mExternalAssemblies.TryGetValue(assembly, out var externalAssembly))
+                throw new ReferenceTargetNotFoundException($"Reference assembly [{assembly}] not found");
+            var methodDefToken = externalAssembly.GetMemberDefToken(methodReference, MDRecordKinds.MethodDef);
+            var methodRefTable = mReferenceTables[MDRecordKinds.MethodRef];
+
+            
+            methodRefTable.GetReferenceToken(methodReference,)
+        }
+        public uint AcquireInternalMethodReference(string typeReference, uint typeDefToken)
+        {
+            var typeRefTable = mReferenceTables[MDRecordKinds.TypeRef];
+            return typeRefTable.GetReferenceToken(typeReference,
+                () => new TypeRefMD { AssemblyToken = AssemblyRefMD.Self, Token = typeDefToken });
+        }
+        public uint ResovleFieldReference(string assembly, string typeReference, string methodReference)
+        {
             return 0u;
+        }
+        public uint AcquireInternalFieldReference(string typeReference, uint typeDefToken)
+        {
+            var typeRefTable = mReferenceTables[MDRecordKinds.TypeRef];
+            return typeRefTable.GetReferenceToken(typeReference,
+                () => new TypeRefMD { AssemblyToken = AssemblyRefMD.Self, Token = typeDefToken });
         }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HexRuntimeAssemblier
+namespace HexRuntimeAssemblier.Meta
 {
-    class ReferenceTable
+    public class ReferenceTable
     {
         private readonly MDRecordKinds mReferenceKind;
         private readonly Dictionary<string, uint> mName2Token = new();

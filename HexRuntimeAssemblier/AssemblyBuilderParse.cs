@@ -5,27 +5,28 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using HexRuntimeAssemblier.IL;
+using HexRuntimeAssemblier.Interfaces;
+using HexRuntimeAssemblier.Meta;
+using HexRuntimeAssemblier.Reference;
 
 namespace HexRuntimeAssemblier
 {
-    public class AssemblyBuilder : IAssemblyResolver
+    public partial class AssemblyBuilder : IAssemblyBuilder
     {
         private AssemblyHeaderMD mCurrentAssembly;
-        private readonly ReferenceResolver mReferenceResolver;
-        private readonly Dictionary<MDRecordKinds, DefinitionTable> mDefinitionTables;
-        private readonly Dictionary<string, uint> mString2Token = new();
-        private uint mStringToken = 0u;
-
+        private readonly GlobalResolver mResolver;
+        private readonly Dictionary<MDRecordKinds, DefinitionTable> mDefTables;
+        private readonly Dictionary<MDRecordKinds, ReferenceTable> mRefTables;
+        private readonly StringTable mStringTable;
         #region TableAlias
-        private DefinitionTable TypeDefTable => mDefinitionTables[MDRecordKinds.TypeDef];
-        private DefinitionTable FieldDefTable => mDefinitionTables[MDRecordKinds.FieldDef];
-        private DefinitionTable MethodDefTable => mDefinitionTables[MDRecordKinds.MethodDef];
-        private DefinitionTable PropertyDefTable => mDefinitionTables[MDRecordKinds.PropertyDef];
-        private DefinitionTable EventDefTable => mDefinitionTables[MDRecordKinds.EventDef];
-        private DefinitionTable GenericParameterDefTable => mDefinitionTables[MDRecordKinds.GenericParameter];
-        private DefinitionTable GenericInstantiationDefTable => mDefinitionTables[MDRecordKinds.GenericInstantiationDef];
+        private DefinitionTable TypeDefTable => mDefTables[MDRecordKinds.TypeDef];
+        private DefinitionTable FieldDefTable => mDefTables[MDRecordKinds.FieldDef];
+        private DefinitionTable MethodDefTable => mDefTables[MDRecordKinds.MethodDef];
+        private DefinitionTable PropertyDefTable => mDefTables[MDRecordKinds.PropertyDef];
+        private DefinitionTable EventDefTable => mDefTables[MDRecordKinds.EventDef];
+        private DefinitionTable GenericParameterDefTable => mDefTables[MDRecordKinds.GenericParameter];
+        private DefinitionTable GenericInstantiationDefTable => mDefTables[MDRecordKinds.GenericInstantiationDef];
         #endregion
-
         #region NameHelper
         private static string GetFullQualifiedNameOf(Assemblier.MethodDefContext context, string typeFullQualifiedName)
         {
@@ -64,14 +65,7 @@ namespace HexRuntimeAssemblier
         /// <param name="value"></param>
         /// <returns></returns>
         public uint GetTokenFromString(string value)
-        {
-            if (!mString2Token.TryGetValue(value, out var token))
-            {
-                token = mStringToken++;
-                mString2Token.Add(value, token);
-            }
-            return token;
-        }
+            => mStringTable.GetTokenFromString(value);
         /// <summary>
         /// Get the full qualified name of nested class or class member
         /// </summary>
@@ -233,12 +227,10 @@ namespace HexRuntimeAssemblier
             var fieldShortName = context.IDENTIFIER().GetText();
             var fieldFullQualifiedName = GetFullQualifiedName(context, "::", fieldShortName);
 
-            var fieldDefToken = FieldDefTable.GetDefinitionToken(fieldFullQualifiedName, () => new FieldMD()
-            {
-                NameToken = GetTokenFromString(fieldShortName)
-            });
+            var fieldDefToken = TryDefineField(fieldFullQualifiedName);
             var field = FieldDefTable[fieldDefToken] as FieldMD;
 
+            field.NameToken = GetTokenFromString(fieldShortName);
             //Flags
             FieldFlag flag = 0;
             if (context.ExistToken(Assemblier.MODIFIER_THREAD_LOCAL))
@@ -260,7 +252,7 @@ namespace HexRuntimeAssemblier
                 flag |= FieldFlag.Static;
 
             field.TypeRefToken = ResolveType(context.type());
-            field.ParentTypeRefToken = mReferenceResolver.AcquireInternalTypeReference(typeFullQualifiedName, typeDefToken);
+            field.ParentTypeRefToken = mResolver.QueryReference(null,typeFullQualifiedName,)
             return fieldDefToken;
         }
         public uint ResolveMethodDef(
@@ -454,24 +446,41 @@ namespace HexRuntimeAssemblier
         public uint ResolveTypeRef(Assemblier.TypeRefContext context)
         {
             var assemblyRef = context.assemblyRef();
+            string typeName = context.GetText();
             if (assemblyRef == null)
-            {
-                string typeName = context.GetText();
+            {              
                 var defToken = TypeDefTable.GetDefinitionToken(
                     typeName,
-                    () => new TypeMD());
+                    () => new TypeMD()
+                    {
+                        NameToken = GetTokenFromString(typeName)
+                    });
 
                 return mReferenceResolver.AcquireInternalTypeReference(typeName, defToken);
             }
             else
             {
-                return mReferenceResolver.ResolveTypeReference(assemblyRef.GetText(), context.GetText());
+                return mReferenceResolver.ResolveTypeReference(assemblyRef.GetText(), typeName);
             }
         }
         public uint ResolveMethodRef(Assemblier.MethodRefContext context)
         {
             var typeRef = context.typeRef();
             var assemblyRef = typeRef.assemblyRef();
+            var methodFullQualifiedName = context.GetText();
+            if (assemblyRef == null)
+            {
+                //A definition inside this assembly
+
+                var definitionToken = MethodDefTable.GetDefinitionToken(
+                    context.GetText(),
+                    () => new MethodMD()
+                    {
+                        NameToken = GetTokenFromString(methodFullQualifiedName)
+                    });
+
+                return mReferenceResolver
+            }
             return 0;
         }
         public uint ResolveFieldRef(Assemblier.FieldRefContext context)

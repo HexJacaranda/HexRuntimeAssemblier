@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using MDToken = System.UInt32;
-namespace HexRuntimeAssemblier
+
+namespace HexRuntimeAssemblier.Meta
 {
-	enum MDRecordKinds : int
+	public enum MDRecordKinds : int
 	{
 		String,
 		Argument,
@@ -24,7 +24,7 @@ namespace HexRuntimeAssemblier
 		PropertyRef,
 		EventRef
 	};
-	class AssemblyHeaderMD
+	public class AssemblyHeaderMD
 	{
 		public MDToken NameToken;
 		public Int32 MajorVersion;
@@ -33,7 +33,7 @@ namespace HexRuntimeAssemblier
 		public Guid GUID;
 	};
 
-	class RefTableHeaderMD
+	public class RefTableHeaderMD
 	{
 		public Int32 TypeRefTableOffset;
 		public Int32 TypeRefCount;
@@ -44,13 +44,13 @@ namespace HexRuntimeAssemblier
 	};
 
 
-	class MDIndexTable
+	public class MDIndexTable
 	{
 		public MDRecordKinds Kind;
 		public Int32[] Offsets;
 	}
 
-	class TypeRefMD
+	public class TypeRefMD
 	{
 		public MDToken AssemblyToken;
 		public MDRecordKinds DefKind;
@@ -58,26 +58,26 @@ namespace HexRuntimeAssemblier
 	}
 
 
-	class MemberRefMD
+	public class MemberRefMD
 	{
 		public MDToken TypeRefToken;
 		public MDRecordKinds MemberDefKind;
 		public MDToken MemberDefToken;
 	}
 
-	class AssemblyRefMD
+	public class AssemblyRefMD
 	{
 		public const MDToken Self = 0u;
 		public Guid GUID;
 		public MDToken AssemblyName;
 	}
 
-	class StringMD
+	public class StringMD
 	{
 		public char[] Sequence;
 	}
 
-	class AtrributeMD
+	public class AtrributeMD
 	{
 		public MDRecordKinds ParentKind;
 		public MDToken ParentToken;
@@ -85,19 +85,19 @@ namespace HexRuntimeAssemblier
 		public List<byte> Attribute;
 	}
 
-	class GenericParamterMD
+	public class GenericParamterMD
 	{
 		public MDToken NameToken;
 	}
 
-	class GenericInstantiationMD
+	public class GenericInstantiationMD
 	{
 		public MDToken CanonicalTypeRefToken;
 		public MDToken[] GenericParameterTokens;
 	};
 
 	[Flags]
-	enum FieldFlag : ushort
+	public enum FieldFlag : ushort
 	{
 		Volatile = 0x0001,
 		Static = 0x0002,
@@ -106,7 +106,7 @@ namespace HexRuntimeAssemblier
 		ThreadLocal = 0x0010
 	}
 
-	class FieldMD
+	public class FieldMD
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken TypeRefToken;
@@ -116,7 +116,7 @@ namespace HexRuntimeAssemblier
 		public MDToken[] AttributeTokens;
 	}
 
-	class PropertyMD
+	public class PropertyMD
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken TypeRefToken;
@@ -127,7 +127,7 @@ namespace HexRuntimeAssemblier
 		public MDToken[] AttributeTokens;
 	}
 
-	class EventMD
+	public class EventMD
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken TypeRefToken;
@@ -138,7 +138,7 @@ namespace HexRuntimeAssemblier
 		public MDToken[] AttributeTokens;
 	}
 
-	class ArgumentMD
+	public class ArgumentMD
 	{
 		public MDToken TypeRefToken;
 		public MDToken NameToken;
@@ -147,31 +147,31 @@ namespace HexRuntimeAssemblier
 		public MDToken[] AttributeTokens;
 	}
 
-	class MethodSignatureMD
+	public class MethodSignatureMD
 	{
 		public MDToken ReturnTypeRefToken;
 		public MDToken[] ArgumentTokens;
 	}
 
-	class LocalVariableMD
+	public class LocalVariableMD
 	{
 		public MDToken TypeRefToken;
 		public MDToken NameToken;
 	}
 
-	class ILMD
+	public class ILMD
 	{
 		public LocalVariableMD[] LocalVariables;
 		public byte[] IL;
 	}
 
-	class NativeLinkMD
+	public class NativeLinkMD
 	{
 
 	}
 
 	[Flags]
-	enum MethodFlag : ushort
+	public enum MethodFlag : ushort
 	{
 		Virtual = 0x0001,
 		Static = 0x0002,
@@ -181,7 +181,7 @@ namespace HexRuntimeAssemblier
 		RTSpecial = 0x0020
 	}
 
-	class MethodMD
+	public class MethodMD
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken NameToken;
@@ -196,7 +196,7 @@ namespace HexRuntimeAssemblier
 	}
 
 	[Flags]
-	enum TypeFlag : ushort
+	public enum TypeFlag : ushort
     {
 		Sealed = 0x0001,
 		Abstract = 0x0002,
@@ -207,7 +207,7 @@ namespace HexRuntimeAssemblier
 		Nested = 0x0040
     }
 
-	class TypeMD
+	public class TypeMD
 	{
 		public MDToken ParentAssemblyToken;
 		public MDToken ParentTypeRefToken;
