@@ -7,7 +7,6 @@ using HexRuntimeAssemblier.Interfaces;
 
 namespace HexRuntimeAssemblier.Reference
 {
-    //R
     public class AssemblyResolver : IAssemblyResolver
     {
         public uint QueryFieldReference(string fullQualifiedName)

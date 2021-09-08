@@ -51,11 +51,12 @@ methodDef: KEY_METHOD
         methodBody
     BODY_END;
 
-methodRef: methodReturnType typeRef JUNCTION methodName genericParameterList? PARAM_BEGIN type* PARAM_END;
+methodParentType: type;
+methodRef: methodReturnType methodParentType JUNCTION methodName genericParameterList? PARAM_BEGIN type* PARAM_END;
 
 //Field
 fieldDef: KEY_FIELD modifierAccess modifierLife MODIFIER_THREAD_LOCAL? (MODIFIER_VOLATILE | MODIFIER_CONSTANT | MODIFIER_READONLY)? type IDENTIFIER;
-fieldRef: type typeRef JUNCTION IDENTIFIER;
+fieldRef: type type JUNCTION IDENTIFIER;
 
 //Property
 propertyGet: PROPERTY_GET methodRef;
@@ -101,7 +102,7 @@ primitiveType: PRIMITIVE_INT |
         PRIMITIVE_BOOL;
 
 genericParameterList: LBRACE type+ RBRACE;
-type: (primitiveType | typeRef | arrayType | interiorRefType | genericParameterRef);
+type: (primitiveType | typeRef | arrayType | interiorRefType | genericParameterRef | genericInstantiation);
 genericInstantiation: typeRef genericParameterList;
 genericParameterRef: LMID INT RMID JUNCTION IDENTIFIER;
 arrayType: nestArrayType | multidimensionArrayType;

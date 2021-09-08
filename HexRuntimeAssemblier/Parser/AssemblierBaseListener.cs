@@ -215,6 +215,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMethodDef([NotNull] Assemblier.MethodDefContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.methodParentType"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterMethodParentType([NotNull] Assemblier.MethodParentTypeContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.methodParentType"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitMethodParentType([NotNull] Assemblier.MethodParentTypeContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodRef"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

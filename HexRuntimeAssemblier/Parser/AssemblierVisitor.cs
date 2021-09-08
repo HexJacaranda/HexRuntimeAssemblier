@@ -122,6 +122,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitMethodDef([NotNull] Assemblier.MethodDefContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.methodParentType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMethodParentType([NotNull] Assemblier.MethodParentTypeContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.methodRef"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

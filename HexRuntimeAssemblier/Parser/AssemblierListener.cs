@@ -181,6 +181,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitMethodDef([NotNull] Assemblier.MethodDefContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.methodParentType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMethodParentType([NotNull] Assemblier.MethodParentTypeContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.methodParentType"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMethodParentType([NotNull] Assemblier.MethodParentTypeContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.methodRef"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

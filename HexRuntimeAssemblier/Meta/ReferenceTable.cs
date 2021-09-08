@@ -20,6 +20,7 @@ namespace HexRuntimeAssemblier.Meta
         /// Stores the reference token meta struture
         /// </summary>
         public IList<object> ReferenceTokenMetas => mRefTokenMetas;
+        public T GetMeta<T>(uint token) where T : class => mRefTokenMetas[(int)token] as T;
         public uint GetReferenceToken(string fullQualifiedName, Func<object> metaGenerator)
         {
             if (!mName2Token.TryGetValue(fullQualifiedName, out var token))

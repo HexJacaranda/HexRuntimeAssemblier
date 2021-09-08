@@ -18,22 +18,39 @@ namespace HexRuntimeAssemblier.Reference
             CurrentAssembly = builder;
             ExternalAssembly = externals;
         }
-        public MDToken QueryReference(
+        public MDToken QueryTypeDefinition(
             string assembly,
-            string fullQualifiedName,
-            Func<MDToken, MDToken> referenceTokenGenerator)
+            string fullQualifiedName)
         {
             if (string.IsNullOrEmpty(assembly))
-            {
-                //Reference to type inside current assembly
-                return referenceTokenGenerator(CurrentAssembly.TryDefineType(fullQualifiedName));
-            }
+                return CurrentAssembly.TryDefineType(fullQualifiedName);
             else
             {
                 var external = ExternalAssembly[assembly];
-                var defToken = external.QueryTypeReference(fullQualifiedName);
-                return referenceTokenGenerator(defToken);
+                return external.QueryTypeDefinition(fullQualifiedName);
             }
         }
+        public MDToken QueryMethodDefinition(
+            string assembly,
+            string fullQualifiedName)
+        {
+            if (string.IsNullOrEmpty(assembly))
+                return CurrentAssembly.TryDefineMethod(fullQualifiedName);
+            else
+            {
+                var external = ExternalAssembly[assembly];
+                return external.QueryMethodDefinition(fullQualifiedName);
+            }
+        }
+        public MDToken QueryTypeReference(
+            string assembly,
+            string fullQualifiedName,
+            Func<MDToken, MDToken> referenceTokenGenerator)
+            => referenceTokenGenerator(QueryTypeDefinition(assembly, fullQualifiedName));
+        public MDToken QueryMethodReference(
+            string assembly,
+            string fullQualifiedName,
+            Func<MDToken, MDToken> referenceTokenGenerator)
+            => referenceTokenGenerator(QueryMethodDefinition(assembly, fullQualifiedName));
     }
 }
