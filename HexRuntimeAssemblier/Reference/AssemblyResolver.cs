@@ -9,19 +9,19 @@ namespace HexRuntimeAssemblier.Reference
 {
     public class AssemblyResolver : IAssemblyResolver
     {
-        public uint QueryFieldReference(string fullQualifiedName)
+        public uint QueryFieldDefinition(string fullQualifiedName)
         {
-            throw new NotImplementedException();
+            return 0u;
         }
 
-        public uint QueryMethodReference(string fullQualifiedName)
+        public uint QueryMethodDefinition(string fullQualifiedName)
         {
-            throw new NotImplementedException();
+            return 0u;
         }
 
-        public uint QueryTypeReference(string fullQualifiedName)
+        public uint QueryTypeDefinition(string fullQualifiedName)
         {
-            throw new NotImplementedException();
+            return 0u;
         }
     }
 }

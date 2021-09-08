@@ -42,6 +42,18 @@ namespace HexRuntimeAssemblier.Reference
                 return external.QueryMethodDefinition(fullQualifiedName);
             }
         }
+        public MDToken QueryFieldDefinition(
+            string assembly,
+            string fullQualifiedName)
+        {
+            if (string.IsNullOrEmpty(assembly))
+                return CurrentAssembly.TryDefineField(fullQualifiedName);
+            else
+            {
+                var external = ExternalAssembly[assembly];
+                return external.QueryFieldDefinition(fullQualifiedName);
+            }
+        }
         public MDToken QueryTypeReference(
             string assembly,
             string fullQualifiedName,

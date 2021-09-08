@@ -10,6 +10,7 @@ namespace HexRuntimeAssemblier
         public IReadOnlyDictionary<MDRecordKinds, ReferenceTable> ReferenceTables => mRefTables;
         public IReadOnlyDictionary<MDRecordKinds, DefinitionTable> DefinitionTables => mDefTables;
         public StringTable MetaStringTable => mStringTable;
+        public AssemblyHeaderMD AssemblyHeader => mCurrentAssembly;
         public MDToken QueryFieldDefinition(string fullQualifiedName)
             => FieldDefTable.GetDefinitionToken(fullQualifiedName, () => new FieldMD());
         public MDToken QueryMethodDefinition(string fullQualifiedName)
@@ -23,10 +24,10 @@ namespace HexRuntimeAssemblier
         public MDToken TryDefineType(string fullQualifiedName)
             => TypeDefTable.GetDefinitionToken(fullQualifiedName, () => new TypeMD());
         public MDToken GetReferenceTokenOfType(string assembly, string fullQualifiedName, MDToken defToken)
-            => mRefTables[MDRecordKinds.TypeRef].GetReferenceToken(fullQualifiedName, () => new TypeRefMD()
+            => TypeReferenceTable.GetReferenceToken(fullQualifiedName, () => new TypeRefMD()
             {
                 DefKind = MDRecordKinds.TypeRef,
-                AssemblyToken = mAssemblyRefTable.GetReferenceToken(assembly, null),
+                AssemblyToken = string.IsNullOrEmpty(assembly) ? AssemblyRefMD.Self : AssemblyReferenceTable.GetReferenceToken(assembly, null),
                 Token = defToken
             });
     }

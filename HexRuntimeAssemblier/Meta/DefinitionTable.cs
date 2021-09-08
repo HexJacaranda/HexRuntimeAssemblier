@@ -35,6 +35,7 @@ namespace HexRuntimeAssemblier.Meta
             {
                 token = (uint)mDefTokenMetas.Count;
                 mDefTokenMetas.Add(metaGenerator());
+                mName2Token.Add(fullQualifiedName, token);
             }
             return token;
         }

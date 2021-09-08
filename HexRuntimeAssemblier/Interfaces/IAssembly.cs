@@ -26,7 +26,9 @@ namespace HexRuntimeAssemblier.Interfaces
         MDToken TryDefineField(string fullQualifiedName);
         StringTable MetaStringTable { get; }
         ReferenceTable AssemblyReferenceTable { get; }
+        AssemblyHeaderMD AssemblyHeader { get; }
         IReadOnlyDictionary<MDRecordKinds, ReferenceTable> ReferenceTables { get; }
         IReadOnlyDictionary<MDRecordKinds, DefinitionTable> DefinitionTables { get; }
+        void Build();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using HexRuntimeAssemblier.Interfaces;
 using Antlr4.Runtime;
 
 namespace HexRuntimeAssemblier
@@ -14,8 +16,8 @@ namespace HexRuntimeAssemblier
 #endif
             var parser = new Assemblier(new CommonTokenStream(lexer));
 
-            var builder = new AssemblyBuilder();
-            builder.ResolveStart(parser.start());
+            IAssemblyBuilder builder = new AssemblyBuilder(new Dictionary<string, IAssemblyResolver>(), parser.start());
+            builder.Build();
         }
     }
 }

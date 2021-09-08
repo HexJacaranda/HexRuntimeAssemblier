@@ -24,7 +24,7 @@ methodImport: METHOD_IMPORT LMID STRING COMMA STRING RMID;
 methodSource: METHOD_MANAGED | methodImport;
 //- DEF
 
-methodLocal: LMID INT RMID typeRef IDENTIFIER;
+methodLocal: LMID INT RMID type IDENTIFIER;
 
 methodLocals: METHOD_LOCAL
     BODY_BEGIN
@@ -56,7 +56,7 @@ methodRef: methodReturnType methodParentType JUNCTION methodName genericParamete
 
 //Field
 fieldDef: KEY_FIELD modifierAccess modifierLife MODIFIER_THREAD_LOCAL? (MODIFIER_VOLATILE | MODIFIER_CONSTANT | MODIFIER_READONLY)? type IDENTIFIER;
-fieldRef: type type JUNCTION IDENTIFIER;
+fieldRef: type JUNCTION IDENTIFIER;
 
 //Property
 propertyGet: PROPERTY_GET methodRef;
@@ -88,7 +88,7 @@ typeName: (IDENTIFIER DOT)+ IDENTIFIER;
 typeRef: assemblyRef? typeName;
 
 primitiveType: PRIMITIVE_INT |
-        PRIMITIVE_UINT
+        PRIMITIVE_UINT |
         PRIMITIVE_LONG |
         PRIMITIVE_ULONG |
         PRIMITIVE_SHORT |

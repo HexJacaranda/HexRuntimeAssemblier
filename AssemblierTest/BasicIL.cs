@@ -1,6 +1,8 @@
-using NUnit.Framework;
-using HexRuntimeAssemblier;
 using Antlr4.Runtime;
+using HexRuntimeAssemblier;
+using HexRuntimeAssemblier.Interfaces;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace AssemblierTest
 {
@@ -17,9 +19,8 @@ namespace AssemblierTest
             var lexer = new AssemblierLexer(CharStreams.fromPath(@"..\..\..\TestIL\test.il"));
             var parser = new Assemblier(new CommonTokenStream(lexer));
 
-            var builder = new AssemblyBuilder();
-            var start = parser.start();
-            builder.ResolveStart(start);
+            IAssemblyBuilder builder = new AssemblyBuilder(new Dictionary<string, IAssemblyResolver>(), parser.start());
+            builder.Build();
         }
     }
 }

@@ -9,6 +9,16 @@
 
 .class public instance Core.Hello
 {
+    .method public instance void B() managed
+    {
+        .local
+        {
+        }
+        .code
+        {
+            .ret
+        }
+    }
     .method public instance void .ctor() managed
     {
         .local
@@ -18,9 +28,19 @@
         }
         .code
         {
-            .ret int32 void Core.Sys::Fun(int32)
-            .push int32 3
+            .call void Core.Hello::B()
             .pop
+            .ret
+        }
+    }
+    .method public instance void C() managed
+    {
+        .local
+        {
+        }
+        .code
+        {
+            .ret
         }
     }
 }
