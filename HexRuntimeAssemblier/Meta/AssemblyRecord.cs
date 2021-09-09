@@ -92,7 +92,7 @@ namespace HexRuntimeAssemblier.Meta
 
 	public class GenericInstantiationMD
 	{
-		public MDToken CanonicalTypeRefToken;
+		public MDToken CanonicalTypeDefToken;
 		public MDToken[] GenericParameterTokens;
 	};
 

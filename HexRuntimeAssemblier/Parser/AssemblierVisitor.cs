@@ -212,17 +212,41 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAssemblyRef([NotNull] Assemblier.AssemblyRefContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.typeRef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypeRef([NotNull] Assemblier.TypeRefContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.typeName"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTypeName([NotNull] Assemblier.TypeNameContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="Assemblier.typeRef"/>.
+	/// Visit a parse tree produced by <see cref="Assemblier.typeRefNamespace"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitTypeRef([NotNull] Assemblier.TypeRefContext context);
+	Result VisitTypeRefNamespace([NotNull] Assemblier.TypeRefNamespaceContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.typeRefGeneric"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypeRefGeneric([NotNull] Assemblier.TypeRefGenericContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.typeRefPlain"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypeRefPlain([NotNull] Assemblier.TypeRefPlainContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.typeRefNode"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypeRefNode([NotNull] Assemblier.TypeRefNodeContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.primitiveType"/>.
 	/// </summary>
@@ -241,12 +265,6 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitType([NotNull] Assemblier.TypeContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
 	/// </summary>
@@ -289,6 +307,24 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitClassBody([NotNull] Assemblier.ClassBodyContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.className"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitClassName([NotNull] Assemblier.ClassNameContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.namespaceValue"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNamespaceValue([NotNull] Assemblier.NamespaceValueContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.classNameSpace"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitClassNameSpace([NotNull] Assemblier.ClassNameSpaceContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.classDef"/>.
 	/// </summary>

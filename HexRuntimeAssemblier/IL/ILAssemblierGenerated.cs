@@ -114,7 +114,7 @@ namespace HexRuntimeAssemblier.IL
         private void ParseLdStr(Assemblier.OpLdStrContext context)
         {
             mILWriter.Write((byte)OpCode.LdStr);
-            mILWriter.Write(mResolver.GetTokenFromString(context.STRING().GetText()));
+            mILWriter.Write(mResolver.GetTokenFromString(context.STRING().GetText().Trim('"')));
         }
         private void ParseLdC(Assemblier.OpLdCContext context)
         {

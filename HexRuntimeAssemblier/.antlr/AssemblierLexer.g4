@@ -21,6 +21,7 @@ REF: '&';
 JUNCTION: '::';
 COLON: ':';
 
+KEY_NAMESPACE: '.namespace';
 KEY_ASSEMBLY: '.assembly';
 
 KEY_INTERFACE: '.interface';

@@ -395,6 +395,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitAssemblyRef([NotNull] Assemblier.AssemblyRefContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeRef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTypeRef([NotNull] Assemblier.TypeRefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeRef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTypeRef([NotNull] Assemblier.TypeRefContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.typeName"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -407,17 +419,53 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitTypeName([NotNull] Assemblier.TypeNameContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.typeRef"/>.
+	/// Enter a parse tree produced by <see cref="Assemblier.typeRefNamespace"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterTypeRef([NotNull] Assemblier.TypeRefContext context) { }
+	public virtual void EnterTypeRefNamespace([NotNull] Assemblier.TypeRefNamespaceContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.typeRef"/>.
+	/// Exit a parse tree produced by <see cref="Assemblier.typeRefNamespace"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitTypeRef([NotNull] Assemblier.TypeRefContext context) { }
+	public virtual void ExitTypeRefNamespace([NotNull] Assemblier.TypeRefNamespaceContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeRefGeneric"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTypeRefGeneric([NotNull] Assemblier.TypeRefGenericContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeRefGeneric"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTypeRefGeneric([NotNull] Assemblier.TypeRefGenericContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeRefPlain"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTypeRefPlain([NotNull] Assemblier.TypeRefPlainContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeRefPlain"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTypeRefPlain([NotNull] Assemblier.TypeRefPlainContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.typeRefNode"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTypeRefNode([NotNull] Assemblier.TypeRefNodeContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.typeRefNode"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTypeRefNode([NotNull] Assemblier.TypeRefNodeContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.primitiveType"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -454,18 +502,6 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitType([NotNull] Assemblier.TypeContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="Assemblier.genericInstantiation"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitGenericInstantiation([NotNull] Assemblier.GenericInstantiationContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.genericParameterRef"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -550,6 +586,42 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitClassBody([NotNull] Assemblier.ClassBodyContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.className"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterClassName([NotNull] Assemblier.ClassNameContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.className"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitClassName([NotNull] Assemblier.ClassNameContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.namespaceValue"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterNamespaceValue([NotNull] Assemblier.NamespaceValueContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.namespaceValue"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitNamespaceValue([NotNull] Assemblier.NamespaceValueContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.classNameSpace"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterClassNameSpace([NotNull] Assemblier.ClassNameSpaceContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.classNameSpace"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitClassNameSpace([NotNull] Assemblier.ClassNameSpaceContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.classDef"/>.
 	/// <para>The default implementation does nothing.</para>

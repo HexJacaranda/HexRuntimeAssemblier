@@ -77,15 +77,21 @@ eventDef: KEY_EVENT type IDENTIFIER
     BODY_END;
 
 //Class
-inheritOrImplementType: typeRef | genericInstantiation | genericParameterRef;
+inheritOrImplementType: typeRef | genericParameterRef;
 typeRefList: (inheritOrImplementType COMMA)* inheritOrImplementType;
 implementList: KEY_IMPLEMENT typeRefList;
 typeInherit: KEY_INHERIT inheritOrImplementType;
 
 //Type part
 assemblyRef: LMID IDENTIFIER RMID;
-typeName: (IDENTIFIER DOT)+ IDENTIFIER;
 typeRef: assemblyRef? typeName;
+typeName: typeRefNamespace (typeRefNode DOT)* typeRefNode;
+
+typeRefNamespace: LMID namespaceValue RMID;
+typeRefGeneric: IDENTIFIER LBRACE (type COMMA)* type RBRACE;
+typeRefPlain: IDENTIFIER;
+typeRefNode: typeRefGeneric | typeRefPlain | genericParameterRef;
+
 
 primitiveType: PRIMITIVE_INT |
         PRIMITIVE_UINT |
@@ -101,9 +107,8 @@ primitiveType: PRIMITIVE_INT |
         PRIMITIVE_STRING |
         PRIMITIVE_BOOL;
 
-genericParameterList: LBRACE type+ RBRACE;
-type: (primitiveType | typeRef | arrayType | interiorRefType | genericParameterRef | genericInstantiation);
-genericInstantiation: typeRef genericParameterList;
+genericParameterList: LBRACE (type COMMA)* type RBRACE;
+type: (primitiveType | typeRef | arrayType | interiorRefType | genericParameterRef);
 genericParameterRef: LMID INT RMID JUNCTION IDENTIFIER;
 arrayType: nestArrayType | multidimensionArrayType;
 nestArrayType: ARRAY LBRACE type RBRACE;
@@ -114,12 +119,18 @@ genericList: KEY_GENERIC IDENTIFIER+;
 
 classBody: (methodDef | propertyDef | eventDef | fieldDef | classDef)*;
 
+className: IDENTIFIER;
+namespaceValue: (IDENTIFIER DOT)* IDENTIFIER;
+classNameSpace: KEY_NAMESPACE namespaceValue;
+
 classDef: (KEY_STRUCT | KEY_CLASS | KEY_INTERFACE) 
 MODIFIER_NEST? 
 MODIFIER_ATTRIBUTE?
 (MODIFIER_ABSTRACT | MODIFIER_SEALED)? 
 modifierAccess 
-modifierLife typeName
+modifierLife 
+className
+classNameSpace?
 typeInherit?
 implementList?
 genericList?

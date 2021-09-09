@@ -7,7 +7,8 @@
     guid = 00000000-0000-0000-0000-000000000000
 }
 
-.class public instance Core.Hello
+.class public instance Hello
+.namespace System.Test
 {
     .method public instance void B() managed
     {
@@ -28,7 +29,7 @@
         }
         .code
         {
-            .call void Core.Hello::B()
+            .call void [System.Test]Hello::C()
             .pop
             .ret
         }

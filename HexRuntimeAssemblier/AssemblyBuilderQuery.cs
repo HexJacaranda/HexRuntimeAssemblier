@@ -23,12 +23,18 @@ namespace HexRuntimeAssemblier
             => MethodDefTable.GetDefinitionToken(fullQualifiedName, () => new MethodMD());
         public MDToken TryDefineType(string fullQualifiedName)
             => TypeDefTable.GetDefinitionToken(fullQualifiedName, () => new TypeMD());
-        public MDToken GetReferenceTokenOfType(string assembly, string fullQualifiedName, MDToken defToken)
-            => TypeReferenceTable.GetReferenceToken(fullQualifiedName, () => new TypeRefMD()
+        public MDToken GetReferenceTokenOfType(string assembly, string fullQualifiedName, MDToken defToken, MDRecordKinds kind = MDRecordKinds.TypeRef)
+            => TypeReferenceTable.GetReferenceToken(ComposeAssemblyTag(assembly, fullQualifiedName), () => new TypeRefMD()
             {
-                DefKind = MDRecordKinds.TypeRef,
+                DefKind = kind,
                 AssemblyToken = string.IsNullOrEmpty(assembly) ? AssemblyRefMD.Self : AssemblyReferenceTable.GetReferenceToken(assembly, null),
                 Token = defToken
             });
+        private static string ComposeAssemblyTag(string assembly, string fullQualifiedName)
+        {
+            if (string.IsNullOrEmpty(assembly))
+                return fullQualifiedName;
+            return $"[{assembly}]{fullQualifiedName}";
+        }
     }
 }

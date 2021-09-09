@@ -30,11 +30,11 @@ namespace HexRuntimeAssemblier
             mResolver = new GlobalResolver(this, externalResolvers);
             mStringTable = new StringTable();
             mStartContext = startContext;
-            
+
             //Set def tables
             for (int kind = (int)MDRecordKinds.Argument; kind < (int)MDRecordKinds.KindLimit; ++kind)
                 mDefTables.Add((MDRecordKinds)kind, new DefinitionTable((MDRecordKinds)kind));
-       
+
             //Set ref tables
             //The zeroth token is reserved for self reference
             var assemblyRefTable = new ReferenceTable(MDRecordKinds.KindLimit);
@@ -96,57 +96,38 @@ namespace HexRuntimeAssemblier
          * [Core]System.Converter<double>::Some, this is a normal FQN
          * [Core]System.Converter<Canon>::To, this is a canonical FQN
          */
-        public static string GetFullQualifiedName(ParserRuleContext memberContext, string referenceJunction, string shortName)
+        private static string GetFullQualifiedName(Assemblier.ClassDefContext context, string parentFullQualifiedName)
         {
             var stringBuilder = new StringBuilder();
-            var current = memberContext.Parent;
-            if (current is Assemblier.ClassDefContext currentClass)
-            {
-                stringBuilder.Append(currentClass.typeName().GetText());
-                stringBuilder.Append(referenceJunction);
-            }
 
-            stringBuilder.Append(shortName);
-            //Generic
-            if (memberContext is Assemblier.ClassDefContext classDef &&
-                classDef.genericList() != null)
+            if (string.IsNullOrEmpty(parentFullQualifiedName) && context.classNameSpace() != null)
+                stringBuilder.Append($"[{context.classNameSpace().namespaceValue().GetText()}]");
+            else
             {
-                var placeHolderCount = classDef.genericList().IDENTIFIER().Length;
-                stringBuilder.Append($"<{ string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, placeHolderCount))}>");
+                stringBuilder.Append(parentFullQualifiedName);
+                stringBuilder.Append('.');
             }
-
-            
-            while (current is Assemblier.ClassDefContext)
-            {
-                currentClass = current as Assemblier.ClassDefContext;
-                stringBuilder.Insert(0, '.');
-                //Generic
-                if (currentClass.genericList() != null)
-                {
-                    var placeHolderCount = currentClass.genericList().IDENTIFIER().Length;
-                    stringBuilder.Insert(0, $"<{ string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, placeHolderCount))}>");
-                }
-                stringBuilder.Insert(0, currentClass.typeName().GetText());
-                current = current.Parent;
-            }
-            
+            stringBuilder.Append(context.className().GetText());
+            if (context.genericList() != null)
+                stringBuilder.Append($"<{string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, context.genericList().IDENTIFIER().Length))}>");
             return stringBuilder.ToString();
         }
         private static string GetFullQualifiedName(Assemblier.MethodDefContext context, string typeFullQualifiedName)
         {
             var methodShortName = context.methodName().GetText();
-            var returnType = context.methodReturnType().GetText();
+            var returnType = GetFullQualifiedName(context.methodReturnType());
             var arguments = context.methodArgumentList().methodArgument();
             var genericArguments = context.genericList()?.IDENTIFIER();
-            string methodSignature = string.Empty;
+
+            string methodSignature = null;
             if (genericArguments != null && genericArguments.Length > 0)
             {
-                methodSignature = $"{methodShortName}<{genericArguments?.Length}>" +
-                $"({string.Join(", ", arguments.Select(x => x.type().GetText()))})";
+                methodSignature = $"{methodShortName}<{string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, genericArguments.Length))}>" +
+                $"({string.Join(", ", arguments.Select(x => GetFullQualifiedName(x.type())))})";
             }
             else
             {
-                methodSignature = $"{methodShortName}({string.Join(", ", arguments.Select(x => x.type().GetText()))})";
+                methodSignature = $"{methodShortName}({string.Join(", ", arguments.Select(x => GetFullQualifiedName(x.type())))})";
             }
 
             //Replace the generic placeholder
@@ -154,7 +135,80 @@ namespace HexRuntimeAssemblier
                 $"{returnType} {typeFullQualifiedName}::{methodSignature}",
                 CanonicalPlaceHolder);
         }
-        private string GetCanonicalFullQualifiedName(Assemblier.TypeContext context)
+        private static string GetFullQualifiedName(Assemblier.TypeContext context)
+            => context.GetChild(0) switch
+            {
+                Assemblier.ArrayTypeContext array => GetFullQualifiedName(array),
+                Assemblier.NestArrayTypeContext nest => GetFullQualifiedName(nest),
+                Assemblier.TypeRefContext typeRef => GetFullQualifiedName(typeRef),
+                Assemblier.InteriorRefTypeContext interiorRef => GetFullQualifiedName(interiorRef),
+                _ => context.GetText(),
+            };
+        private static string GetFullQualifiedName(Assemblier.TypeRefNodeContext context)
+            => context.GetChild(0) switch
+            {
+                Assemblier.TypeRefGenericContext generic => $"{generic.IDENTIFIER()}<{string.Join(", ", generic.type().Select(x => GetFullQualifiedName(x)))}>",
+                _ => context.GetText(),
+            };
+        private static string GetFullQualifiedName(Assemblier.TypeRefContext context, bool needAssemblyTag = false)
+        {
+            StringBuilder builder = new();
+
+            //Assembly tag
+            if (context.assemblyRef() != null && needAssemblyTag)
+                builder.Append($"[{context.assemblyRef().IDENTIFIER()}]");
+
+            //Top namespace, mandatory
+            var typeName = context.typeName();
+            builder.Append($"[{typeName.typeRefNamespace().namespaceValue().GetText()}]");
+
+            var nodes = typeName.typeRefNode();
+            for(int i = 0; i< nodes.Length - 1; i++)
+            {
+                builder.Append(GetFullQualifiedName(nodes[i]));
+                builder.Append('.');
+            }
+
+            builder.Append(GetFullQualifiedName(nodes.Last()));
+            return builder.ToString();
+        }
+        private static string GetFullQualifiedName(Assemblier.MethodReturnTypeContext context)
+            => context.GetChild(0) switch
+            {
+                Assemblier.TypeContext type => GetFullQualifiedName(type),
+                ITerminalNode voidToken => voidToken.GetText(),
+                _ => throw new UnexpectedParseRuleException("Unexpected child of MethodReturnType rule")
+            };
+        private static string GetFullQualifiedName(Assemblier.InteriorRefTypeContext context)
+            => $"{GetFullQualifiedName(context.typeRef())}&";
+        private static string GetFullQualifiedName(Assemblier.ArrayTypeContext context)
+            => context.GetChild(0) switch
+            {
+                Assemblier.NestArrayTypeContext nest => GetFullQualifiedName(nest),
+                Assemblier.MultidimensionArrayTypeContext multiDimension => GetFullQualifiedName(multiDimension),
+                _ => throw new UnexpectedParseRuleException("Unexpected child of ArrayType rule")
+            };
+        private static string GetFullQualifiedName(Assemblier.NestArrayTypeContext context)
+            => $"{context.ARRAY().GetText()}<{GetFullQualifiedName(context.type())}>";
+        private static string GetFullQualifiedName(Assemblier.MultidimensionArrayTypeContext context)
+            => $"{context.ARRAY().GetText()}<{GetFullQualifiedName(context.type())}, {context.INT().GetText()}>";
+        private static string GetFullQualifiedName(Assemblier.MethodRefContext context)
+        {
+            var returnType = GetFullQualifiedName(context.methodReturnType());
+            var typeRef = GetFullQualifiedName(context.methodParentType().GetUnderlyingType() as Assemblier.TypeContext);
+            var methodName = context.methodName().GetText();
+
+            string generic = null;
+            if (context.genericParameterList() != null && context.genericParameterList().type().Length > 0)
+                generic = $"<{string.Join(", ", context.genericParameterList().type().Select(x => GetCanonicalFullQualifiedName(x)))}>";
+
+            var parameters = $"({string.Join(", ", context.type().Select(x => GetFullQualifiedName(x)))})";
+            if (generic != null)
+                return $"{returnType} {typeRef}::{methodName}{generic}{parameters}";
+            else
+                return $"{returnType} {typeRef}::{methodName}{parameters}";
+        }
+        private static string GetCanonicalFullQualifiedName(Assemblier.TypeContext context)
         {
             var child = context.GetChild(0);
             while (true)
@@ -166,21 +220,13 @@ namespace HexRuntimeAssemblier
                         break;
                     case Assemblier.NestArrayTypeContext nest:
                         return $"{nest.ARRAY().GetText()}<{CanonicalPlaceHolder}>";
-                    case Assemblier.GenericInstantiationContext generic:
-                        return $"{generic.typeRef().GetText()}<" +
-                            $"{string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, generic.genericParameterList().type().Length))}>";
                     default:
                         return context.GetText();
                 }
             }
         }
-        private string GetCanonicalFullQualifiedName(Assemblier.GenericInstantiationContext context)
-        {
-            var canonical = context.typeRef();
-            var genericParameterCount = context.genericParameterList().type().Length;
-            return $"{canonical.typeName().GetText()}" +
-                $"<{string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, genericParameterCount))}>";
-        }
+        private static string GetCanonicalFullQualifiedName(Assemblier.TypeRefContext context, bool needAssemblyTag = false)
+            => GenericReplace.Replace(GetFullQualifiedName(context, needAssemblyTag), CanonicalPlaceHolder);
         private string GetCanonicalFullQualifiedName(Assemblier.MethodRefContext context, 
             out string sourceAssemblyName)
         {
@@ -239,7 +285,7 @@ namespace HexRuntimeAssemblier
         {
             ResolveAssemblyDef(context.assemblyDef());
             foreach (var classContext in context.classDef())
-                ResolveClassDef(classContext);
+                ResolveClassDef(classContext, null);
         }
         public void ResolveAssemblyDef(Assemblier.AssemblyDefContext context)
         {
@@ -247,8 +293,8 @@ namespace HexRuntimeAssemblier
 
             mCurrentAssembly = new AssemblyHeaderMD
             {
-                NameToken = GetTokenFromString(map["name"]),
-                GroupNameToken = GetTokenFromString(map["groupname"]),
+                NameToken = GetTokenFromString(map["name"].Trim('"')),
+                GroupNameToken = GetTokenFromString(map["groupname"].Trim('"')),
                 MajorVersion = int.Parse(map["major"]),
                 MinorVersion = int.Parse(map["minor"]),
                 GUID = Guid.Parse(map["guid"])
@@ -265,7 +311,6 @@ namespace HexRuntimeAssemblier
                 Assemblier.MultidimensionArrayTypeContext multidimensionArrayType => ResolveArrayType(multidimensionArrayType),
                 Assemblier.InteriorRefTypeContext interiorRefType => ResolveInteriorRefType(interiorRefType),
                 Assemblier.GenericParameterRefContext genericParam => ResolveGenericParameterRef(genericParam),
-                Assemblier.GenericInstantiationContext genericInst => ResolveGenericInstantiation(genericInst),
                 _ => throw new TypeResolveException("Unknown type representation"),
             };
         }
@@ -284,7 +329,6 @@ namespace HexRuntimeAssemblier
                 Assemblier.InteriorRefTypeContext interiorRefType => ResolveInteriorRefType(interiorRefType),
                 Assemblier.ArrayTypeContext arrayType => ResolveArrayType(arrayType),
                 Assemblier.GenericParameterRefContext genericParam => ResolveGenericParameterRef(genericParam),
-                Assemblier.GenericInstantiationContext genericInst => ResolveGenericInstantiation(genericInst),
                 _ => throw new TypeResolveException("Unknown type representation"),
             };
         }
@@ -315,7 +359,7 @@ namespace HexRuntimeAssemblier
             return GenericParameterDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
             {
                 //Multidimension-Array generic ref, need to get from the core library
-                CanonicalTypeRefToken = 0u,
+                CanonicalTypeDefToken = 0u,
                 GenericParameterTokens = new uint[] { elementRefToken }
             });
         }
@@ -323,11 +367,11 @@ namespace HexRuntimeAssemblier
         {
             var elementType = context.type();
             var elementRefToken = ResolveType(elementType);
-
+            var fullQualifiedName = GetFullQualifiedName(context);
             return GenericParameterDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
             {
                 //Array generic ref, need to get from the core library
-                CanonicalTypeRefToken = 0u,
+                CanonicalTypeDefToken = 0u,
                 GenericParameterTokens = new uint[] { elementRefToken }
             });
         }
@@ -339,7 +383,7 @@ namespace HexRuntimeAssemblier
             return GenericParameterDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
             {
                 //interior generic ref, need to get from the core library
-                CanonicalTypeRefToken = 0u,
+                CanonicalTypeDefToken = 0u,
                 GenericParameterTokens = new uint[] { internalRefToken }
             });
         }
@@ -350,28 +394,13 @@ namespace HexRuntimeAssemblier
                 NameToken = GetTokenFromString(context.GetText())
             });
         }
-        public uint ResolveGenericInstantiation(Assemblier.GenericInstantiationContext context)
-        {
-            //Special for canonical full qualified name           
-            var assemblyName = context.typeRef().assemblyRef()?.IDENTIFIER().GetText();
-            var canonicalTypeName = GetCanonicalFullQualifiedName(context);
-            var canonicalRefToken = mResolver.QueryTypeReference(assemblyName, canonicalTypeName,
-                defToken => GetReferenceTokenOfType(assemblyName, canonicalTypeName, defToken));
-
-            var parameterTypeTokens = context.genericParameterList().type().Select(x => ResolveType(x)).ToArray();
-            return GenericInstantiationDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
-            {
-                CanonicalTypeRefToken = canonicalRefToken,
-                GenericParameterTokens = parameterTypeTokens
-            });
-        }
         public uint ResolveFieldDef(
             Assemblier.FieldDefContext context,
             string typeFullQualifiedName)
         {
             //Handle the type mapping    
             var fieldShortName = context.IDENTIFIER().GetText();
-            var fieldFullQualifiedName = GetFullQualifiedName(context, "::", fieldShortName);
+            var fieldFullQualifiedName = $"{typeFullQualifiedName}::{fieldShortName}";
 
             var fieldDefToken = TryDefineField(fieldFullQualifiedName);
             var field = FieldDefTable[fieldDefToken] as FieldMD;
@@ -512,10 +541,10 @@ namespace HexRuntimeAssemblier
                 TypeRefToken = ResolveType(context.type())
             });
         }
-        public uint ResolveClassDef(Assemblier.ClassDefContext context, bool isNest = false)
+        public uint ResolveClassDef(Assemblier.ClassDefContext context, string outerClassFullQualifiedName, bool isNest = false)
         {
             //Handle the type mapping    
-            var typeFullQualifiedName = GetFullQualifiedName(context, ".", context.typeName().GetText());
+            var typeFullQualifiedName = GetFullQualifiedName(context, outerClassFullQualifiedName);
             var typeDefToken = TypeDefTable.GetDefinitionToken(typeFullQualifiedName, () => new TypeMD() { 
                 NameToken = GetTokenFromString(typeFullQualifiedName)
             });
@@ -555,7 +584,7 @@ namespace HexRuntimeAssemblier
                 type.GenericParameterTokens = genericParams
                     .Select(x =>
                     {
-                        var fullQualifiedName = $"{typeFullQualifiedName}::{x.GetText()}";
+                        var fullQualifiedName = x.GetText();
                         return GenericParameterDefTable.GetDefinitionToken(fullQualifiedName,
                             () => new GenericParamterMD { NameToken = GetTokenFromString(fullQualifiedName) });
                     })
@@ -584,7 +613,7 @@ namespace HexRuntimeAssemblier
             //Handle the body
             var body = context.classBody();
             foreach (var member in body.classDef())
-                ResolveClassDef(member, true);
+                ResolveClassDef(member, typeFullQualifiedName ,true);
 
             type.FieldTokens = body.fieldDef().Select(
                 x => ResolveFieldDef(x, typeFullQualifiedName)).ToArray();
@@ -599,16 +628,44 @@ namespace HexRuntimeAssemblier
         }
         public uint ResolveTypeRef(Assemblier.TypeRefContext context)
         {
+            //For reducing the size of metadata, we only need to deal with the part
             string assemblyName = context.assemblyRef()?.IDENTIFIER().GetText();
-            string typeName = context.typeName().GetText();
-            return mResolver.QueryTypeReference(assemblyName, typeName,
-                defToken => GetReferenceTokenOfType(assemblyName, typeName, defToken));
+
+            string canonicalFullQualifiedName = GetCanonicalFullQualifiedName(context);
+            string fullQualifiedName= GetFullQualifiedName(context);
+
+            var typeRefNodes = context.typeName().typeRefNode();
+
+            var instantiationParameterToken = typeRefNodes
+                .Select(x => x.GetChild(0))
+                .Where(x => x is Assemblier.TypeRefGenericContext)
+                .Cast<Assemblier.TypeRefGenericContext>()
+                .SelectMany(x => x.type().Select(param => ResolveType(param)))
+                .ToArray();
+
+            var canonicalDef = mResolver.QueryTypeDefinition(assemblyName, canonicalFullQualifiedName);
+            if (instantiationParameterToken.Length == 0)
+                return GetReferenceTokenOfType(assemblyName, fullQualifiedName, canonicalDef);
+            else 
+            {
+                var fullQualifiedNameWithTag = ComposeAssemblyTag(assemblyName, fullQualifiedName);
+                //For generic instantiation, we need a GenericInstantiation
+                var genericInstantiationToken = GenericInstantiationDefTable.GetDefinitionToken(
+                    fullQualifiedNameWithTag,
+                    () => new GenericInstantiationMD
+                    {
+                        CanonicalTypeDefToken = canonicalDef,
+                        GenericParameterTokens = instantiationParameterToken
+                    });
+
+                return GetReferenceTokenOfType(assemblyName, fullQualifiedName, genericInstantiationToken, MDRecordKinds.GenericInstantiationDef);
+            }
         }
         public uint ResolveMethodRef(Assemblier.MethodRefContext context)
         {
             var methodCanonicalName = GetCanonicalFullQualifiedName(context,
                 out string sourceAssemblyName);
-            var methodFullQualifiedName = context.GetText();
+            var methodFullQualifiedName = GetFullQualifiedName(context);
 
             var parentType = context.methodParentType().GetUnderlyingType() as Assemblier.TypeContext;
             var typeRefToken = ResolveType(parentType);
@@ -624,7 +681,7 @@ namespace HexRuntimeAssemblier
                 var genericInstantiationToken = GenericInstantiationDefTable.GetDefinitionToken(methodFullQualifiedName,
                     () => new GenericInstantiationMD()
                     {
-                        CanonicalTypeRefToken = methodDefToken,
+                        CanonicalTypeDefToken = methodDefToken,
                         GenericParameterTokens = typeTokens
                     });
                 methodDefToken = genericInstantiationToken;             
