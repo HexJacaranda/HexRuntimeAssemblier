@@ -426,6 +426,8 @@ namespace HexRuntimeAssemblier
             if (lifeToken == Assemblier.MODIFIER_STATIC)
                 flag |= FieldFlag.Static;
 
+            field.Flags = flag;
+
             field.TypeRefToken = ResolveType(context.type());
             field.ParentTypeRefToken = mResolver.QueryTypeReference(
                 null,
@@ -569,6 +571,8 @@ namespace HexRuntimeAssemblier
                 flag |= TypeFlag.Struct;
             else if (context.ExistToken(Assemblier.KEY_INTERFACE))
                 flag |= TypeFlag.Interface;
+
+            type.Flags = flag;
 
             //Accessbility
             var accessToken = context.modifierAccess()

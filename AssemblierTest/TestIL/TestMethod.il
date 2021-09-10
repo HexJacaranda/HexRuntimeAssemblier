@@ -8,13 +8,10 @@
 }
 
 .class public instance Hello
-.namespace System.Test
+.namespace Test
 {
     .method public instance void B() managed
     {
-        .local
-        {
-        }
         .code
         {
             .ret
@@ -29,16 +26,13 @@
         }
         .code
         {
-            .call void [System.Test]Hello::C()
+            .call void [Test]Hello::C()
             .pop
             .ret
         }
     }
     .method public instance void C() managed
     {
-        .local
-        {
-        }
         .code
         {
             .ret

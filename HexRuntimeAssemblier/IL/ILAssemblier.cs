@@ -31,12 +31,15 @@ namespace HexRuntimeAssemblier.IL
         {
             ILMD result = new();
 
-            var locals = mAST.methodLocals().methodLocal();
-            result.LocalVariables = locals.Select(x => new LocalVariableMD
+            var locals = mAST.methodLocals()?.methodLocal();
+            if (locals != null)
             {
-                NameToken = mResolver.MetaStringTable.GetTokenFromString(x.IDENTIFIER().GetText()),
-                TypeRefToken = mResolver.ResolveType(x.type())
-            }).ToArray();
+                result.LocalVariables = locals.Select(x => new LocalVariableMD
+                {
+                    NameToken = mResolver.MetaStringTable.GetTokenFromString(x.IDENTIFIER().GetText()),
+                    TypeRefToken = mResolver.ResolveType(x.type())
+                }).ToArray();
+            }
 
             //Parse the IL code
             ParseIL(mAST.methodCode().ilInstruction());
