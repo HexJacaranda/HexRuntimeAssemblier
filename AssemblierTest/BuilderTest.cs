@@ -114,5 +114,14 @@ namespace AssemblierTest
             Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<Canon>")));
             Assert.That(field.TypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<!T1>.World.This<!T1, !T1>")));
         }
+
+        [Test]
+        public void TestGenericMethod()
+        {
+            var builder = Build(nameof(TestGenericMethod));
+
+            Assert.DoesNotThrow(() => builder.GetMethodDef("Canon [Test]Hello<Canon>::A<Canon>()"));
+            Assert.DoesNotThrow(() => builder.GetMethodDef("void [Test]Hello<Canon>::B()"));
+        }
     }
 }

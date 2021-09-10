@@ -242,6 +242,10 @@ namespace HexRuntimeAssemblier
             else
                 return $"{returnType} {typeRef}::{methodName}{parameters}";
         }
+        private string GetCanonicalFullQualifiedName(Assemblier.InteriorRefTypeContext context)
+        {
+            return null;
+        }
         private string GetCanonicalFullQualifiedName(Assemblier.TypeContext context)
         {
             var child = context.GetChild(0);
@@ -254,6 +258,10 @@ namespace HexRuntimeAssemblier
                         break;
                     case Assemblier.NestArrayTypeContext nest:
                         return $"{nest.ARRAY().GetText()}<{CanonicalPlaceHolder}>";
+                    case Assemblier.PrimitiveTypeContext primitive:
+                        return GetFullQualifiedName(primitive);
+                    case Assemblier.TypeRefContext typeRef:
+                        return GetCanonicalFullQualifiedName(typeRef);
                     default:
                         return context.GetText();
                 }
@@ -286,8 +294,11 @@ namespace HexRuntimeAssemblier
 
             //Generic
             if (context.genericParameterList() != null)
-                builder.Append($"<{context.genericParameterList().type().Length}>");
-
+            {
+                int genericArgumentCount = context.genericParameterList().type().Length;
+                builder.Append($"<{string.Join(", ", Enumerable.Repeat(CanonicalPlaceHolder, genericArgumentCount))}>");
+            }
+                
             builder.Append($"({string.Join(", ", context.type().Select(x => GetFullQualifiedName(x)))})");
             return GenericReplace.Replace(builder.ToString(), CanonicalPlaceHolder);
         }
@@ -397,23 +408,10 @@ namespace HexRuntimeAssemblier
             }; 
         public uint ResolveArrayType(Assemblier.MultidimensionArrayTypeContext context)
         {
-            var arrayCanonicalDefToken = uint.MaxValue;
-            if (!mOptions.DisableCoreType)
-                arrayCanonicalDefToken = GetArrayCanonicalDefToken();
+            string assemblyName = null;
+            if(mOptions.CoreLibrary)
+                assemblyName = mConstant.AssemblyStandardName;
 
-            var elementType = context.type();
-            var elementRefToken = ResolveType(elementType);
-
-            return GenericInstantiationDefTable.GetDefinitionToken(context.GetText(),
-                () => new GenericInstantiationMD
-                {
-                    //Multidimension-Array generic ref, need to get from the core library
-                    CanonicalTypeDefToken = arrayCanonicalDefToken,
-                    GenericParameterTokens = new uint[] { elementRefToken }
-                });
-        }
-        public uint ResolveArrayType(Assemblier.NestArrayTypeContext context)
-        {
             var arrayCanonicalDefToken = uint.MaxValue;
             if (!mOptions.DisableCoreType)
                 arrayCanonicalDefToken = GetArrayCanonicalDefToken();
@@ -421,36 +419,93 @@ namespace HexRuntimeAssemblier
             var elementType = context.type();
             var elementRefToken = ResolveType(elementType);
             var fullQualifiedName = GetFullQualifiedName(context);
-            return GenericParameterDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
-            {
-                //Array generic ref, need to get from the core library
-                CanonicalTypeDefToken = arrayCanonicalDefToken,
-                GenericParameterTokens = new uint[] { elementRefToken }
-            });
+
+            var genericInstDefToken = GenericInstantiationDefTable.GetDefinitionToken(
+                fullQualifiedName,
+                () => new GenericInstantiationMD
+                {
+                    //Multidimension-Array generic ref, need to get from the core library
+                    CanonicalTypeDefToken = arrayCanonicalDefToken,
+                    GenericParameterTokens = new uint[] { elementRefToken }
+                });
+
+            return GetReferenceTokenOfType(
+                assemblyName, 
+                fullQualifiedName, 
+                genericInstDefToken, 
+                MDRecordKinds.GenericInstantiationDef);
+        }
+        public uint ResolveArrayType(Assemblier.NestArrayTypeContext context)
+        {
+            string assemblyName = null;
+            if (mOptions.CoreLibrary)
+                assemblyName = mConstant.AssemblyStandardName;
+
+            var arrayCanonicalDefToken = uint.MaxValue;
+            if (!mOptions.DisableCoreType)
+                arrayCanonicalDefToken = GetArrayCanonicalDefToken();
+
+            var elementType = context.type();
+            var elementRefToken = ResolveType(elementType);
+            var fullQualifiedName = GetFullQualifiedName(context);
+
+            var genericInstDefToken = GenericInstantiationDefTable.GetDefinitionToken(
+                fullQualifiedName,
+                () => new GenericInstantiationMD
+                {
+                    //Array generic ref, need to get from the core library
+                    CanonicalTypeDefToken = arrayCanonicalDefToken,
+                    GenericParameterTokens = new uint[] { elementRefToken }
+                });
+
+            return GetReferenceTokenOfType(
+                assemblyName,
+                fullQualifiedName,
+                genericInstDefToken,MDRecordKinds.GenericInstantiationDef);
         }
         public uint ResolveInteriorRefType(Assemblier.InteriorRefTypeContext context)
         {
+            string assemblyName = null;
+            if (mOptions.CoreLibrary)
+                assemblyName = mConstant.AssemblyStandardName;
+
             var interiorCanonicalDefToken = uint.MaxValue;
             if (!mOptions.DisableCoreType)
                 interiorCanonicalDefToken = GetInteriorReferenceCanonicalDefToken();
 
             var internalType = context.GetChild(0);
             var internalRefToken = ResolveUnknownTypeForm(internalType);
+            var fullQualifiedName = GetFullQualifiedName(context);
 
-            return GenericParameterDefTable.GetDefinitionToken(context.GetText(), () => new GenericInstantiationMD
-            {
-                //interior generic ref, need to get from the core library
-                CanonicalTypeDefToken = interiorCanonicalDefToken,
-                GenericParameterTokens = new uint[] { internalRefToken }
-            });
+            var genericInstDefToken = GenericInstantiationDefTable.GetDefinitionToken(
+                fullQualifiedName,
+                () => new GenericInstantiationMD
+                {
+                    //interior generic ref, need to get from the core library
+                    CanonicalTypeDefToken = interiorCanonicalDefToken,
+                    GenericParameterTokens = new uint[] { internalRefToken }
+                });
+
+            return GetReferenceTokenOfType(
+               assemblyName,
+               fullQualifiedName,
+               genericInstDefToken, MDRecordKinds.GenericInstantiationDef);
         }
         public uint ResolveGenericParameterRef(Assemblier.GenericParameterRefContext context)
         {
-            var genericParameter = context.IDENTIFIER().GetText();
-            return GenericParameterDefTable.GetDefinitionToken(genericParameter, () => new GenericParamterMD
-            {
-                NameToken = GetTokenFromString(genericParameter)
-            });
+            var genericParam = context.IDENTIFIER().GetText();
+            var genericParamDefToken = GenericParameterDefTable.GetDefinitionToken(
+                genericParam,
+                () => new GenericParamterMD
+                {
+                    NameToken = GetTokenFromString(genericParam)
+                });
+
+            return GetReferenceTokenOfType(
+                null, 
+                genericParam, 
+                genericParamDefToken, 
+                MDRecordKinds.GenericParameter);
         }
         public uint ResolveFieldDef(
             Assemblier.FieldDefContext context,
