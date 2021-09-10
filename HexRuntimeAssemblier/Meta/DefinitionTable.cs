@@ -33,6 +33,8 @@ namespace HexRuntimeAssemblier.Meta
         {
             if (!mName2Token.TryGetValue(fullQualifiedName, out var token))
             {
+                if (metaGenerator == null)
+                    throw new SymbolNotFoundException($"Symbol '{fullQualifiedName}' not found");
                 token = (uint)mDefTokenMetas.Count;
                 mDefTokenMetas.Add(metaGenerator());
                 mName2Token.Add(fullQualifiedName, token);

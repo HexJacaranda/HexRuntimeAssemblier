@@ -9,15 +9,6 @@ namespace HexRuntimeAssemblier
     {
         static void Main(string[] args)
         {
-#if DEBUG
-            var lexer = new AssemblierLexer(CharStreams.fromPath(@"..\test.il"));
-#else
-            var lexer = new AssemblierLexer(CharStreams.fromPath(args[1]));
-#endif
-            var parser = new Assemblier(new CommonTokenStream(lexer));
-
-            IAssemblyBuilder builder = new AssemblyBuilder(new Dictionary<string, IAssemblyResolver>(), parser.start());
-            builder.Build();
         }
     }
 }

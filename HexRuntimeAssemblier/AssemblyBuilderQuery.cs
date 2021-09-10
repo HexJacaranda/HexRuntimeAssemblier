@@ -30,11 +30,5 @@ namespace HexRuntimeAssemblier
                 AssemblyToken = string.IsNullOrEmpty(assembly) ? AssemblyRefMD.Self : AssemblyReferenceTable.GetReferenceToken(assembly, null),
                 Token = defToken
             });
-        private static string ComposeAssemblyTag(string assembly, string fullQualifiedName)
-        {
-            if (string.IsNullOrEmpty(assembly))
-                return fullQualifiedName;
-            return $"[{assembly}]{fullQualifiedName}";
-        }
     }
 }

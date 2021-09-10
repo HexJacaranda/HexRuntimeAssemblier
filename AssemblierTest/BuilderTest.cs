@@ -10,12 +10,23 @@ namespace AssemblierTest
 {
     public class Tests
     {
-        public static IAssemblyBuilder Build(string name)
+        public static IAssemblyBuilder Build(string name, 
+            bool disableCoreType = true,
+            bool coreLibrary = false)
         {
             var lexer = new AssemblierLexer(CharStreams.fromPath(@$"..\..\..\TestIL\{name}.il"));
             var parser = new Assemblier(new CommonTokenStream(lexer));
 
-            IAssemblyBuilder builder = new AssemblyBuilder(new Dictionary<string, IAssemblyResolver>(), parser.start());
+            IAssemblyBuilder builder = new AssemblyBuilder(
+                CoreAssemblyConstant.Default,
+                new AssemblyOptions()
+                {
+                    CoreLibrary = coreLibrary,
+                    DisableCoreType = disableCoreType
+                },
+                new Dictionary<string, IAssemblyResolver>(),
+                parser.start());
+
             builder.Build();
             return builder;
         }
@@ -73,8 +84,8 @@ namespace AssemblierTest
 
             Assert.That(property.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
 
-            Assert.That(property.SetterToken, Is.EqualTo(builder.GetMethodRefToken("void [Test]Hello::setX(int32)")));
-            Assert.That(property.GetterToken, Is.EqualTo(builder.GetMethodRefToken("int32 [Test]Hello::getX()")));
+            Assert.That(property.SetterToken, Is.EqualTo(builder.GetMethodRefToken("void [Test]Hello::setX([Core][System]Int32)")));
+            Assert.That(property.GetterToken, Is.EqualTo(builder.GetMethodRefToken("[Core][System]Int32 [Test]Hello::getX()")));
         }
 
         [Test]
@@ -88,6 +99,20 @@ namespace AssemblierTest
             Assert.True(field.Flags.HasFlag(FieldFlag.ThreadLocal));
             Assert.True(field.Flags.HasFlag(FieldFlag.Volatile));
             Assert.False(field.Flags.HasFlag(FieldFlag.Static));
+        }
+
+        [Test]
+        public void TestGenericClass()
+        {
+            var builder = Build(nameof(TestGenericClass));
+
+            Assert.DoesNotThrow(() => builder.GetTypeDef("[Test]Hello<Canon>"));
+            Assert.DoesNotThrow(() => builder.GetTypeDef("[Test]Hello<Canon>.World"));
+            Assert.DoesNotThrow(() => builder.GetTypeDef("[Test]Hello<Canon>.World.This<Canon, Canon>"));
+
+            var field = builder.GetFieldDef("[Test]Hello<Canon>::X");
+            Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<Canon>")));
+            Assert.That(field.TypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<!T1>.World.This<!T1, !T1>")));
         }
     }
 }

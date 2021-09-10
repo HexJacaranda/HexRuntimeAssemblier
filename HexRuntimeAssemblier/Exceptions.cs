@@ -86,4 +86,15 @@ namespace HexRuntimeAssemblier
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+
+    [Serializable]
+    public class SymbolNotFoundException : Exception
+    {
+        public SymbolNotFoundException() { }
+        public SymbolNotFoundException(string message) : base(message) { }
+        public SymbolNotFoundException(string message, Exception inner) : base(message, inner) { }
+        protected SymbolNotFoundException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

@@ -20,6 +20,7 @@ COMMA: ',';
 REF: '&';
 JUNCTION: '::';
 COLON: ':';
+EXCLAMATION: '!';
 
 KEY_NAMESPACE: '.namespace';
 KEY_ASSEMBLY: '.assembly';
@@ -32,9 +33,9 @@ KEY_PROPERTY: '.property';
 KEY_EVENT: '.event';
 KEY_FIELD: '.field';
 
-KEY_INHERIT: 'inherits';
-KEY_IMPLEMENT: 'implements';
-KEY_GENERIC: 'generic';
+KEY_INHERIT: '.inherits';
+KEY_IMPLEMENT: '.implements';
+KEY_GENERIC: '.generic';
 
 MODIFIER_ABSTRACT: 'abstract';
 MODIFIER_VIRTUAL: 'virtual';
@@ -75,6 +76,7 @@ PRIMITIVE_CHAR: 'char';
 PRIMITIVE_R4: 'float';
 PRIMITIVE_R8: 'double';
 PRIMITIVE_STRING: 'string';
+PRIMITIVE_OBJECT: 'object';
 PRIMITIVE_BOOL: 'bool';
 
 METHOD_MANAGED: 'managed';

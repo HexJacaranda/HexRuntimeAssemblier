@@ -77,7 +77,7 @@ eventDef: KEY_EVENT type IDENTIFIER
     BODY_END;
 
 //Class
-inheritOrImplementType: typeRef | genericParameterRef;
+inheritOrImplementType: typeRef | genericParameterRef | PRIMITIVE_OBJECT;
 typeRefList: (inheritOrImplementType COMMA)* inheritOrImplementType;
 implementList: KEY_IMPLEMENT typeRefList;
 typeInherit: KEY_INHERIT inheritOrImplementType;
@@ -105,11 +105,12 @@ primitiveType: PRIMITIVE_INT |
         PRIMITIVE_R4 |
         PRIMITIVE_R8 |
         PRIMITIVE_STRING |
+        PRIMITIVE_OBJECT |
         PRIMITIVE_BOOL;
 
 genericParameterList: LBRACE (type COMMA)* type RBRACE;
 type: (primitiveType | typeRef | arrayType | interiorRefType | genericParameterRef);
-genericParameterRef: LMID INT RMID JUNCTION IDENTIFIER;
+genericParameterRef: EXCLAMATION IDENTIFIER;
 arrayType: nestArrayType | multidimensionArrayType;
 nestArrayType: ARRAY LBRACE type RBRACE;
 multidimensionArrayType: ARRAY LBRACE type COMMA INT RBRACE;
