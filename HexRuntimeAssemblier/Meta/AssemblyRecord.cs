@@ -61,7 +61,7 @@ namespace HexRuntimeAssemblier.Meta
 	public class MemberRefMD
 	{
 		public MDToken TypeRefToken;
-		public MDRecordKinds MemberDefKind;
+		public int MemberDefKind;
 		public MDToken MemberDefToken;
 	}
 

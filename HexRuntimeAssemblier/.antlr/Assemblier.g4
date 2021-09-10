@@ -52,7 +52,7 @@ methodDef: KEY_METHOD
     BODY_END;
 
 methodParentType: type;
-methodRef: methodReturnType methodParentType JUNCTION methodName genericParameterList? PARAM_BEGIN type* PARAM_END;
+methodRef: methodParentType JUNCTION methodName genericParameterList? PARAM_BEGIN type* PARAM_END;
 
 //Field
 fieldDef: KEY_FIELD modifierAccess modifierLife MODIFIER_THREAD_LOCAL? (MODIFIER_VOLATILE | MODIFIER_CONSTANT | MODIFIER_READONLY)? type IDENTIFIER;
@@ -90,7 +90,7 @@ typeName: typeRefNamespace (typeRefNode DOT)* typeRefNode;
 typeRefNamespace: LMID namespaceValue RMID;
 typeRefGeneric: IDENTIFIER LBRACE (type COMMA)* type RBRACE;
 typeRefPlain: IDENTIFIER;
-typeRefNode: typeRefGeneric | typeRefPlain | genericParameterRef;
+typeRefNode: typeRefGeneric | typeRefPlain ;
 
 
 primitiveType: PRIMITIVE_INT |

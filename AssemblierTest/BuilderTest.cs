@@ -69,10 +69,10 @@ namespace AssemblierTest
         public void TestMethod()
         {
             var builder = Build(nameof(TestMethod));
-            var method = builder.GetMethodDef("void [Test]Hello::.ctor()");
+            var method = builder.GetMethodDef("[Test]Hello::.ctor()");
 
             Assert.IsFalse(method.Flags.HasFlag(MethodFlag.Static));
-            Assert.That(method.NameToken.GetString(builder), Is.EqualTo("void [Test]Hello::.ctor()"));
+            Assert.That(method.NameToken.GetString(builder), Is.EqualTo("[Test]Hello::.ctor()"));
             Assert.That(method.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
         }
 
@@ -84,8 +84,8 @@ namespace AssemblierTest
 
             Assert.That(property.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
 
-            Assert.That(property.SetterToken, Is.EqualTo(builder.GetMethodRefToken("void [Test]Hello::setX([Core][System]Int32)")));
-            Assert.That(property.GetterToken, Is.EqualTo(builder.GetMethodRefToken("[Core][System]Int32 [Test]Hello::getX()")));
+            Assert.That(property.SetterToken, Is.EqualTo(builder.GetMethodRefToken("[Test]Hello::setX([Core][System]Int32)")));
+            Assert.That(property.GetterToken, Is.EqualTo(builder.GetMethodRefToken("[Test]Hello::getX()")));
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace AssemblierTest
 
             var field = builder.GetFieldDef("[Test]Hello<Canon>::X");
             Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<Canon>")));
-            Assert.That(field.TypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<!T1>.World.This<!T1, !T1>")));
+            Assert.That(field.TypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<!T1>.World.This<!T1, [Core][System]Int32>")));
         }
 
         [Test]
@@ -120,8 +120,8 @@ namespace AssemblierTest
         {
             var builder = Build(nameof(TestGenericMethod));
 
-            Assert.DoesNotThrow(() => builder.GetMethodDef("Canon [Test]Hello<Canon>::A<Canon>()"));
-            Assert.DoesNotThrow(() => builder.GetMethodDef("void [Test]Hello<Canon>::B()"));
+            Assert.DoesNotThrow(() => builder.GetMethodDef("[Test]Hello<Canon>::A<Canon>()"));
+            Assert.DoesNotThrow(() => builder.GetMethodDef("[Test]Hello<Canon>::B()"));
         }
     }
 }

@@ -26,7 +26,7 @@
         }
         .code
         {
-            .call void [Test]Hello::C()
+            .call [Test]Hello::C()
             .pop
             .ret
         }

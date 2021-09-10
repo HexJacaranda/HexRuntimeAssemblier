@@ -27,7 +27,7 @@
     }
     .property int32 X
     {
-        .get int32 [Test]Hello::getX()
-        .set void [Test]Hello::setX(int32)
+        .get [Test]Hello::getX()
+        .set [Test]Hello::setX(int32)
     }
 }

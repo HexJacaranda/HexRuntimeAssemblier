@@ -16,7 +16,7 @@
     {
         .code 
         {
-            .new !T2 !T2::.ctor()
+            .new !T2::.ctor()
             .conv int32
             .ret
         }
@@ -26,7 +26,7 @@
     {
         .code
         {
-            .call !T1 [Test]Hello<int64>::A<int32>()
+            .call [Test]Hello<int64>::A<int32>()
             .pop
             .ret
         }
