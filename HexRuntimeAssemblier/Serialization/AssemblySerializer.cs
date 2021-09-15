@@ -1,6 +1,7 @@
 ﻿using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Meta;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,11 @@ namespace HexRuntimeAssemblier.Serialization
     public class MetaWriter
     {
         public static void Write(BinaryWriter writer, string value)
-            => writer.Write(value.AsSpan());
+        {
+            writer.Write(value.Length);
+            var stringBytes = Encoding.Unicode.GetBytes(value);            
+            writer.Write(stringBytes);
+        }
         public static void Write(BinaryWriter writer, Guid value)
             => writer.Write(value.ToByteArray());
     }

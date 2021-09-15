@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HexRuntimeAssemblier.IL;
 using MDToken = System.UInt32;
 
 namespace HexRuntimeAssemblier.Meta
@@ -213,13 +214,13 @@ namespace HexRuntimeAssemblier.Meta
 
 	public class TypeMD
 	{
-		public MDToken ParentAssemblyToken;
-		public MDToken ParentTypeRefToken;
-		public MDToken NameToken;
+		public MDToken ParentAssemblyToken = Token.Null;
+		public MDToken ParentTypeRefToken = Token.Null;
+		public MDToken NameToken = Token.Null;
 		public MDToken EnclosingTypeRefToken = Token.Null;
 		public MDToken CanonicalTypeRefToken = Token.Null;
-		public MDToken NamespaceToken;
-		public byte CoreType;
+		public MDToken FullyQualifiedNameToken = Token.Null;
+		public CoreTypes CoreType;
 		public byte Accessibility;
 
 		public TypeFlag Flags;

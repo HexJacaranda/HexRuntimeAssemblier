@@ -13,9 +13,12 @@ namespace HexRuntimeAssemblier.Interfaces
     public class CoreAssemblyConstant
     {
         /// <summary>
-        /// Defines alias to QFN of primitive types
+        /// Defines alias to FQN of primitive types
         /// </summary>
         public IReadOnlyDictionary<string, string> PrimitiveTypes { get; init; }
+        /// <summary>
+        /// Defines mapping from FQN to core type
+        /// </summary>
         public IReadOnlyDictionary<string, CoreTypes> PrimitiveToCore { get;init; }
         /// <summary>
         /// Array type name

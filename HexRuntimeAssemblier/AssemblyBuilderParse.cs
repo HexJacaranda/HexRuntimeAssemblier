@@ -701,10 +701,14 @@ namespace HexRuntimeAssemblier
         {
             //Handle the type mapping    
             var typeFullyQualifiedName = GetFullyQualifiedName(context, outerClassFullyQualifiedName);
-            var typeDefToken = TypeDefTable.GetDefinitionToken(typeFullyQualifiedName, () => new TypeMD() { 
-                NameToken = GetTokenFromString(typeFullyQualifiedName)
-            });
+            var typeDefToken = TypeDefTable.GetDefinitionToken(typeFullyQualifiedName, () => new TypeMD());
+
             var type = TypeDefTable[typeDefToken] as TypeMD;
+            type.NameToken = GetTokenFromString(context.className().GetText());
+            type.FullyQualifiedNameToken = GetTokenFromString(typeFullyQualifiedName);
+
+            //Set assumed core type
+            type.CoreType = CoreTypes.Ref;
 
             //Handle flags
             TypeFlag flag = 0;
@@ -722,10 +726,15 @@ namespace HexRuntimeAssemblier
                 flag |= TypeFlag.Attribute;
 
             if (context.ExistToken(Assemblier.KEY_STRUCT))
+            {
                 flag |= TypeFlag.Struct;
+                //Set struct core type
+                type.CoreType = CoreTypes.Struct;
+            }
             else if (context.ExistToken(Assemblier.KEY_INTERFACE))
                 flag |= TypeFlag.Interface;
 
+            //Set flag
             type.Flags = flag;
 
             //Accessbility
@@ -733,10 +742,9 @@ namespace HexRuntimeAssemblier
                 .GetUnderlyingTokenType();
 
             type.Accessibility = MapAccessbility(accessToken);
-            
-            //Core Type
-            
 
+            //Overrides generic Core Type
+            mConstant.PrimitiveToCore.TryGetValue(typeFullyQualifiedName, out type.CoreType);
 
             //Generic
             var genericList = context.genericList();
