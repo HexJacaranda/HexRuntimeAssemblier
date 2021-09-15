@@ -9,17 +9,17 @@ namespace HexRuntimeAssemblier.Reference
 {
     public class AssemblyResolver : IAssemblyResolver
     {
-        public uint QueryFieldDefinition(string fullQualifiedName)
+        public uint QueryFieldDefinition(string fullyQualifiedName)
         {
             return 0u;
         }
 
-        public uint QueryMethodDefinition(string fullQualifiedName)
+        public uint QueryMethodDefinition(string fullyQualifiedName)
         {
             return 0u;
         }
 
-        public uint QueryTypeDefinition(string fullQualifiedName)
+        public uint QueryTypeDefinition(string fullyQualifiedName)
         {
             return 0u;
         }

@@ -123,5 +123,11 @@ namespace AssemblierTest
             Assert.DoesNotThrow(() => builder.GetMethodDef("[Test]Hello<Canon>::A<Canon>()"));
             Assert.DoesNotThrow(() => builder.GetMethodDef("[Test]Hello<Canon>::B()"));
         }
+
+        [Test]
+        public void TestCoreLib()
+        {
+            var builder = Build(nameof(TestCoreLib), false, true);
+        }
     }
 }

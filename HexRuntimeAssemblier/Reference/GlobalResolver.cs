@@ -20,49 +20,49 @@ namespace HexRuntimeAssemblier.Reference
         }
         public MDToken QueryTypeDefinition(
             string assembly,
-            string fullQualifiedName)
+            string fullyQualifiedName)
         {
             if (string.IsNullOrEmpty(assembly))
-                return CurrentAssembly.TryDefineType(fullQualifiedName);
+                return CurrentAssembly.TryDefineType(fullyQualifiedName);
             else
             {
                 var external = ExternalAssembly[assembly];
-                return external.QueryTypeDefinition(fullQualifiedName);
+                return external.QueryTypeDefinition(fullyQualifiedName);
             }
         }
         public MDToken QueryMethodDefinition(
             string assembly,
-            string fullQualifiedName)
+            string fullyQualifiedName)
         {
             if (string.IsNullOrEmpty(assembly))
-                return CurrentAssembly.TryDefineMethod(fullQualifiedName);
+                return CurrentAssembly.TryDefineMethod(fullyQualifiedName);
             else
             {
                 var external = ExternalAssembly[assembly];
-                return external.QueryMethodDefinition(fullQualifiedName);
+                return external.QueryMethodDefinition(fullyQualifiedName);
             }
         }
         public MDToken QueryFieldDefinition(
             string assembly,
-            string fullQualifiedName)
+            string fullyQualifiedName)
         {
             if (string.IsNullOrEmpty(assembly))
-                return CurrentAssembly.TryDefineField(fullQualifiedName);
+                return CurrentAssembly.TryDefineField(fullyQualifiedName);
             else
             {
                 var external = ExternalAssembly[assembly];
-                return external.QueryFieldDefinition(fullQualifiedName);
+                return external.QueryFieldDefinition(fullyQualifiedName);
             }
         }
         public MDToken QueryTypeReference(
             string assembly,
-            string fullQualifiedName,
+            string fullyQualifiedName,
             Func<MDToken, MDToken> referenceTokenGenerator)
-            => referenceTokenGenerator(QueryTypeDefinition(assembly, fullQualifiedName));
+            => referenceTokenGenerator(QueryTypeDefinition(assembly, fullyQualifiedName));
         public MDToken QueryMethodReference(
             string assembly,
-            string fullQualifiedName,
+            string fullyQualifiedName,
             Func<MDToken, MDToken> referenceTokenGenerator)
-            => referenceTokenGenerator(QueryMethodDefinition(assembly, fullQualifiedName));
+            => referenceTokenGenerator(QueryMethodDefinition(assembly, fullyQualifiedName));
     }
 }

@@ -4,7 +4,11 @@ using MDToken = System.UInt32;
 
 namespace HexRuntimeAssemblier.Meta
 {
-	public enum MDRecordKinds : int
+	public class Token
+    {
+		public const MDToken Null = uint.MaxValue;
+    }
+	public enum MDRecordKinds : short
 	{
 		String,
 		Argument,
@@ -188,7 +192,7 @@ namespace HexRuntimeAssemblier.Meta
 		public byte Accessibility;
 		public MethodFlag Flags;
 		public MethodSignatureMD Signature;
-		public MDToken OverridesMethodRef;
+		public MDToken OverridesMethodRef = Token.Null;
 		public ILMD ILCodeMD;
 		public NativeLinkMD[] NativeLinks;
 		public MDToken[] GenericParameterTokens;
@@ -212,8 +216,8 @@ namespace HexRuntimeAssemblier.Meta
 		public MDToken ParentAssemblyToken;
 		public MDToken ParentTypeRefToken;
 		public MDToken NameToken;
-		public MDToken EnclosingTypeRefToken;
-		public MDToken CanonicalTypeRefToken;
+		public MDToken EnclosingTypeRefToken = Token.Null;
+		public MDToken CanonicalTypeRefToken = Token.Null;
 		public MDToken NamespaceToken;
 		public byte CoreType;
 		public byte Accessibility;

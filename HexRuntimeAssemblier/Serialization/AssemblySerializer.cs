@@ -1,140 +1,185 @@
 ﻿using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Meta;
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace HexRuntimeAssemblier.Serialization
 {
+    /// <summary>
+    /// Provides the method needed for special meta elements
+    /// </summary>
+    public class MetaWriter
+    {
+        public static void Write(BinaryWriter writer, string value)
+            => writer.Write(value.AsSpan());
+        public static void Write(BinaryWriter writer, Guid value)
+            => writer.Write(value.ToByteArray());
+    }
+
     public class AssemblySerializerHelper
     {
-        private static Dictionary<Type, MethodInfo> mWriterMethods = new();
-        private static Dictionary<Type, Delegate> mCache = new();
-        public static Delegate GetSerializer(Type metaType)
+        private readonly static Dictionary<Type, MethodInfo> mWriterMethods = null;
+        private readonly static Dictionary<Type, Delegate> mCache = new();
+        static AssemblySerializerHelper()
         {
-            lock (mCache)
-                return GetSerializerWithoutLock(metaType);
+            mWriterMethods = typeof(BinaryWriter).GetMethods()
+                .Where(x => x.Name == nameof(BinaryWriter.Write))
+                .Where(x => x.GetParameters().Length == 1)
+                .ToDictionary(x => x.GetParameters().First().ParameterType, x => x);
+
+            var overrideMethods = typeof(MetaWriter).GetMethods()
+                                    .Where(x => x.Name == nameof(MetaWriter.Write))
+                                    .Where(x => x.GetParameters().Length == 2);
+
+            foreach (var method in overrideMethods)
+                mWriterMethods[method.GetParameters()[1].ParameterType] = method;
         }
         private static Delegate GetSerializerWithoutLock(Type metaType)
         {
             if (!mCache.TryGetValue(metaType, out var serializer))
-                mCache[metaType] = GenerateSerializerFor(metaType);
+                mCache[metaType] = serializer = GenerateSerializerFor(metaType);
             return serializer;
         }
         private static Delegate GenerateSerializerFor(Type metaType)
         {
-            DynamicMethod method = new(metaType.FullName, null, new Type[] { typeof(BinaryWriter), metaType });
+            DynamicMethod method = new(
+                metaType.FullName,
+                MethodAttributes.Static | MethodAttributes.Public,
+                CallingConventions.Standard,
+                null,
+                new Type[] { typeof(BinaryWriter), metaType },
+                typeof(AssemblySerializerHelper).Module,
+                true);
             var il = method.GetILGenerator();
             
-            var fields = metaType.GetFields();
-            foreach (var field in fields)
-            {
-                var type = field.FieldType;
-                if (type.IsPrimitive)
-                {
-                    EmitStorePrimitive(il, type, () =>
-                    {
-                        il.Emit(OpCodes.Ldarg_1);
-                        il.Emit(OpCodes.Ldfld, field);
-                    });
-                }
-                else if (type ==  typeof(string))
-                {
+            foreach (var field in metaType.GetFields(BindingFlags.Instance | BindingFlags.Public))
+                EmitStore(il, field.FieldType, () => EmitLoadField(il, field));
 
-                }
-                else if (type.IsArray)
-                {
-                    il.BeginScope();
-
-                    var array = il.DeclareLocal(type);
-                    il.Emit(OpCodes.Ldarg_1);
-                    il.Emit(OpCodes.Ldfld, field);
-                    il.Emit(OpCodes.Stloc, array);
-
-                    var elementType = type.GetElementType();
-                    if (elementType.IsPrimitive)
-                    {
-                        EmitStoreArray(il, array, (index) =>
-                        {
-                            EmitStorePrimitive(il, elementType, () =>
-                            {
-                                il.Emit(OpCodes.Ldloc, array);
-                                il.Emit(OpCodes.Ldloc, index);
-                                il.Emit(OpCodes.Ldelem);
-                            });
-                        });
-                    }
-                    else
-                    {
-                        var targetMethod = GetSerializerWithoutLock(type.GetElementType());
-                        EmitStoreArray(il, array, (index) =>
-                        {
-                            il.Emit(OpCodes.Ldarg_0);
-                            il.Emit(OpCodes.Ldloc, array);
-                            il.Emit(OpCodes.Ldloc, index);
-                            il.Emit(OpCodes.Ldelem);
-                            il.Emit(OpCodes.Call, targetMethod.Method);
-                        });
-                    }
-
-                    il.EndScope();
-                }
-                else
-                {
-                    var targetMethod = GetSerializerWithoutLock(type.GetElementType());
-                    il.Emit(OpCodes.Ldarg_0);
-                    il.Emit(OpCodes.Ldarg_1);
-                    il.Emit(OpCodes.Ldfld, field);
-                    il.Emit(OpCodes.Call, targetMethod.Method);
-                }
-            }
             il.Emit(OpCodes.Ret);
-            return method.CreateDelegate(typeof(Action<>).MakeGenericType(typeof(BinaryWriter), metaType));
+            return method.CreateDelegate(typeof(Action<,>).MakeGenericType(typeof(BinaryWriter), metaType));
         }
-        private static void EmitStorePrimitive(ILGenerator il, Type primitiveType, Action loadPrimitive)
+        private static void EmitLoadField(ILGenerator il, FieldInfo field)
         {
-            var targetMethod = mWriterMethods[primitiveType];
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldfld, field);
+        }
+        private static void EmitStoreBuiltIn(ILGenerator il, MethodInfo method, Action loadPrimitive)
+        {
             il.Emit(OpCodes.Ldarg_0);
             loadPrimitive();
-            il.Emit(OpCodes.Call, targetMethod);
+            il.Emit(OpCodes.Call, method);
+        }
+        private static void EmitIf(ILGenerator il, Action emitCompare, Action emitTrueAction, Action emitFalseAction)
+        {
+            var falseLable = il.DefineLabel();
+            var endLable = il.DefineLabel();
+
+            emitCompare();
+            il.Emit(OpCodes.Brfalse_S, falseLable);
+            emitTrueAction();
+            il.Emit(OpCodes.Br_S, endLable);
+            il.MarkLabel(falseLable);
+            emitFalseAction();
+            il.MarkLabel(endLable);
         }
         private static void EmitStoreArray(ILGenerator il, LocalBuilder array, Action<LocalBuilder> bodyEmit)
         {
-            //Store length
-            EmitStorePrimitive(il, typeof(int), () =>
-             {
-                 il.Emit(OpCodes.Ldloc, array);
-                 il.Emit(OpCodes.Ldlen);
-                 il.Emit(OpCodes.Conv_I4);
-             });
+            //Store guard
+            EmitIf(il,
+                () =>
+                {
+                    il.Emit(OpCodes.Ldloc, array);
+                    il.Emit(OpCodes.Ldnull);
+                    il.Emit(OpCodes.Ceq);
+                },
+                () => 
+                {
+                    //Store zero length
+                    EmitStore(il, typeof(int), () => il.Emit(OpCodes.Ldc_I4_0));
+                },
+                () => 
+                {
+                    //Store length
+                    EmitStore(il, typeof(int), () =>
+                    {
+                        il.Emit(OpCodes.Ldloc, array);
+                        il.Emit(OpCodes.Ldlen);
+                        il.Emit(OpCodes.Conv_I4);
+                    });
 
-            //Store content
-            var compareLabel = il.DefineLabel();
-            var bodyLabel = il.DefineLabel();
-            var index = il.DeclareLocal(typeof(int));
+                    //Store content
+                    var compareLabel = il.DefineLabel();
+                    var bodyLabel = il.DefineLabel();
+                    var index = il.DeclareLocal(typeof(int));
+                    //i = 0
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Stloc, index);
+                    il.Emit(OpCodes.Br_S, compareLabel);
+                    il.MarkLabel(bodyLabel);
 
-            il.Emit(OpCodes.Ldc_I4_0);
-            il.Emit(OpCodes.Stloc, index);
-            il.Emit(OpCodes.Br_S, compareLabel);
-            il.MarkLabel(bodyLabel);
+                    //bodyEmit(index);
 
-            bodyEmit(index);
+                    //i++
+                    il.Emit(OpCodes.Ldloc, index);
+                    il.Emit(OpCodes.Ldc_I4_1);
+                    il.Emit(OpCodes.Add);
+                    il.Emit(OpCodes.Stloc, index);
 
-            il.MarkLabel(compareLabel);
-            il.Emit(OpCodes.Ldloc, index);
-            il.Emit(OpCodes.Ldloc, array);
-            il.Emit(OpCodes.Ldlen);
-            il.Emit(OpCodes.Conv_I4);
-            il.Emit(OpCodes.Clt);
-            il.Emit(OpCodes.Brtrue_S, bodyLabel);
+                    //i < array.Length
+                    il.MarkLabel(compareLabel);
+                    il.Emit(OpCodes.Ldloc, index);
+                    il.Emit(OpCodes.Ldloc, array);
+                    il.Emit(OpCodes.Ldlen);
+                    il.Emit(OpCodes.Conv_I4);
+                    il.Emit(OpCodes.Blt_S, bodyLabel);
+                });
         }
-        private static void WriteString(BinaryWriter writer, string value)
+        private static void EmitStore(ILGenerator il, Type metaType, Action emitValueLoading)
         {
-            var bytes = value.AsSpan();
-            writer.Write(bytes)
+            if (mWriterMethods.TryGetValue(metaType, out var writer))
+                EmitStoreBuiltIn(il, writer, emitValueLoading);
+            else
+            {
+                //Complex type
+                if (metaType.IsArray)
+                {
+                    var array = il.DeclareLocal(metaType);
+                    emitValueLoading();
+                    il.Emit(OpCodes.Stloc, array);
+
+                    var elementType = metaType.GetElementType();
+                    EmitStoreArray(il, array,
+                        (index) => EmitStore(il, elementType, () =>
+                        {
+                            il.Emit(OpCodes.Ldloc, array);
+                            il.Emit(OpCodes.Ldloc, index);
+                            il.Emit(OpCodes.Ldelem, elementType);
+                        }));
+                }
+                else if (metaType.IsEnum)
+                {
+                    var underlyingType = metaType.GetEnumUnderlyingType();
+                    if (!mWriterMethods.TryGetValue(underlyingType, out writer))
+                        throw new MetaElementNotSupportedException($"Type - {underlyingType.FullName} is not supported");
+                    EmitStoreBuiltIn(il, writer, emitValueLoading);
+                }
+                else
+                {
+                    var targetMethod = GetSerializerWithoutLock(metaType);
+                    il.Emit(OpCodes.Ldarg_0);
+                    emitValueLoading();
+                    il.Emit(OpCodes.Call, targetMethod.Method);
+                }
+            }
+        }
+        public static Delegate GetSerializer(Type metaType)
+        {
+            lock (mCache)
+                return GetSerializerWithoutLock(metaType);
         }
     }
     public class AssemblySerializer
@@ -144,14 +189,14 @@ namespace HexRuntimeAssemblier.Serialization
         private readonly IAssemblyBuilder mBuilder;
         private void RelocateFixUp(long position, Action action)
         {
-            long restoreLocation = mOutputStream.Length;
+            long restoreLocation = mOutputStream.Position;
             mOutputStream.Seek(position, SeekOrigin.Begin);
             action();
             mOutputStream.Seek(restoreLocation, SeekOrigin.Begin);
         }
         private void Write<T>(T target)
         {
-            var serializer = AssemblySerializerHelper.GetSerializer(typeof(AssemblyHeaderMD))
+            var serializer = AssemblySerializerHelper.GetSerializer(typeof(T))
                 as Action<BinaryWriter, T>;
             serializer(mWriter, target);
         }
@@ -162,7 +207,7 @@ namespace HexRuntimeAssemblier.Serialization
         }
         private void WriteReferenceTable(ReferenceTable table, int offsetOfContentOffset)
         {
-            int baseOffset = (int)mOutputStream.Length;
+            int baseOffset = (int)mOutputStream.Position;
             foreach (var meta in table.ReferenceTokenMetas)
                 Write(meta);
 
@@ -170,9 +215,9 @@ namespace HexRuntimeAssemblier.Serialization
         }
         private int WriteReferenceTableHead(ReferenceTable table)
         {
-            mWriter.Write(table.ReferenceTokenMetas.Count);
-            int current = (int)mOutputStream.Length;
+            int current = (int)mOutputStream.Position;
             mWriter.Write(int.MinValue);
+            mWriter.Write(table.ReferenceTokenMetas.Count);
             return current;
         }
         private void WriteDefinitionTable(DefinitionTable table, int offsetOfRecordOffsets)
@@ -180,7 +225,7 @@ namespace HexRuntimeAssemblier.Serialization
             int[] offsets = new int[table.DefinitionTokenMetas.Count];
             for (int i = 0; i < table.DefinitionTokenMetas.Count; i++)
             {
-                offsets[i] = (int)mOutputStream.Length;
+                offsets[i] = (int)mOutputStream.Position;
                 Write(table.DefinitionTokenMetas[i]);
             }
 
@@ -192,14 +237,40 @@ namespace HexRuntimeAssemblier.Serialization
         }
         private int WriteDefinitionTableHead(DefinitionTable table)
         {
-            mWriter.Write((int)table.Kind);
+            mWriter.Write((short)table.Kind);
             mWriter.Write(table.DefinitionTokenMetas.Count);
-            int current = (int)mOutputStream.Length;
+            int current = (int)mOutputStream.Position;
 
             for (int i = 0; i < table.DefinitionTokenMetas.Count; i++)
                 mWriter.Write(int.MinValue);
 
             return current;
+        }
+        private int WriteStringTableHead(StringTable table)
+        {
+            mWriter.Write((short)table.Kind);
+            mWriter.Write(table.Contents.Count);
+            int current = (int)mOutputStream.Position;
+
+            for (int i = 0; i < table.Contents.Count; i++)
+                mWriter.Write(int.MinValue);
+
+            return current;
+        }
+        private void WriteStringTable(StringTable table, int offsetOfRecordOffsets)
+        {
+            int[] offsets = new int[table.Contents.Count];
+            for (int i = 0; i < table.Contents.Count; i++)
+            {
+                offsets[i] = (int)mOutputStream.Position;
+                MetaWriter.Write(mWriter, table.Contents[i]);
+            }
+
+            RelocateFixUp(offsetOfRecordOffsets, () =>
+            {
+                for (int i = 0; i < offsets.Length; i++)
+                    mWriter.Write(offsets[i]);
+            });
         }
         public AssemblySerializer(Stream output, IAssemblyBuilder builder)
         {
@@ -221,13 +292,21 @@ namespace HexRuntimeAssemblier.Serialization
                 var assemblyRef = mBuilder.AssemblyReferenceTable;
                 var assemblyRefRelocate = WriteReferenceTableHead(assemblyRef);
 
+                {
+                    List<int> offsetTable = new();
+                    offsetTable.Add(WriteStringTableHead(mBuilder.MetaStringTable));
+                    for (int i = (int)MDRecordKinds.Argument; i < (int)MDRecordKinds.KindLimit; ++i)
+                        offsetTable.Add(WriteDefinitionTableHead(mBuilder.DefinitionTables[(MDRecordKinds)i]));
+
+
+                    WriteStringTable(mBuilder.MetaStringTable, offsetTable[0]);
+                    for (int i = (int)MDRecordKinds.Argument; i < (int)MDRecordKinds.KindLimit; ++i)
+                        WriteDefinitionTable(mBuilder.DefinitionTables[(MDRecordKinds)i], offsetTable[i]);
+                }
+
                 WriteReferenceTable(typeRef, typeRefRelocate);
                 WriteReferenceTable(memberRef, memberRefRelocate);
                 WriteReferenceTable(assemblyRef, assemblyRefRelocate);
-            }
-
-            {
-
             }
         }
     }

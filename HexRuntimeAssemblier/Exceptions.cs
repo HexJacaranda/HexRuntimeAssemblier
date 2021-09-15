@@ -97,4 +97,16 @@ namespace HexRuntimeAssemblier
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+
+
+    [Serializable]
+    public class MetaElementNotSupportedException : Exception
+    {
+        public MetaElementNotSupportedException() { }
+        public MetaElementNotSupportedException(string message) : base(message) { }
+        public MetaElementNotSupportedException(string message, Exception inner) : base(message, inner) { }
+        protected MetaElementNotSupportedException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

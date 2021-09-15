@@ -21,15 +21,15 @@ namespace HexRuntimeAssemblier.Meta
         /// </summary>
         public IList<object> ReferenceTokenMetas => mRefTokenMetas;
         public T GetMeta<T>(uint token) where T : class => mRefTokenMetas[(int)token] as T;
-        public uint GetReferenceToken(string fullQualifiedName, Func<object> metaGenerator)
+        public uint GetReferenceToken(string fullyQualifiedName, Func<object> metaGenerator)
         {
-            if (!mName2Token.TryGetValue(fullQualifiedName, out var token))
+            if (!mName2Token.TryGetValue(fullyQualifiedName, out var token))
             {
                 if (metaGenerator == null)
-                    throw new SymbolNotFoundException($"Symbol '{fullQualifiedName}' not found");
+                    throw new SymbolNotFoundException($"Symbol '{fullyQualifiedName}' not found");
                 token = (uint)mRefTokenMetas.Count;
                 mRefTokenMetas.Add(metaGenerator());
-                mName2Token.Add(fullQualifiedName, token);
+                mName2Token.Add(fullyQualifiedName, token);
             }
             return token;
         }

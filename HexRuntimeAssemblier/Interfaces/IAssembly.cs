@@ -11,9 +11,9 @@ namespace HexRuntimeAssemblier.Interfaces
     /// </summary>
     public interface IAssemblyResolver
     {
-        MDToken QueryTypeDefinition(string fullQualifiedName);
-        MDToken QueryMethodDefinition(string fullQualifiedName);
-        MDToken QueryFieldDefinition(string fullQualifiedName);
+        MDToken QueryTypeDefinition(string fullyQualifiedName);
+        MDToken QueryMethodDefinition(string fullyQualifiedName);
+        MDToken QueryFieldDefinition(string fullyQualifiedName);
     }
 
     /// <summary>
@@ -21,9 +21,9 @@ namespace HexRuntimeAssemblier.Interfaces
     /// </summary>
     public interface IAssemblyBuilder : IAssemblyResolver
     {
-        MDToken TryDefineType(string fullQualifiedName);
-        MDToken TryDefineMethod(string fullQualifiedName);
-        MDToken TryDefineField(string fullQualifiedName);
+        MDToken TryDefineType(string fullyQualifiedName);
+        MDToken TryDefineMethod(string fullyQualifiedName);
+        MDToken TryDefineField(string fullyQualifiedName);
         StringTable MetaStringTable { get; }
         ReferenceTable AssemblyReferenceTable { get; }
         AssemblyHeaderMD AssemblyHeader { get; }

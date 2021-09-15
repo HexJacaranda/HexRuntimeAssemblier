@@ -29,15 +29,15 @@ namespace HexRuntimeAssemblier.Meta
         {
             get => mDefTokenMetas[(int)token];
         }
-        public uint GetDefinitionToken(string fullQualifiedName, Func<object> metaGenerator)
+        public uint GetDefinitionToken(string fullyQualifiedName, Func<object> metaGenerator)
         {
-            if (!mName2Token.TryGetValue(fullQualifiedName, out var token))
+            if (!mName2Token.TryGetValue(fullyQualifiedName, out var token))
             {
                 if (metaGenerator == null)
-                    throw new SymbolNotFoundException($"Symbol '{fullQualifiedName}' not found");
+                    throw new SymbolNotFoundException($"Symbol '{fullyQualifiedName}' not found");
                 token = (uint)mDefTokenMetas.Count;
                 mDefTokenMetas.Add(metaGenerator());
-                mName2Token.Add(fullQualifiedName, token);
+                mName2Token.Add(fullyQualifiedName, token);
             }
             return token;
         }
