@@ -217,9 +217,9 @@ namespace HexRuntimeAssemblier.Meta
 		public MDToken ParentAssemblyToken = Token.Null;
 		public MDToken ParentTypeRefToken = Token.Null;
 		public MDToken NameToken = Token.Null;
-		public MDToken EnclosingTypeRefToken = Token.Null;
-		public MDToken CanonicalTypeRefToken = Token.Null;
 		public MDToken FullyQualifiedNameToken = Token.Null;
+		public MDToken EnclosingTypeRefToken = Token.Null;
+		public MDToken CanonicalTypeRefToken = Token.Null;	
 		public CoreTypes CoreType;
 		public byte Accessibility;
 

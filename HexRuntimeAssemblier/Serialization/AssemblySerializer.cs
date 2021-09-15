@@ -41,7 +41,21 @@ namespace HexRuntimeAssemblier.Serialization
         private readonly static Dictionary<Type, Delegate> mSerializerCache = new();
         private readonly static Dictionary<Type, MethodInfo> mReaderMethods = null;
         private readonly static Dictionary<Type, Delegate> mDeserializerCache = new();
-       
+        private readonly static List<Type> mPrimitives = new()
+        {
+            typeof(bool),
+            typeof(byte),
+            typeof(char),
+            typeof(short),
+            typeof(int),
+            typeof(long),
+            typeof(float),
+            typeof(double),
+            typeof(string),
+            typeof(ushort),
+            typeof(uint),
+            typeof(ulong)
+        };
         static AssemblySerializerHelper()
         {
             mWriterMethods = typeof(BinaryWriter).GetMethods()
@@ -56,15 +70,11 @@ namespace HexRuntimeAssemblier.Serialization
             foreach (var method in overrideMethods)
                 mWriterMethods[method.GetParameters()[1].ParameterType] = method;
 
-            mWriterMethods = typeof(BinaryReader).GetMethods()
-                .Where(x => x.Name.StartsWith("Read"))
-                .Where(x => x.GetParameters().Length == 0)
-                .ToDictionary(x => x.ReturnType, x => x);
-
+            mReaderMethods = mPrimitives.ToDictionary(x => x, x => typeof(BinaryWriter).GetMethod($"Read{x.Name}"));
             foreach (var method in typeof(MetaWriter).GetMethods()
                                     .Where(x => x.Name.StartsWith("Read"))
                                     .Where(x => x.GetParameters().Length == 1))
-                mWriterMethods[method.ReturnType] = method;
+                mReaderMethods[method.ReturnType] = method;
         }
         #region Serialize
         private static Delegate GetSerializerWithoutLock(Type metaType)
