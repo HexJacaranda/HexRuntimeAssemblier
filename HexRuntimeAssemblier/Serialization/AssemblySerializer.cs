@@ -25,10 +25,23 @@ namespace HexRuntimeAssemblier.Serialization
             => writer.Write(value.ToByteArray());
     }
 
+    public class MetaReader
+    {
+        public static string ReadString(BinaryReader reader)
+        {
+            int length = reader.ReadInt32();
+            byte[] bytes = reader.ReadBytes(length);
+            return Encoding.Unicode.GetString(bytes);
+        }
+    }
+
     public class AssemblySerializerHelper
     {
         private readonly static Dictionary<Type, MethodInfo> mWriterMethods = null;
-        private readonly static Dictionary<Type, Delegate> mCache = new();
+        private readonly static Dictionary<Type, Delegate> mSerializerCache = new();
+        private readonly static Dictionary<Type, MethodInfo> mReaderMethods = null;
+        private readonly static Dictionary<Type, Delegate> mDeserializerCache = new();
+       
         static AssemblySerializerHelper()
         {
             mWriterMethods = typeof(BinaryWriter).GetMethods()
@@ -42,11 +55,22 @@ namespace HexRuntimeAssemblier.Serialization
 
             foreach (var method in overrideMethods)
                 mWriterMethods[method.GetParameters()[1].ParameterType] = method;
+
+            mWriterMethods = typeof(BinaryReader).GetMethods()
+                .Where(x => x.Name.StartsWith("Read"))
+                .Where(x => x.GetParameters().Length == 0)
+                .ToDictionary(x => x.ReturnType, x => x);
+
+            foreach (var method in typeof(MetaWriter).GetMethods()
+                                    .Where(x => x.Name.StartsWith("Read"))
+                                    .Where(x => x.GetParameters().Length == 1))
+                mWriterMethods[method.ReturnType] = method;
         }
+        #region Serialize
         private static Delegate GetSerializerWithoutLock(Type metaType)
         {
-            if (!mCache.TryGetValue(metaType, out var serializer))
-                mCache[metaType] = serializer = GenerateSerializerFor(metaType);
+            if (!mSerializerCache.TryGetValue(metaType, out var serializer))
+                mSerializerCache[metaType] = serializer = GenerateSerializerFor(metaType);
             return serializer;
         }
         private static Delegate GenerateSerializerFor(Type metaType)
@@ -126,7 +150,7 @@ namespace HexRuntimeAssemblier.Serialization
                     il.Emit(OpCodes.Br_S, compareLabel);
                     il.MarkLabel(bodyLabel);
 
-                    //bodyEmit(index);
+                    bodyEmit(index);
 
                     //i++
                     il.Emit(OpCodes.Ldloc, index);
@@ -183,9 +207,138 @@ namespace HexRuntimeAssemblier.Serialization
         }
         public static Delegate GetSerializer(Type metaType)
         {
-            lock (mCache)
+            lock (mSerializerCache)
                 return GetSerializerWithoutLock(metaType);
         }
+        #endregion
+        #region Deserialize
+        private static Delegate GetDeserializerWithoutLock(Type metaType)
+        {
+            if (!mDeserializerCache.TryGetValue(metaType, out var deserializer))
+                mDeserializerCache[metaType] = deserializer = GenerateSerializerFor(metaType);
+            return deserializer;
+        }
+        private static Delegate GenerateDeserializerFor(Type metaType)
+        {
+            DynamicMethod method = new(
+                $"Deserialize{metaType.FullName}",
+                MethodAttributes.Static | MethodAttributes.Public,
+                CallingConventions.Standard,
+                metaType,
+                new Type[] { typeof(BinaryReader) },
+                typeof(AssemblySerializerHelper).Module,
+                true);
+
+            var il = method.GetILGenerator();
+
+            var returnObject = il.DeclareLocal(metaType);
+            il.Emit(OpCodes.Newobj, metaType.GetConstructor(Array.Empty<Type>()));
+            il.Emit(OpCodes.Stloc, returnObject);
+
+            foreach (var field in metaType.GetFields(BindingFlags.Instance | BindingFlags.Public))
+                EmitLoad(il, field.FieldType, () => { });
+
+            il.Emit(OpCodes.Ldloc, returnObject);
+            il.Emit(OpCodes.Ret);
+
+            return method.CreateDelegate(typeof(Func<,>).MakeGenericType(typeof(BinaryReader), metaType));
+        }
+        private static void EmitLoadArray(ILGenerator il, Type elementType, LocalBuilder array, Action<LocalBuilder> bodyEmit)
+        {
+            var count = il.DeclareLocal(typeof(int));
+            EmitLoad(il, typeof(int), () =>
+            {
+                il.Emit(OpCodes.Dup);
+                il.Emit(OpCodes.Stloc, count);
+
+                EmitIf(il,
+                    () =>
+                    {
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Cgt);
+                    },
+                    () =>
+                    {
+                        il.Emit(OpCodes.Ldloc, count);
+                        il.Emit(OpCodes.Newarr, elementType);
+                        il.Emit(OpCodes.Stloc, array);
+
+                        //Store content
+                        var compareLabel = il.DefineLabel();
+                        var bodyLabel = il.DefineLabel();
+                        //i = 0
+                        il.Emit(OpCodes.Ldc_I4_0);
+                        il.Emit(OpCodes.Stloc, count);
+                        il.Emit(OpCodes.Br_S, compareLabel);
+                        il.MarkLabel(bodyLabel);
+
+                        bodyEmit(count);
+
+                        //i++
+                        il.Emit(OpCodes.Ldloc, count);
+                        il.Emit(OpCodes.Ldc_I4_1);
+                        il.Emit(OpCodes.Add);
+                        il.Emit(OpCodes.Stloc, count);
+
+                        //i < array.Length
+                        il.MarkLabel(compareLabel);
+                        il.Emit(OpCodes.Ldloc, count);
+                        il.Emit(OpCodes.Ldloc, array);
+                        il.Emit(OpCodes.Ldlen);
+                        il.Emit(OpCodes.Conv_I4);
+                        il.Emit(OpCodes.Blt_S, bodyLabel);
+                    },
+                    () =>
+                    {
+                        il.Emit(OpCodes.Ldnull);
+                    });
+            });
+        }
+        private static void EmitLoad(ILGenerator il, Type metaType, Action emitSetter)
+        {
+            if (mWriterMethods.TryGetValue(metaType, out var reader))
+            {
+                il.Emit(OpCodes.Ldarg_0);
+                il.Emit(OpCodes.Call, reader);
+            }
+            else
+            {
+                if (metaType.IsArray)
+                {
+                    var array = il.DeclareLocal(metaType);
+                    var elementType = metaType.GetElementType();
+                    EmitLoadArray(il, elementType, array,
+                        (index) =>
+                        {
+                            il.Emit(OpCodes.Ldloc, array);
+                            il.Emit(OpCodes.Ldloc, index);
+                            EmitLoad(il, elementType, () => il.Emit(OpCodes.Stelem));
+                        });
+                }
+                else if (metaType.IsEnum)
+                {
+                    var underlyingType = metaType.GetEnumUnderlyingType();
+                    if (!mReaderMethods.TryGetValue(underlyingType, out reader))
+                        throw new MetaElementNotSupportedException($"Type - {underlyingType.FullName} is not supported");
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, reader);
+                }
+                else
+                {
+                    var targetMethod = GetSerializerWithoutLock(metaType);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, targetMethod.Method);
+                }
+            }
+
+            emitSetter();
+        }
+        public static Delegate GetDeserializer(Type metaType)
+        {
+            lock (mDeserializerCache)
+                return GetSerializerWithoutLock(metaType);
+        }
+        #endregion
     }
     public class AssemblySerializer
     {
