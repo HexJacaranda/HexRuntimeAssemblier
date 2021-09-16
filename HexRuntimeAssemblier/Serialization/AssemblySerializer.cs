@@ -33,6 +33,12 @@ namespace HexRuntimeAssemblier.Serialization
             byte[] bytes = reader.ReadBytes(length);
             return Encoding.Unicode.GetString(bytes);
         }
+        public static Guid ReadGuid(BinaryReader reader)
+        {
+            Span<byte> buffer = stackalloc byte[16];
+            reader.Read(buffer);
+            return new Guid(buffer);
+        }
     }
 
     public class AssemblySerializerHelper
@@ -70,11 +76,12 @@ namespace HexRuntimeAssemblier.Serialization
             foreach (var method in overrideMethods)
                 mWriterMethods[method.GetParameters()[1].ParameterType] = method;
 
-            mReaderMethods = mPrimitives.ToDictionary(x => x, x => typeof(BinaryWriter).GetMethod($"Read{x.Name}"));
-            foreach (var method in typeof(MetaWriter).GetMethods()
+            mReaderMethods = mPrimitives.ToDictionary(x => x, x => typeof(BinaryReader).GetMethod($"Read{x.Name}"));
+
+            foreach (var method in typeof(MetaReader).GetMethods()
                                     .Where(x => x.Name.StartsWith("Read"))
                                     .Where(x => x.GetParameters().Length == 1))
-                mReaderMethods[method.ReturnType] = method;
+                mReaderMethods[method.ReturnType] = method;         
         }
         #region Serialize
         private static Delegate GetSerializerWithoutLock(Type metaType)
@@ -225,7 +232,7 @@ namespace HexRuntimeAssemblier.Serialization
         private static Delegate GetDeserializerWithoutLock(Type metaType)
         {
             if (!mDeserializerCache.TryGetValue(metaType, out var deserializer))
-                mDeserializerCache[metaType] = deserializer = GenerateSerializerFor(metaType);
+                mDeserializerCache[metaType] = deserializer = GenerateDeserializerFor(metaType);
             return deserializer;
         }
         private static Delegate GenerateDeserializerFor(Type metaType)
@@ -246,7 +253,10 @@ namespace HexRuntimeAssemblier.Serialization
             il.Emit(OpCodes.Stloc, returnObject);
 
             foreach (var field in metaType.GetFields(BindingFlags.Instance | BindingFlags.Public))
-                EmitLoad(il, field.FieldType, () => { });
+            {
+                il.Emit(OpCodes.Ldloc, returnObject);
+                EmitLoad(il, field.FieldType, () => il.Emit(OpCodes.Stfld, field));
+            }
 
             il.Emit(OpCodes.Ldloc, returnObject);
             il.Emit(OpCodes.Ret);
@@ -256,57 +266,53 @@ namespace HexRuntimeAssemblier.Serialization
         private static void EmitLoadArray(ILGenerator il, Type elementType, LocalBuilder array, Action<LocalBuilder> bodyEmit)
         {
             var count = il.DeclareLocal(typeof(int));
-            EmitLoad(il, typeof(int), () =>
-            {
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Stloc, count);
+            EmitLoad(il, typeof(int), () => il.Emit(OpCodes.Stloc, count));
 
-                EmitIf(il,
-                    () =>
-                    {
-                        il.Emit(OpCodes.Ldc_I4_0);
-                        il.Emit(OpCodes.Cgt);
-                    },
-                    () =>
-                    {
-                        il.Emit(OpCodes.Ldloc, count);
-                        il.Emit(OpCodes.Newarr, elementType);
-                        il.Emit(OpCodes.Stloc, array);
+            EmitIf(il,
+                () =>
+                {
+                    il.Emit(OpCodes.Ldloc, count);
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Cgt);
+                },
+                () =>
+                {
+                    il.Emit(OpCodes.Ldloc, count);
+                    il.Emit(OpCodes.Newarr, elementType);
+                    il.Emit(OpCodes.Stloc, array);
 
-                        //Store content
-                        var compareLabel = il.DefineLabel();
-                        var bodyLabel = il.DefineLabel();
-                        //i = 0
-                        il.Emit(OpCodes.Ldc_I4_0);
-                        il.Emit(OpCodes.Stloc, count);
-                        il.Emit(OpCodes.Br_S, compareLabel);
-                        il.MarkLabel(bodyLabel);
+                    //Store content
+                    var compareLabel = il.DefineLabel();
+                    var bodyLabel = il.DefineLabel();
+                    //i = 0
+                    il.Emit(OpCodes.Ldc_I4_0);
+                    il.Emit(OpCodes.Stloc, count);
+                    il.Emit(OpCodes.Br_S, compareLabel);
+                    il.MarkLabel(bodyLabel);
 
-                        bodyEmit(count);
+                    bodyEmit(count);
 
-                        //i++
-                        il.Emit(OpCodes.Ldloc, count);
-                        il.Emit(OpCodes.Ldc_I4_1);
-                        il.Emit(OpCodes.Add);
-                        il.Emit(OpCodes.Stloc, count);
+                    //i++
+                    il.Emit(OpCodes.Ldloc, count);
+                    il.Emit(OpCodes.Ldc_I4_1);
+                    il.Emit(OpCodes.Add);
+                    il.Emit(OpCodes.Stloc, count);
 
-                        //i < array.Length
-                        il.MarkLabel(compareLabel);
-                        il.Emit(OpCodes.Ldloc, count);
-                        il.Emit(OpCodes.Ldloc, array);
-                        il.Emit(OpCodes.Ldlen);
-                        il.Emit(OpCodes.Conv_I4);
-                        il.Emit(OpCodes.Blt_S, bodyLabel);
-                    },
-                    () =>
-                    {
-                        il.Emit(OpCodes.Ldnull);
-                    });
-            });
+                    //i < array.Length
+                    il.MarkLabel(compareLabel);
+                    il.Emit(OpCodes.Ldloc, count);
+                    il.Emit(OpCodes.Ldloc, array);
+                    il.Emit(OpCodes.Ldlen);
+                    il.Emit(OpCodes.Conv_I4);
+                    il.Emit(OpCodes.Blt_S, bodyLabel);
+                },
+                () =>
+                {
+                });
         }
         private static void EmitLoad(ILGenerator il, Type metaType, Action emitSetter)
         {
-            if (mWriterMethods.TryGetValue(metaType, out var reader))
+            if (mReaderMethods.TryGetValue(metaType, out var reader))
             {
                 il.Emit(OpCodes.Ldarg_0);
                 il.Emit(OpCodes.Call, reader);
@@ -322,8 +328,10 @@ namespace HexRuntimeAssemblier.Serialization
                         {
                             il.Emit(OpCodes.Ldloc, array);
                             il.Emit(OpCodes.Ldloc, index);
-                            EmitLoad(il, elementType, () => il.Emit(OpCodes.Stelem));
+                            EmitLoad(il, elementType, () => il.Emit(OpCodes.Stelem, elementType));
                         });
+
+                    il.Emit(OpCodes.Ldloc, array);
                 }
                 else if (metaType.IsEnum)
                 {
@@ -346,7 +354,7 @@ namespace HexRuntimeAssemblier.Serialization
         public static Delegate GetDeserializer(Type metaType)
         {
             lock (mDeserializerCache)
-                return GetSerializerWithoutLock(metaType);
+                return GetDeserializerWithoutLock(metaType);
         }
         #endregion
     }
@@ -465,7 +473,6 @@ namespace HexRuntimeAssemblier.Serialization
                     offsetTable.Add(WriteStringTableHead(mBuilder.MetaStringTable));
                     for (int i = (int)MDRecordKinds.Argument; i < (int)MDRecordKinds.KindLimit; ++i)
                         offsetTable.Add(WriteDefinitionTableHead(mBuilder.DefinitionTables[(MDRecordKinds)i]));
-
 
                     WriteStringTable(mBuilder.MetaStringTable, offsetTable[0]);
                     for (int i = (int)MDRecordKinds.Argument; i < (int)MDRecordKinds.KindLimit; ++i)

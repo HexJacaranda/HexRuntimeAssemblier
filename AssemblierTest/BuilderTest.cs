@@ -72,7 +72,7 @@ namespace AssemblierTest
             var method = builder.GetMethodDef("[Test]Hello::.ctor()");
 
             Assert.IsFalse(method.Flags.HasFlag(MethodFlag.Static));
-            Assert.That(method.NameToken.GetString(builder), Is.EqualTo("[Test]Hello::.ctor()"));
+            Assert.That(method.FullyQualifiedNameToken.GetString(builder), Is.EqualTo("[Test]Hello::.ctor()"));
             Assert.That(method.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
         }
 

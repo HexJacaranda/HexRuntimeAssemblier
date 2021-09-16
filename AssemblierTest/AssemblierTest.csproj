@@ -17,4 +17,8 @@
     <ProjectReference Include="..\HexRuntimeAssemblier\HexRuntimeAssemblier.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestLib\" />
+  </ItemGroup>
+
 </Project>

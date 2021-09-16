@@ -116,6 +116,7 @@ namespace HexRuntimeAssemblier.Meta
 		public MDToken ParentTypeRefToken;
 		public MDToken TypeRefToken;
 		public MDToken NameToken;
+		public MDToken FullyQualifiedNameToken = Token.Null;
 		public byte Accessibility;
 		public FieldFlag Flags;
 		public MDToken[] AttributeTokens;
@@ -190,6 +191,7 @@ namespace HexRuntimeAssemblier.Meta
 	{
 		public MDToken ParentTypeRefToken;
 		public MDToken NameToken;
+		public MDToken FullyQualifiedNameToken = Token.Null;
 		public byte Accessibility;
 		public MethodFlag Flags;
 		public MethodSignatureMD Signature;

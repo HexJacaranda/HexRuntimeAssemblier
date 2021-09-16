@@ -109,4 +109,16 @@ namespace HexRuntimeAssemblier
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+
+
+    [Serializable]
+    public class BadAssemblyException : Exception
+    {
+        public BadAssemblyException() { }
+        public BadAssemblyException(string message) : base(message) { }
+        public BadAssemblyException(string message, Exception inner) : base(message, inner) { }
+        protected BadAssemblyException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

@@ -2,6 +2,7 @@
 using HexRuntimeAssemblier;
 using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Serialization;
+using HexRuntimeAssemblier.Reference;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,7 @@ namespace AssemblierTest
             builder.Build();
             return builder;
         }
-        [Test]
+        [Test, Order(1)]
         public void SerializeCoreLibToMem()
         {
             var builder = Build("TestCoreLib", false, true);
@@ -39,13 +40,22 @@ namespace AssemblierTest
             serializer.Serialize();
         }
 
-        [Test]
+        [Test, Order(2)]
         public void SerializeCoreLibToFile()
         {
             var builder = Build("TestCoreLib", false, true);
-            using var output = File.OpenWrite(@"C:\HexRTLib\HexRT.Core");
+            using var output = File.OpenWrite(@"..\..\..\TestLib\HexRT.Core");
             var serializer = new AssemblySerializer(output, builder);
             serializer.Serialize();
+        }
+
+        [Test, Order(3)]
+        public void ResolveCoreLib()
+        {
+            var resolver = AssemblyResolver.Build(File.OpenRead(@"..\..\..\TestLib\HexRT.Core"));
+            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[System]Int32"));
+            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[System]Object"));
+            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[System]Array<Canon>"));
         }
     }
 }

@@ -560,6 +560,7 @@ namespace HexRuntimeAssemblier
             var field = FieldDefTable[fieldDefToken] as FieldMD;
 
             field.NameToken = GetTokenFromString(fieldShortName);
+            field.FullyQualifiedNameToken = GetTokenFromString(fieldFullyQualifiedName);
             //Flags
             FieldFlag flag = 0;
             if (context.ExistToken(Assemblier.MODIFIER_THREAD_LOCAL))
@@ -598,7 +599,8 @@ namespace HexRuntimeAssemblier
 
             var methodDefToken = TryDefineMethod(methodFullyQualifiedName);
             var method = MethodDefTable[methodDefToken] as MethodMD;
-            method.NameToken = GetTokenFromString(methodFullyQualifiedName);
+            method.NameToken = GetTokenFromString(methodShortName);
+            method.FullyQualifiedNameToken = GetTokenFromString(methodFullyQualifiedName);
 
             //Parent ref
             method.ParentTypeRefToken = mResolver.QueryTypeReference(
