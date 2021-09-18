@@ -44,9 +44,9 @@ namespace HexRuntimeAssemblier.Serialization
     public class AssemblySerializerHelper
     {
         private readonly static Dictionary<Type, MethodInfo> mWriterMethods = null;
-        private readonly static Dictionary<Type, Delegate> mSerializerCache = new();
+        private readonly static Dictionary<Type, (MethodInfo Method, Delegate Invoker)> mSerializerCache = new();
         private readonly static Dictionary<Type, MethodInfo> mReaderMethods = null;
-        private readonly static Dictionary<Type, Delegate> mDeserializerCache = new();
+        private readonly static Dictionary<Type, (MethodInfo Method, Delegate Invoker)> mDeserializerCache = new();
         private readonly static List<Type> mPrimitives = new()
         {
             typeof(bool),
@@ -84,13 +84,18 @@ namespace HexRuntimeAssemblier.Serialization
                 mReaderMethods[method.ReturnType] = method;         
         }
         #region Serialize
-        private static Delegate GetSerializerWithoutLock(Type metaType)
+        private static (MethodInfo Method, Delegate Invoker) GetSerializerWithoutLock(Type metaType)
         {
             if (!mSerializerCache.TryGetValue(metaType, out var serializer))
-                mSerializerCache[metaType] = serializer = GenerateSerializerFor(metaType);
+            {
+                var method = GenerateSerializerFor(metaType);
+                var invoker = method.CreateDelegate(typeof(Action<,>).MakeGenericType(typeof(BinaryWriter), metaType));
+                mSerializerCache[metaType] = serializer = (method, invoker);
+            }
+                
             return serializer;
         }
-        private static Delegate GenerateSerializerFor(Type metaType)
+        private static DynamicMethod GenerateSerializerFor(Type metaType)
         {
             DynamicMethod method = new(
                 metaType.FullName,
@@ -106,7 +111,7 @@ namespace HexRuntimeAssemblier.Serialization
                 EmitStore(il, field.FieldType, () => EmitLoadField(il, field));
 
             il.Emit(OpCodes.Ret);
-            return method.CreateDelegate(typeof(Action<,>).MakeGenericType(typeof(BinaryWriter), metaType));
+            return method;
         }
         private static void EmitLoadField(ILGenerator il, FieldInfo field)
         {
@@ -215,27 +220,31 @@ namespace HexRuntimeAssemblier.Serialization
                 }
                 else
                 {
-                    var targetMethod = GetSerializerWithoutLock(metaType);
+                    var (Method, _) = GetSerializerWithoutLock(metaType);
                     il.Emit(OpCodes.Ldarg_0);
                     emitValueLoading();
-                    il.Emit(OpCodes.Call, targetMethod.Method);
+                    il.Emit(OpCodes.Call, Method);
                 }
             }
         }
         public static Delegate GetSerializer(Type metaType)
         {
             lock (mSerializerCache)
-                return GetSerializerWithoutLock(metaType);
+                return GetSerializerWithoutLock(metaType).Invoker;
         }
         #endregion
         #region Deserialize
-        private static Delegate GetDeserializerWithoutLock(Type metaType)
+        private static (MethodInfo Method, Delegate Invoker) GetDeserializerWithoutLock(Type metaType)
         {
             if (!mDeserializerCache.TryGetValue(metaType, out var deserializer))
-                mDeserializerCache[metaType] = deserializer = GenerateDeserializerFor(metaType);
+            {
+                var method = GenerateDeserializerFor(metaType);
+                var invoker = method.CreateDelegate(typeof(Func<,>).MakeGenericType(typeof(BinaryReader), metaType));
+                mDeserializerCache[metaType] = deserializer = (method, invoker);
+            }
             return deserializer;
         }
-        private static Delegate GenerateDeserializerFor(Type metaType)
+        private static DynamicMethod GenerateDeserializerFor(Type metaType)
         {
             DynamicMethod method = new(
                 $"Deserialize{metaType.FullName}",
@@ -261,7 +270,7 @@ namespace HexRuntimeAssemblier.Serialization
             il.Emit(OpCodes.Ldloc, returnObject);
             il.Emit(OpCodes.Ret);
 
-            return method.CreateDelegate(typeof(Func<,>).MakeGenericType(typeof(BinaryReader), metaType));
+            return method;
         }
         private static void EmitLoadArray(ILGenerator il, Type elementType, LocalBuilder array, Action<LocalBuilder> bodyEmit)
         {
@@ -343,9 +352,9 @@ namespace HexRuntimeAssemblier.Serialization
                 }
                 else
                 {
-                    var targetMethod = GetSerializerWithoutLock(metaType);
+                    var (Method, _) = GetDeserializerWithoutLock(metaType);
                     il.Emit(OpCodes.Ldarg_0);
-                    il.Emit(OpCodes.Call, targetMethod.Method);
+                    il.Emit(OpCodes.Call, Method);
                 }
             }
 
@@ -354,7 +363,7 @@ namespace HexRuntimeAssemblier.Serialization
         public static Delegate GetDeserializer(Type metaType)
         {
             lock (mDeserializerCache)
-                return GetDeserializerWithoutLock(metaType);
+                return GetDeserializerWithoutLock(metaType).Invoker;
         }
         #endregion
     }
