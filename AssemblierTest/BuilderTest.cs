@@ -1,22 +1,20 @@
-using Antlr4.Runtime;
 using HexRuntimeAssemblier;
 using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Meta;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace AssemblierTest
 {
-    public class Tests
+    public class BuilderTest
     {
-        public static IAssemblyBuilder Build(string name, 
+        private readonly static ILoggerFactory Factory = LoggerFactory.Create(x => x.AddConsole());
+        public static IAssemblyBuilder Build(string name,
             bool disableCoreType = true,
             bool coreLibrary = false)
         {
-            var lexer = new AssemblierLexer(CharStreams.fromPath(@$"..\..\..\TestIL\{name}.il"));
-            var parser = new Assemblier(new CommonTokenStream(lexer));
-
             IAssemblyBuilder builder = new AssemblyBuilder(
                 CoreAssemblyConstant.Default,
                 new AssemblyOptions()
@@ -24,16 +22,11 @@ namespace AssemblierTest
                     CoreLibrary = coreLibrary,
                     DisableCoreType = disableCoreType
                 },
-                new Dictionary<string, IAssemblyResolver>(),
-                parser.start());
-
-            builder.Build();
+                Factory.CreateLogger<AssemblyBuilder>(),
+                Array.Empty<IAssemblyResolver>());
+            
+            builder.Build(File.OpenRead(@$"..\..\..\TestIL\{name}.il"));
             return builder;
-        }
-
-        [SetUp]
-        public void Setup()
-        {
         }
 
         [Test]
@@ -127,7 +120,7 @@ namespace AssemblierTest
         [Test]
         public void TestCoreLib()
         {
-            var builder = Build(nameof(TestCoreLib), false, true);
+            Assert.DoesNotThrow(() => Build(nameof(TestCoreLib), false, true));
         }
     }
 }

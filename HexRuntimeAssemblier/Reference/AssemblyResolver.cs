@@ -165,6 +165,11 @@ namespace HexRuntimeAssemblier.Reference
                         }
                     }
                 }
+
+                //Don't forget to set the necessary info
+                resolver.AssemblyName = mStringTable[resolver.mHeader.NameToken];
+                resolver.AssemblyGuid = resolver.mHeader.GUID;
+
                 return resolver;
             }
         }
@@ -179,5 +184,9 @@ namespace HexRuntimeAssemblier.Reference
 
         public uint QueryTypeDefinition(string fullyQualifiedName)
              => mQueryTable[MDRecordKinds.TypeDef][fullyQualifiedName];
+
+        public string AssemblyName { get; private set; }
+
+        public Guid AssemblyGuid { get; private set; }
     }
 }

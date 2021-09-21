@@ -149,7 +149,6 @@ namespace HexRuntimeAssemblier.Meta
 		public MDToken TypeRefToken;
 		public MDToken NameToken;
 		public MDToken DefaultStringValueToken;
-		public Int64 DefaultValue;
 		public MDToken[] AttributeTokens;
 	}
 

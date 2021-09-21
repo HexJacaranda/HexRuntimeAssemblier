@@ -1,6 +1,7 @@
 ﻿using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Meta;
 using System.Collections.Generic;
+using System;
 using MDToken = System.UInt32;
 
 namespace HexRuntimeAssemblier
@@ -11,6 +12,8 @@ namespace HexRuntimeAssemblier
         public IReadOnlyDictionary<MDRecordKinds, DefinitionTable> DefinitionTables => mDefTables;
         public StringTable MetaStringTable => mStringTable;
         public AssemblyHeaderMD AssemblyHeader => mCurrentAssembly;
+        public string AssemblyName => mStringTable.Contents[(int)AssemblyHeader.NameToken];
+        public Guid AssemblyGuid => AssemblyHeader.GUID;
         public MDToken QueryFieldDefinition(string fullyQualifiedName)
             => FieldDefTable.GetDefinitionToken(fullyQualifiedName, () => new FieldMD());
         public MDToken QueryMethodDefinition(string fullyQualifiedName)

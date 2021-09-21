@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using HexRuntimeAssemblier.Meta;
 
@@ -11,6 +12,8 @@ namespace HexRuntimeAssemblier.Interfaces
     /// </summary>
     public interface IAssemblyResolver
     {
+        string AssemblyName { get; }
+        Guid AssemblyGuid { get; }
         MDToken QueryTypeDefinition(string fullyQualifiedName);
         MDToken QueryMethodDefinition(string fullyQualifiedName);
         MDToken QueryFieldDefinition(string fullyQualifiedName);
@@ -29,6 +32,6 @@ namespace HexRuntimeAssemblier.Interfaces
         AssemblyHeaderMD AssemblyHeader { get; }
         IReadOnlyDictionary<MDRecordKinds, ReferenceTable> ReferenceTables { get; }
         IReadOnlyDictionary<MDRecordKinds, DefinitionTable> DefinitionTables { get; }
-        void Build();
+        IAssemblyBuilder Build(Stream originStream);
     }
 }

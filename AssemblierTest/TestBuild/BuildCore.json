@@ -1,0 +1,9 @@
+{
+  "inputs": [ "..\\..\\..\\TestIL\\TestCoreLib.il" ],
+  "references": [],
+  "output_directory": "..\\..\\..\\TestLib",
+  "options": {
+    "core_library": true,
+    "disable_core_type": false
+  }
+}

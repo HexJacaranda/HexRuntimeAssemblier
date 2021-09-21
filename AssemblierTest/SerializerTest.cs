@@ -1,23 +1,21 @@
-﻿using Antlr4.Runtime;
-using HexRuntimeAssemblier;
+﻿using HexRuntimeAssemblier;
 using HexRuntimeAssemblier.Interfaces;
-using HexRuntimeAssemblier.Serialization;
 using HexRuntimeAssemblier.Reference;
+using HexRuntimeAssemblier.Serialization;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System.Collections.Generic;
+using System;
 using System.IO;
 
 namespace AssemblierTest
 {
     public class SerializerTest
     {
+        private readonly static ILoggerFactory Factory = LoggerFactory.Create(x => x.AddConsole());
         public static IAssemblyBuilder Build(string name,
             bool disableCoreType = true,
             bool coreLibrary = false)
         {
-            var lexer = new AssemblierLexer(CharStreams.fromPath(@$"..\..\..\TestIL\{name}.il"));
-            var parser = new Assemblier(new CommonTokenStream(lexer));
-
             IAssemblyBuilder builder = new AssemblyBuilder(
                 CoreAssemblyConstant.Default,
                 new AssemblyOptions()
@@ -25,10 +23,10 @@ namespace AssemblierTest
                     CoreLibrary = coreLibrary,
                     DisableCoreType = disableCoreType
                 },
-                new Dictionary<string, IAssemblyResolver>(),
-                parser.start());
+                Factory.CreateLogger<AssemblyBuilder>(),
+                Array.Empty<IAssemblyResolver>());
 
-            builder.Build();
+            builder.Build(File.OpenRead(@$"..\..\..\TestIL\{name}.il"));
             return builder;
         }
         [Test, Order(1)]

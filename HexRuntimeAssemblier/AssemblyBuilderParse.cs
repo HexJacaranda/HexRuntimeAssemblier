@@ -1,13 +1,15 @@
 ﻿using Antlr4.Runtime.Tree;
+using Antlr4.Runtime;
 using HexRuntimeAssemblier.IL;
 using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Meta;
 using HexRuntimeAssemblier.Reference;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace HexRuntimeAssemblier
 {
@@ -17,8 +19,8 @@ namespace HexRuntimeAssemblier
         private readonly GlobalResolver mResolver;
         private readonly Dictionary<MDRecordKinds, DefinitionTable> mDefTables = new();
         private readonly Dictionary<MDRecordKinds, ReferenceTable> mRefTables = new();
-        private readonly StringTable mStringTable;
-        private readonly Assemblier.StartContext mStartContext;
+        private readonly StringTable mStringTable = new();
+        private readonly ILogger<AssemblyBuilder> mLog;
 
         private readonly AssemblyOptions mOptions;
         private readonly CoreAssemblyConstant mConstant;
@@ -26,15 +28,15 @@ namespace HexRuntimeAssemblier
         public AssemblyBuilder(
             CoreAssemblyConstant constant,
             AssemblyOptions options,
-            IReadOnlyDictionary<string, IAssemblyResolver> externalResolvers,
-            Assemblier.StartContext startContext)
+            ILogger<AssemblyBuilder> logger,
+            IEnumerable<IAssemblyResolver> externalResolvers)
         {
+            mLog = logger;
             mConstant = constant;
             mOptions = options;
-            mResolver = new GlobalResolver(this, externalResolvers);
-            mStringTable = new StringTable();
-            mStartContext = startContext;
 
+            mResolver = new GlobalResolver(this, externalResolvers.ToDictionary(x => x.AssemblyName, x => x));
+            
             //Set def tables
             for (int kind = (int)MDRecordKinds.Argument; kind < (int)MDRecordKinds.KindLimit; ++kind)
                 mDefTables.Add((MDRecordKinds)kind, new DefinitionTable((MDRecordKinds)kind));
@@ -43,6 +45,16 @@ namespace HexRuntimeAssemblier
             //The zeroth token is reserved for self reference
             var assemblyRefTable = new ReferenceTable(MDRecordKinds.KindLimit);
             assemblyRefTable.GetReferenceToken("Self", () => new AssemblyRefMD());
+
+            //Initialize assembly reference table
+            foreach (var assembly in externalResolvers)
+                assemblyRefTable.GetReferenceToken(assembly.AssemblyName,
+                    () => new AssemblyRefMD
+                    {
+                        AssemblyName = GetTokenFromString(assembly.AssemblyName),
+                        GUID = assembly.AssemblyGuid
+                    });
+
             mRefTables.Add(MDRecordKinds.KindLimit, assemblyRefTable);
 
             //Other reference table
@@ -626,6 +638,35 @@ namespace HexRuntimeAssemblier
             method.Accessibility = MapAccessbility(access);
 
             method.ILCodeMD = new ILAssemblier(context.methodBody(), this).Generate();
+
+            //Signature
+            {
+                uint returnTypeRef = Token.Null;
+                if (context.methodReturnType().VOID() == null)
+                    returnTypeRef = ResolveType(context.methodReturnType().GetUnderlyingType() as Assemblier.TypeContext);
+
+                var arguments = context.methodArgumentList();
+                uint[] argumentTokens = null;
+                if (arguments != null)
+                {
+                    argumentTokens = arguments.methodArgument().Select(x =>
+                        mDefTables[MDRecordKinds.Argument].GetDefinitionToken(
+                            $"{methodFullyQualifiedName}~{x.IDENTIFIER().GetText()}",
+                        () => new ArgumentMD()
+                        {
+                            //TODO: default value
+                            DefaultStringValueToken = Token.Null,
+                            NameToken = GetTokenFromString(x.IDENTIFIER().GetText()),
+                            TypeRefToken = ResolveType(x.type())
+                        })).ToArray();
+                }
+
+                method.Signature = new MethodSignatureMD()
+                {
+                    ReturnTypeRefToken = returnTypeRef,
+                    ArgumentTokens = argumentTokens
+                };
+            }
             
             return methodDefToken;
         }
@@ -940,6 +981,12 @@ namespace HexRuntimeAssemblier
                 TypeRefToken = parentRefToken
             });
         }
-        public void Build() => ResolveStart(mStartContext);
+        public IAssemblyBuilder Build(Stream stream)
+        {
+            var lexer = new AssemblierLexer(CharStreams.fromStream(stream));
+            var parser = new Assemblier(new CommonTokenStream(lexer));
+            ResolveStart(parser.start());
+            return this;
+        }
     }
 }
