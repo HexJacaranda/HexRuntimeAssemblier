@@ -2,6 +2,7 @@
 using HexRuntimeAssemblier.Serialization;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Collections.Generic;
 using System;
 
 namespace HexRuntimeAssemblier
@@ -22,6 +23,7 @@ namespace HexRuntimeAssemblier
         }
         public void Run()
         {
+            List<Exception> errors = new();
             foreach (var input in mConfiguration.Inputs)
             {
                 mLog.LogInformation($"Begin compiling assembly {input}");
@@ -39,8 +41,11 @@ namespace HexRuntimeAssemblier
                 catch (Exception ex)
                 {
                     mLog.LogCritical(ex, $"Assemblier encounters unexpected exception when compiling [{input}]");
+                    errors.Add(ex);
                 }
             }
+            if (errors.Count > 0)
+                throw new AggregateException(errors);
         }
     }
 }
