@@ -27,10 +27,12 @@ namespace HexRuntimeAssemblier
         public MDToken TryDefineType(string fullyQualifiedName)
             => TypeDefTable.GetDefinitionToken(fullyQualifiedName, () => new TypeMD());
         public MDToken GetReferenceTokenOfType(string assembly, string fullyQualifiedName, MDToken defToken, MDRecordKinds kind = MDRecordKinds.TypeRef)
-            => TypeReferenceTable.GetReferenceToken(ComposeAssemblyTag(assembly, fullyQualifiedName), () => new TypeRefMD()
+            => TypeReferenceTable.GetReferenceToken(fullyQualifiedName, () => new TypeRefMD()
             {
                 DefKind = kind,
-                AssemblyToken = string.IsNullOrEmpty(assembly) ? AssemblyRefMD.Self : AssemblyReferenceTable.GetReferenceToken(assembly, null),
+                AssemblyToken = string.IsNullOrEmpty(assembly) || assembly == AssemblyName ? 
+                    AssemblyRefMD.Self : 
+                    AssemblyReferenceTable.GetReferenceToken(assembly, null),
                 Token = defToken
             });
     }

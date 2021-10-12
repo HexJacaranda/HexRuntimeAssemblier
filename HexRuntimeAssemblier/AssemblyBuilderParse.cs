@@ -106,12 +106,6 @@ namespace HexRuntimeAssemblier
 
             return mResolver.QueryTypeDefinition(assembly, fullyQualifiedName);
         }
-        private static string ComposeAssemblyTag(string assembly, string fullyQualifiedName)
-        {
-            if (string.IsNullOrEmpty(assembly))
-                return fullyQualifiedName;
-            return $"[{assembly}]{fullyQualifiedName}";
-        }
         private string CanonicalPlaceHolder => mConstant.CanonicalPlaceholder;
         #endregion
         #region FQN
@@ -131,13 +125,33 @@ namespace HexRuntimeAssemblier
          * 3. Field:
          * [Core][System]Converter<double>::Some, this is a normal FQN
          * [Core][System]Converter<Canon>::To, this is a canonical FQN
+         * 
+         * Assembly reference is a must, while the empty namespace means [global] namespace
          */
+
+        private string GetNamespaceTag(Assemblier.ClassNameSpaceContext context)
+        {
+            if (context == null)
+                return $"[{mConstant.GlobalNamespace}]";
+            else
+                return $"[{context.namespaceValue().GetText()}]";
+        }
+        private string GetNamespaceTag(Assemblier.TypeRefNamespaceContext context)
+        {
+            if (context == null)
+                return $"[{mConstant.GlobalNamespace}]";
+            else
+                return $"[{context.namespaceValue().GetText()}]";
+        }
         private string GetFullyQualifiedName(Assemblier.ClassDefContext context, string parentFullyQualifiedName)
         {
             var stringBuilder = new StringBuilder();
 
-            if (string.IsNullOrEmpty(parentFullyQualifiedName) && context.classNameSpace() != null)
-                stringBuilder.Append($"[{context.classNameSpace().namespaceValue().GetText()}]");
+            if (string.IsNullOrEmpty(parentFullyQualifiedName))
+            {
+                stringBuilder.Append($"[{AssemblyName}]");
+                stringBuilder.Append(GetNamespaceTag(context.classNameSpace()));
+            }
             else
             {
                 stringBuilder.Append(parentFullyQualifiedName);
@@ -179,11 +193,7 @@ namespace HexRuntimeAssemblier
             };
         private string GetFullyQualifiedName(Assemblier.PrimitiveTypeContext context)
         {
-            string fullyQualifiedNameWithoutTag = mConstant.PrimitiveTypes[context.GetText()];
-            if (mOptions.CoreLibrary)
-                return fullyQualifiedNameWithoutTag;
-            else
-                return ComposeAssemblyTag(mConstant.AssemblyStandardName, fullyQualifiedNameWithoutTag);
+            return mConstant.PrimitiveTypes[context.GetText()];
         }
         private string GetFullyQualifiedName(Assemblier.TypeRefNodeContext context)
             => context.GetChild(0) switch
@@ -197,12 +207,11 @@ namespace HexRuntimeAssemblier
             StringBuilder builder = new();
 
             //Assembly tag
-            if (context.assemblyRef() != null)
-                builder.Append($"[{context.assemblyRef().IDENTIFIER()}]");
+            builder.Append($"[{context.assemblyRef().IDENTIFIER()}]");
 
             //Top namespace, mandatory
             var typeName = context.typeName();
-            builder.Append($"[{typeName.typeRefNamespace().namespaceValue().GetText()}]");
+            builder.Append(GetNamespaceTag(typeName.typeRefNamespace()));
 
             var nodes = typeName.typeRefNode();
             for(int i = 0; i< nodes.Length - 1; i++)
@@ -298,7 +307,8 @@ namespace HexRuntimeAssemblier
         {
             StringBuilder builder = new();
             //Insert the namespace part
-            builder.Append(context.typeName().typeRefNamespace().GetText());
+            builder.Append(context.assemblyRef().GetText());
+            builder.Append(GetNamespaceTag(context.typeName().typeRefNamespace()));
             var typeRefNodes = context.typeName().typeRefNode();
             void AppendNode(IParseTree x)
             {
@@ -852,10 +862,11 @@ namespace HexRuntimeAssemblier
             out string canonicalName,
             out string assembly)
         {
-            assembly = context.assemblyRef()?.IDENTIFIER().GetText();
+            assembly = context.assemblyRef().IDENTIFIER().GetText();
             StringBuilder builder = new();
             //Insert the namespace part
-            builder.Append(context.typeName().typeRefNamespace().GetText());
+            builder.Append(context.assemblyRef().GetText());
+            builder.Append(GetNamespaceTag(context.typeName().typeRefNamespace()));
 
             var typeRefNodes = context.typeName().typeRefNode();
             genericParamTokens = new();
@@ -910,10 +921,9 @@ namespace HexRuntimeAssemblier
                 return GetReferenceTokenOfType(assemblyName, fullyQualifiedName, canonicalDef);
             else
             {
-                var fullyQualifiedNameWithTag = ComposeAssemblyTag(assemblyName, fullyQualifiedName);
                 //For generic instantiation, we need a GenericInstantiation
                 var genericInstantiationToken = GenericInstantiationDefTable.GetDefinitionToken(
-                    fullyQualifiedNameWithTag,
+                    fullyQualifiedName,
                     () => new GenericInstantiationMD
                     {
                         CanonicalTypeDefToken = canonicalDef,

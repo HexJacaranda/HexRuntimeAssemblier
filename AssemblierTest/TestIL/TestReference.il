@@ -11,8 +11,8 @@
 .namespace Test
 .generic T1
 {
-    .field public static [Test]Hello<!T1>.World.This<!T1, int32> X
-    .field public static [Core][System]Double Y
+    .field public static [Reference][Test]Hello<!T1>.World.This<!T1, int32> X
+    .field public static [Core]Double Y
 
     .class nested public instance World
     {

@@ -84,8 +84,8 @@ typeInherit: KEY_INHERIT inheritOrImplementType;
 
 //Type part
 assemblyRef: LMID IDENTIFIER RMID;
-typeRef: assemblyRef? typeName;
-typeName: typeRefNamespace (typeRefNode DOT)* typeRefNode;
+typeRef: assemblyRef typeName;
+typeName: typeRefNamespace? (typeRefNode DOT)* typeRefNode;
 
 typeRefNamespace: LMID namespaceValue RMID;
 typeRefGeneric: IDENTIFIER LBRACE (type COMMA)* type RBRACE;
@@ -240,6 +240,7 @@ ilInstruction: opLabel |
         opXor |
         opNot |
         opNeg |
+        opConv |
         opCall |
         opCallVirt |
         opRet |

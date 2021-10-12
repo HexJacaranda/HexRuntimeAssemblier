@@ -51,9 +51,9 @@ namespace AssemblierTest
         public void ResolveCoreLib()
         {
             var resolver = AssemblyResolver.Build(File.OpenRead(@"..\..\..\TestLib\HexRT.Core"));
-            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[System]Int32"));
-            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[System]Object"));
-            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[System]Array<Canon>"));
+            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[Core][global]Int32"));
+            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[Core][global]Object"));
+            Assert.DoesNotThrow(() => resolver.QueryTypeDefinition("[Core][global]Array<Canon>"));
         }
     }
 }

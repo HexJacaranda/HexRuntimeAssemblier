@@ -22,7 +22,7 @@ namespace HexRuntimeAssemblier.Reference
             string assembly,
             string fullyQualifiedName)
         {
-            if (string.IsNullOrEmpty(assembly))
+            if (string.IsNullOrEmpty(assembly) || assembly == CurrentAssembly.AssemblyName)
                 return CurrentAssembly.TryDefineType(fullyQualifiedName);
             else
             {
@@ -34,7 +34,7 @@ namespace HexRuntimeAssemblier.Reference
             string assembly,
             string fullyQualifiedName)
         {
-            if (string.IsNullOrEmpty(assembly))
+            if (string.IsNullOrEmpty(assembly) || assembly == CurrentAssembly.AssemblyName)
                 return CurrentAssembly.TryDefineMethod(fullyQualifiedName);
             else
             {
@@ -46,7 +46,7 @@ namespace HexRuntimeAssemblier.Reference
             string assembly,
             string fullyQualifiedName)
         {
-            if (string.IsNullOrEmpty(assembly))
+            if (string.IsNullOrEmpty(assembly) || assembly == CurrentAssembly.AssemblyName)
                 return CurrentAssembly.TryDefineField(fullyQualifiedName);
             else
             {

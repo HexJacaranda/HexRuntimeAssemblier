@@ -46,15 +46,15 @@ namespace AssemblierTest
         public void TestClass()
         {
             var builder = Build(nameof(TestClass));
-            var type = builder.GetTypeDef("[Test]Hello");
+            var type = builder.GetTypeDef("[Core][Test]Hello");
 
-            var interfaceType = builder.GetTypeDef("[Test]IA");
+            var interfaceType = builder.GetTypeDef("[Core][Test]IA");
             Assert.IsTrue(interfaceType.Flags.HasFlag(TypeFlag.Interface));
 
-            var structType = builder.GetTypeDef("[Test]SA");
+            var structType = builder.GetTypeDef("[Core][Test]SA");
             Assert.IsTrue(structType.Flags.HasFlag(TypeFlag.Struct));
 
-            var nestType = builder.GetTypeDef("[Test]Hello.World");
+            var nestType = builder.GetTypeDef("[Core][Test]Hello.World");
             Assert.IsTrue(nestType.Flags.HasFlag(TypeFlag.Nested));
         }
 
@@ -62,32 +62,32 @@ namespace AssemblierTest
         public void TestMethod()
         {
             var builder = Build(nameof(TestMethod));
-            var method = builder.GetMethodDef("[Test]Hello::.ctor()");
+            var method = builder.GetMethodDef("[Core][Test]Hello::.ctor()");
 
             Assert.IsFalse(method.Flags.HasFlag(MethodFlag.Static));
-            Assert.That(method.FullyQualifiedNameToken.GetString(builder), Is.EqualTo("[Test]Hello::.ctor()"));
-            Assert.That(method.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
+            Assert.That(method.FullyQualifiedNameToken.GetString(builder), Is.EqualTo("[Core][Test]Hello::.ctor()"));
+            Assert.That(method.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Core][Test]Hello")));
         }
 
         [Test]
         public void TestProperty()
         {
             var builder = Build(nameof(TestProperty));
-            var property = builder.GetPropertyDef("[Test]Hello::X");
+            var property = builder.GetPropertyDef("[Core][Test]Hello::X");
 
-            Assert.That(property.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
+            Assert.That(property.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Core][Test]Hello")));
 
-            Assert.That(property.SetterToken, Is.EqualTo(builder.GetMethodRefToken("[Test]Hello::setX([Core][System]Int32)")));
-            Assert.That(property.GetterToken, Is.EqualTo(builder.GetMethodRefToken("[Test]Hello::getX()")));
+            Assert.That(property.SetterToken, Is.EqualTo(builder.GetMethodRefToken("[Core][Test]Hello::setX([Core][global]Int32)")));
+            Assert.That(property.GetterToken, Is.EqualTo(builder.GetMethodRefToken("[Core][Test]Hello::getX()")));
         }
 
         [Test]
         public void TestField()
         {
             var builder = Build(nameof(TestField));
-            var field = builder.GetFieldDef("[Test]Hello::X");
+            var field = builder.GetFieldDef("[Core][Test]Hello::X");
 
-            Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello")));
+            Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Core][Test]Hello")));
 
             Assert.True(field.Flags.HasFlag(FieldFlag.ThreadLocal));
             Assert.True(field.Flags.HasFlag(FieldFlag.Volatile));
@@ -99,13 +99,13 @@ namespace AssemblierTest
         {
             var builder = Build(nameof(TestGenericClass));
 
-            Assert.DoesNotThrow(() => builder.GetTypeDef("[Test]Hello<Canon>"));
-            Assert.DoesNotThrow(() => builder.GetTypeDef("[Test]Hello<Canon>.World"));
-            Assert.DoesNotThrow(() => builder.GetTypeDef("[Test]Hello<Canon>.World.This<Canon, Canon>"));
+            Assert.DoesNotThrow(() => builder.GetTypeDef("[Core][Test]Hello<Canon>"));
+            Assert.DoesNotThrow(() => builder.GetTypeDef("[Core][Test]Hello<Canon>.World"));
+            Assert.DoesNotThrow(() => builder.GetTypeDef("[Core][Test]Hello<Canon>.World.This<Canon, Canon>"));
 
-            var field = builder.GetFieldDef("[Test]Hello<Canon>::X");
-            Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<Canon>")));
-            Assert.That(field.TypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Test]Hello<!T1>.World.This<!T1, [Core][System]Int32>")));
+            var field = builder.GetFieldDef("[Core][Test]Hello<Canon>::X");
+            Assert.That(field.ParentTypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Core][Test]Hello<Canon>")));
+            Assert.That(field.TypeRefToken, Is.EqualTo(builder.GetTypeRefToken("[Core][Test]Hello<!T1>.World.This<!T1, [Core][global]Int32>")));
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace AssemblierTest
         {
             var builder = Build(nameof(TestGenericMethod));
 
-            Assert.DoesNotThrow(() => builder.GetMethodDef("[Test]Hello<Canon>::A<Canon>()"));
-            Assert.DoesNotThrow(() => builder.GetMethodDef("[Test]Hello<Canon>::B()"));
+            Assert.DoesNotThrow(() => builder.GetMethodDef("[Core][Test]Hello<Canon>::A<Canon>()"));
+            Assert.DoesNotThrow(() => builder.GetMethodDef("[Core][Test]Hello<Canon>::B()"));
         }
 
         [Test]

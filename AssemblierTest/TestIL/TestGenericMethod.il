@@ -26,7 +26,7 @@
     {
         .code
         {
-            .call [Test]Hello<int64>::A<int32>()
+            .call [Core][Test]Hello<int64>::A<int32>()
             .pop
             .ret
         }
