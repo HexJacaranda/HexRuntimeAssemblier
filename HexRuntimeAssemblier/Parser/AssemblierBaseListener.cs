@@ -1199,6 +1199,42 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitOpNewArr([NotNull] Assemblier.OpNewArrContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCast"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpCast([NotNull] Assemblier.OpCastContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCast"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpCast([NotNull] Assemblier.OpCastContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opBox"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpBox([NotNull] Assemblier.OpBoxContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opBox"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpBox([NotNull] Assemblier.OpBoxContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opUnBox"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpUnBox([NotNull] Assemblier.OpUnBoxContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opUnBox"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpUnBox([NotNull] Assemblier.OpUnBoxContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opDup"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

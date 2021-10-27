@@ -168,6 +168,18 @@
         "value": "0x61"
     },
     {
+        "name": "Cast",
+        "value": "0x70"
+    },
+    {
+        "name": "Box",
+        "value": "0x71"
+    },
+    {
+        "name": "Unbox",
+        "value": "0x72"
+    },
+    {
         "name": "Dup",
         "value": "0xF0"
     },

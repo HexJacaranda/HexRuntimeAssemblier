@@ -146,6 +146,10 @@ IL_ARC: '.arc';
 IL_NEW: '.new';
 IL_NEWARRAY: '.newarr';
 
+IL_CAST: '.cast';
+IL_BOX: '.box';
+IL_UNBOX: '.unbox';
+
 IL_DUP: '.dup';
 IL_POP: '.pop';
 IL_NOP: '.nop';

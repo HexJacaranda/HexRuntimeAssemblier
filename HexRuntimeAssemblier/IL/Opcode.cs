@@ -44,6 +44,9 @@ namespace HexRuntimeAssemblier.IL
         ArC = 0x51,
         New = 0x60,
         NewArr = 0x61,
+        Cast = 0x70,
+        Box = 0x71,
+        UnBox = 0x72,
         Dup = 0xF0,
         Pop = 0xF1,
         Nop = 0xFF

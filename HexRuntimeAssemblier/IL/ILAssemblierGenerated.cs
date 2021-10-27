@@ -50,6 +50,9 @@ namespace HexRuntimeAssemblier.IL
                     case Assemblier.OpFinallyContext @finally: ParseFinally(@finally); break;
                     case Assemblier.OpNewContext @new: ParseNew(@new); break;
                     case Assemblier.OpNewArrContext @newarr: ParseNewArr(@newarr); break;
+                    case Assemblier.OpCastContext @cast: ParseCast(@cast); break;
+                    case Assemblier.OpBoxContext @box: ParseBox(@box); break;
+                    case Assemblier.OpUnBoxContext @unbox: ParseUnBox(@unbox); break;
                     case Assemblier.OpDupContext @dup: ParseDup(@dup); break;
                     case Assemblier.OpPopContext @pop: ParsePop(@pop); break;
                     case Assemblier.OpNopContext @nop: ParseNop(@nop); break;
@@ -348,6 +351,20 @@ namespace HexRuntimeAssemblier.IL
         private void ParseNewArr(Assemblier.OpNewArrContext context)
         {
             mILWriter.Write((byte)OpCode.NewArr);
+            mILWriter.Write(mResolver.ResolveTypeRef(context.typeRef()));
+        }
+        private void ParseCast(Assemblier.OpCastContext context)
+        {
+            mILWriter.Write((byte)OpCode.Cast);
+            mILWriter.Write(mResolver.ResolveTypeRef(context.typeRef()));
+        }
+        private void ParseBox(Assemblier.OpBoxContext context)
+        {
+            mILWriter.Write((byte)OpCode.Box);
+        }
+        private void ParseUnBox(Assemblier.OpUnBoxContext context)
+        {
+            mILWriter.Write((byte)OpCode.UnBox);
             mILWriter.Write(mResolver.ResolveTypeRef(context.typeRef()));
         }
         private void ParseDup(Assemblier.OpDupContext _)

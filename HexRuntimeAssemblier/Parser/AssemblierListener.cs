@@ -1001,6 +1001,36 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitOpNewArr([NotNull] Assemblier.OpNewArrContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opCast"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpCast([NotNull] Assemblier.OpCastContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opCast"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpCast([NotNull] Assemblier.OpCastContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opBox"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpBox([NotNull] Assemblier.OpBoxContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opBox"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpBox([NotNull] Assemblier.OpBoxContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opUnBox"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpUnBox([NotNull] Assemblier.OpUnBoxContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opUnBox"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpUnBox([NotNull] Assemblier.OpUnBoxContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opDup"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

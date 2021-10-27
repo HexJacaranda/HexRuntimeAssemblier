@@ -614,6 +614,24 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitOpNewArr([NotNull] Assemblier.OpNewArrContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opCast"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpCast([NotNull] Assemblier.OpCastContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opBox"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpBox([NotNull] Assemblier.OpBoxContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opUnBox"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpUnBox([NotNull] Assemblier.OpUnBoxContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.opDup"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

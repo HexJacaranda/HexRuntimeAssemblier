@@ -208,6 +208,10 @@ opFinally: IL_FINALLY;
 opNew: IL_NEW methodRef;
 opNewArr: IL_NEWARRAY typeRef;
 
+opCast: IL_CAST typeRef;
+opBox: IL_BOX;
+opUnBox: IL_UNBOX typeRef;
+
 opDup: IL_DUP;
 opPop: IL_POP;
 opNop: IL_NOP;
