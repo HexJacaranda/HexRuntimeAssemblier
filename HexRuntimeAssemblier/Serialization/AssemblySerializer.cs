@@ -23,6 +23,16 @@ namespace HexRuntimeAssemblier.Serialization
         }
         public static void Write(BinaryWriter writer, Guid value)
             => writer.Write(value.ToByteArray());
+        public static void Write(BinaryWriter writer, byte[] value)
+        {
+            if(value == null)
+                writer.Write(0);
+            else
+            {
+                writer.Write(value.Length);
+                writer.Write(value);
+            }    
+        }
     }
 
     public class MetaReader

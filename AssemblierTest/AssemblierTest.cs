@@ -21,5 +21,11 @@ namespace AssemblierTest
         {
             Assert.DoesNotThrow(() => StartUp.Main(new string[] { @"..\..\..\TestBuild\Reference.json" }));
         }
+
+        [Test, Order(3)]
+        public void TestJITLibrary()
+        {
+            Assert.DoesNotThrow(() => StartUp.Main(new string[] { @"..\..\..\TestBuild\JIT.json" }));
+        }
     }
 }

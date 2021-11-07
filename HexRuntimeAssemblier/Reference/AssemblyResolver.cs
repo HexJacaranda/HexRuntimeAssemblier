@@ -13,7 +13,7 @@ namespace HexRuntimeAssemblier.Reference
     public class AssemblyResolver : IAssemblyResolver
     {
         private AssemblyHeaderMD mHeader;
-        private Dictionary<MDRecordKinds, Dictionary<string, uint>> mQueryTable = new();
+        private readonly Dictionary<MDRecordKinds, Dictionary<string, uint>> mQueryTable = new();
         protected AssemblyResolver()
         {
 

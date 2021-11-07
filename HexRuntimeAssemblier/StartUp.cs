@@ -23,8 +23,12 @@ namespace HexRuntimeAssemblier
         public static IServiceCollection AddAssemblyResolvers(this IServiceCollection services)
             => services.AddSingleton<IEnumerable<IAssemblyResolver>>(x =>
             {
-                var configuration = x.GetRequiredService<AssemblyBuildConfiguration>();
-                return configuration.References.Select(u => AssemblyResolver.Build(File.OpenRead(u))).ToList();
+            var configuration = x.GetRequiredService<AssemblyBuildConfiguration>();
+                return configuration.References.Select(u =>
+                {
+                    using var file = FileHelper.OpenRead(u);
+                    return AssemblyResolver.Build(file);
+                }).ToList();
             });
         public static IServiceCollection AddAssemblyBuilder(this IServiceCollection services)
             => services
@@ -35,9 +39,16 @@ namespace HexRuntimeAssemblier
     {
         public static void Main(string[] args)
         {
-            var provider = BuildService(args[0]);
-            var program = provider.GetService<AssemblierProgram>();
-            program.Run();
+            if(args.Length == 0)
+            {
+                Console.WriteLine("Please enter the path of building configuration json");
+            }
+            else
+            {
+                var provider = BuildService(args[0]);
+                var program = provider.GetService<AssemblierProgram>();
+                program.Run();
+            }
         }
 
         public static IServiceProvider BuildService(string configurationJsonPath)

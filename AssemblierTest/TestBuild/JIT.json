@@ -1,0 +1,9 @@
+{
+  "inputs": [ "..\\..\\..\\TestIL\\JIT.il" ],
+    "references": [ "..\\..\\..\\TestLib\\Core" ],
+    "output_directory": "..\\..\\..\\TestLib",
+    "options": {
+      "core_library": false,
+      "disable_core_type": false
+    }
+  }

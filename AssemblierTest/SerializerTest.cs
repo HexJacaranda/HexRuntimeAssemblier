@@ -1,4 +1,5 @@
 ﻿using HexRuntimeAssemblier;
+using HexRuntimeAssemblier.Meta;
 using HexRuntimeAssemblier.Interfaces;
 using HexRuntimeAssemblier.Reference;
 using HexRuntimeAssemblier.Serialization;
@@ -29,6 +30,18 @@ namespace AssemblierTest
             builder.Build(File.OpenRead(@$"..\..\..\TestIL\{name}.il"));
             return builder;
         }
+
+        [Test]
+        public void SerializeILMD()
+        {
+            var serializer = AssemblySerializerHelper.GetSerializer(typeof(ILMD)) as Action<BinaryWriter, ILMD>;
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+            serializer(writer, new ILMD() { LocalVariables = null, IL = new byte[] { 0x00 } });
+            var actual = stream.ToArray();
+            Assert.AreEqual(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, actual);
+        }
+
         [Test, Order(1)]
         public void SerializeCoreLibToMem()
         {

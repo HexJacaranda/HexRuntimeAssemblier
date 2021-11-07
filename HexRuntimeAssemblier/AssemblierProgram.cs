@@ -29,7 +29,7 @@ namespace HexRuntimeAssemblier
                 mLog.LogInformation($"Begin compiling assembly {input}");
                 try
                 {
-                    using var file = File.OpenRead(input);
+                    using var file = FileHelper.OpenRead(input);
                     mLog.LogInformation("Building relations from il file");
                     var builder = mBuilderFactory.Create().Build(file);
 
