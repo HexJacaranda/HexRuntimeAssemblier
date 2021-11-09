@@ -797,7 +797,8 @@ namespace HexRuntimeAssemblier
             type.Accessibility = MapAccessbility(accessToken);
 
             //Overrides generic Core Type
-            mConstant.PrimitiveToCore.TryGetValue(typeFullyQualifiedName, out type.CoreType);
+            if (mConstant.PrimitiveToCore.TryGetValue(typeFullyQualifiedName, out var core))
+                type.CoreType = core;
 
             //Generic
             var genericList = context.genericList();
