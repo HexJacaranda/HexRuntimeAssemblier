@@ -24,7 +24,7 @@ methodImport: METHOD_IMPORT LMID STRING COMMA STRING RMID;
 methodSource: METHOD_MANAGED | methodImport;
 //- DEF
 
-methodLocal: LMID INT RMID type IDENTIFIER;
+methodLocal: type IDENTIFIER;
 
 methodLocals: METHOD_LOCAL
     BODY_BEGIN

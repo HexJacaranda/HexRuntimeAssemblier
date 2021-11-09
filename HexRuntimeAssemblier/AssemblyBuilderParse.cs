@@ -647,7 +647,7 @@ namespace HexRuntimeAssemblier
             var access = context.modifierAccess().GetUnderlyingTokenType();
             method.Accessibility = MapAccessbility(access);
 
-            method.ILCodeMD = new ILAssemblier(context.methodBody(), this).Generate();
+            method.ILCodeMD = new ILAssemblier(context.methodBody(), context.methodArgumentList(), this).Generate();
 
             //Signature
             {

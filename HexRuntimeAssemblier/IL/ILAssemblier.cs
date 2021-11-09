@@ -16,14 +16,16 @@ namespace HexRuntimeAssemblier.IL
         readonly MemoryStream mILStream = new(16);
         readonly BinaryWriter mILWriter;
         readonly Assemblier.MethodBodyContext mAST;
+        readonly Assemblier.MethodArgumentListContext mArguments;
         readonly AssemblyBuilder mResolver;
         readonly Dictionary<string, short> mLocalMap = new();
         readonly Dictionary<string, short> mArgumentMap = new();
         readonly Dictionary<string, int> mLabelMap = new();
         readonly List<(int Index, string LabelName)> mOffsetTable = new();
-        public ILAssemblier(Assemblier.MethodBodyContext body, AssemblyBuilder assemblyResolver)
+        public ILAssemblier(Assemblier.MethodBodyContext body, Assemblier.MethodArgumentListContext arguments, AssemblyBuilder assemblyResolver)
         {
             mAST = body;
+            mArguments = arguments;
             mResolver = assemblyResolver;
             mILWriter = new BinaryWriter(mILStream);
         }
@@ -39,6 +41,22 @@ namespace HexRuntimeAssemblier.IL
                     NameToken = mResolver.MetaStringTable.GetTokenFromString(x.IDENTIFIER().GetText()),
                     TypeRefToken = mResolver.ResolveType(x.type())
                 }).ToArray();
+            }
+
+            //Set local mapping
+            if (locals != null)
+            {
+                short localIndex = 0;
+                foreach (var local in locals)
+                    mLocalMap[local.IDENTIFIER().GetText()] = localIndex++;
+            }
+
+            //Set argument mapping
+            if(mArguments != null)
+            {
+                short argumentIndex = 0;
+                foreach (var argument in mArguments.methodArgument())
+                    mArgumentMap[argument.IDENTIFIER().GetText()] = argumentIndex++;
             }
 
             //Parse the IL code

@@ -37,9 +37,27 @@ namespace AssemblierTest
             var serializer = AssemblySerializerHelper.GetSerializer(typeof(ILMD)) as Action<BinaryWriter, ILMD>;
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
-            serializer(writer, new ILMD() { LocalVariables = null, IL = new byte[] { 0x00 } });
+            serializer(writer, new ILMD()
+            {
+                LocalVariables = null,
+                IL = new byte[] { 0x00 }
+            });
             var actual = stream.ToArray();
             Assert.AreEqual(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, actual);
+        }
+
+        [Test]
+        public void SerializeTypeMD()
+        {
+            var serializer = AssemblySerializerHelper.GetSerializer(typeof(TypeMD)) as Action<BinaryWriter, TypeMD>;
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+            serializer(writer, new TypeMD()
+            {
+                MethodTokens = new uint[] { 0, 1 }
+            });
+            var actual = stream.ToArray();
+            Assert.AreEqual(null, null);
         }
 
         [Test, Order(1)]

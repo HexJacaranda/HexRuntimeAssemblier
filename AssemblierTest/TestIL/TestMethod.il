@@ -21,8 +21,8 @@
     {
         .local
         {
-            [0] int32& x
-            [1] int64& y
+            int32& x
+            int64& y
         }
         .code
         {
