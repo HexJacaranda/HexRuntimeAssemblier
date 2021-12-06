@@ -125,8 +125,12 @@ namespace HexRuntimeAssemblier.IL
             var text = context.opConstant().GetText();
             switch(context.primitiveType().GetUnderlyingTokenType())
             {
+                case Assemblier.PRIMITIVE_CHAR:
+                    mILWriter.Write((byte)CoreTypes.Char);
+                    mILWriter.Write(char.Parse(text));
+                    break;
                 case Assemblier.PRIMITIVE_BOOL:
-                    mILWriter.Write((byte)CoreTypes.I1);
+                    mILWriter.Write((byte)CoreTypes.Bool);
                     mILWriter.Write(bool.Parse(text));
                     break;
                 case Assemblier.PRIMITIVE_BYTE:
@@ -251,7 +255,9 @@ namespace HexRuntimeAssemblier.IL
             switch (context.primitiveType().GetUnderlyingTokenType())
             {
                 case Assemblier.PRIMITIVE_BOOL:
-                    mILWriter.Write((byte)CoreTypes.I1);break;
+                    mILWriter.Write((byte)CoreTypes.Bool);break;
+                case Assemblier.PRIMITIVE_CHAR:
+                    mILWriter.Write((byte)CoreTypes.Char); break;
                 case Assemblier.PRIMITIVE_BYTE:
                     mILWriter.Write((byte)CoreTypes.I1); break;
                 case Assemblier.PRIMITIVE_UBYTE:

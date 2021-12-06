@@ -17,17 +17,25 @@ namespace HexRuntimeAssemblier.IL
         readonly BinaryWriter mILWriter;
         readonly Assemblier.MethodBodyContext mAST;
         readonly Assemblier.MethodArgumentListContext mArguments;
+        readonly MethodFlag mMethodFlag;
         readonly AssemblyBuilder mResolver;
+        readonly CoreAssemblyConstant mConstant;
         readonly Dictionary<string, short> mLocalMap = new();
         readonly Dictionary<string, short> mArgumentMap = new();
         readonly Dictionary<string, int> mLabelMap = new();
         readonly List<(int Index, string LabelName)> mOffsetTable = new();
-        public ILAssemblier(Assemblier.MethodBodyContext body, Assemblier.MethodArgumentListContext arguments, AssemblyBuilder assemblyResolver)
+        public ILAssemblier(
+            Assemblier.MethodDefContext context,
+            AssemblyBuilder assemblyResolver,
+            CoreAssemblyConstant constant, 
+            MethodFlag methodFlag)
         {
-            mAST = body;
-            mArguments = arguments;
+            mConstant = constant;
+            mAST = context.methodBody();
+            mArguments = context.methodArgumentList();
             mResolver = assemblyResolver;
-            mILWriter = new BinaryWriter(mILStream);
+            mMethodFlag = methodFlag;
+            mILWriter = new BinaryWriter(mILStream);         
         }
         public ILMD Generate()
         {
@@ -51,13 +59,19 @@ namespace HexRuntimeAssemblier.IL
                     mLocalMap[local.IDENTIFIER().GetText()] = localIndex++;
             }
 
-            //Set argument mapping
-            if(mArguments != null)
             {
                 short argumentIndex = 0;
-                foreach (var argument in mArguments.methodArgument())
-                    mArgumentMap[argument.IDENTIFIER().GetText()] = argumentIndex++;
+                if (!mMethodFlag.HasFlag(MethodFlag.Static))
+                    mArgumentMap[mConstant.ThisArgument] = argumentIndex++;
+                //Set argument mapping
+                if (mArguments != null)
+                {
+
+                    foreach (var argument in mArguments.methodArgument())
+                        mArgumentMap[argument.IDENTIFIER().GetText()] = argumentIndex++;
+                }
             }
+
 
             //Parse the IL code
             ParseIL(mAST.methodCode().ilInstruction());

@@ -42,6 +42,10 @@ namespace HexRuntimeAssemblier.Interfaces
         public string AssemblyStandardName { get; init; }
         public string GlobalNamespace { get; init; }
         /// <summary>
+        /// The name of this argument
+        /// </summary>
+        public string ThisArgument { get; init; }
+        /// <summary>
         /// Provide a standard mapping for building
         /// </summary>
         public static CoreAssemblyConstant Default { get; } = new CoreAssemblyConstant()
@@ -65,13 +69,14 @@ namespace HexRuntimeAssemblier.Interfaces
             },
             PrimitiveToCore = new Dictionary<string, CoreTypes>()
             {
-                ["[Core][global]Boolean"] = CoreTypes.I1,
+                ["[Core][global]Boolean"] = CoreTypes.Bool,
+                ["[Core][global]Char"] = CoreTypes.Char,
                 ["[Core][global]Int8"] = CoreTypes.I1,
                 ["[Core][global]Int16"] = CoreTypes.I2,
                 ["[Core][global]Int32"] = CoreTypes.I4,
                 ["[Core][global]Int64"] = CoreTypes.I8,
                 ["[Core][global]UInt8"] = CoreTypes.U1,
-                ["[Core][global]UInt16"] = CoreTypes.U2,
+                ["[Core][global]UInt16"] = CoreTypes.U2,               
                 ["[Core][global]UInt32"] = CoreTypes.U4,
                 ["[Core][global]UInt64"] = CoreTypes.U8,
                 ["[Core][global]Float"] = CoreTypes.R4,
@@ -83,7 +88,8 @@ namespace HexRuntimeAssemblier.Interfaces
             Array = "[Core][global]Array",
             InteriorReference = "[Core][global]Interior",
             AssemblyStandardName = "Core",
-            GlobalNamespace = "global"
+            GlobalNamespace = "global",
+            ThisArgument = "this"
         };
     }
 }

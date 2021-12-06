@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
+using MDToken = System.UInt32;
+
 namespace HexRuntimeAssemblier
 {
     public partial class AssemblyBuilder : IAssemblyBuilder
@@ -647,7 +649,7 @@ namespace HexRuntimeAssemblier
             var access = context.modifierAccess().GetUnderlyingTokenType();
             method.Accessibility = MapAccessbility(access);
 
-            method.ILCodeMD = new ILAssemblier(context.methodBody(), context.methodArgumentList(), this).Generate();
+            method.ILCodeMD = new ILAssemblier(context, this, mConstant, flag).Generate();
 
             //Signature
             {
@@ -659,7 +661,21 @@ namespace HexRuntimeAssemblier
                 uint[] argumentTokens = null;
                 if (arguments != null)
                 {
-                    argumentTokens = arguments.methodArgument().Select(x =>
+                    MDToken thisToken = Token.Null;
+                    if (!flag.HasFlag(MethodFlag.Static))
+                    {
+                        //Need a 'this' argument in instance call
+                        string fqn = $"{methodFullyQualifiedName}~{mConstant.ThisArgument}";
+                        var thisArgument = new ArgumentMD()
+                        {
+                            TypeRefToken = mResolver.QueryTypeReference(null, typeFullyQualifiedName, _ => Token.Null),
+                            NameToken = GetTokenFromString(mConstant.ThisArgument),
+                            DefaultStringValueToken = Token.Null
+                        };
+                        thisToken = mDefTables[MDRecordKinds.Argument].GetDefinitionToken(fqn, () => thisArgument);
+                    }
+
+                    var originArguments = arguments.methodArgument().Select(x =>
                         mDefTables[MDRecordKinds.Argument].GetDefinitionToken(
                             $"{methodFullyQualifiedName}~{x.IDENTIFIER().GetText()}",
                         () => new ArgumentMD()
@@ -668,7 +684,12 @@ namespace HexRuntimeAssemblier
                             DefaultStringValueToken = Token.Null,
                             NameToken = GetTokenFromString(x.IDENTIFIER().GetText()),
                             TypeRefToken = ResolveType(x.type())
-                        })).ToArray();
+                        }));
+
+                    if (thisToken != Token.Null)
+                        originArguments = originArguments.Prepend(thisToken);
+
+                    argumentTokens = originArguments.ToArray();
                 }
 
                 method.Signature = new MethodSignatureMD()

@@ -54,7 +54,8 @@ namespace AssemblierTest
             using var writer = new BinaryWriter(stream);
             serializer(writer, new TypeMD()
             {
-                MethodTokens = new uint[] { 0, 1 }
+                MethodTokens = new uint[] { 0, 1 },
+                CoreType = HexRuntimeAssemblier.IL.CoreTypes.I4
             });
             var actual = stream.ToArray();
             Assert.AreEqual(null, null);
