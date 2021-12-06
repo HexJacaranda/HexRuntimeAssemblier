@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "HexRuntimeAssemblier": {
+      "commandName": "Project"
+    },
+    "JITTestCompile": {
+      "commandName": "Project",
+      "commandLineArgs": ".\\JIT.json",
+      "workingDirectory": "C:\\Users\\Hex\\source\\repos\\HexRuntime\\RuntimeTest\\TestIL"
+    }
+  }
+}

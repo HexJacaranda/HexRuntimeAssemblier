@@ -953,7 +953,7 @@ namespace HexRuntimeAssemblier
             var methodFullyQualifiedName = GetFullyQualifiedName(context);
             var methodDefToken = mResolver.QueryMethodDefinition(sourceAssemblyName, methodCanonicalName);
 
-            int memberDefKind = (int)MDRecordKinds.MethodRef;
+            short memberDefKind = (short)MDRecordKinds.MethodRef;
             var genericList = context.genericParameterList();
             if (genericList != null)
             {
@@ -966,7 +966,7 @@ namespace HexRuntimeAssemblier
                     });
                 methodDefToken = genericInstantiationToken;
                 //Set highest bit
-                memberDefKind |= unchecked((int)0x80000000);
+                memberDefKind |= unchecked((short)0x8000);
             }
 
             return MemberReferenceTable.GetReferenceToken(methodFullyQualifiedName, () => new MemberRefMD()
