@@ -52,7 +52,7 @@ methodDef: KEY_METHOD
     BODY_END;
 
 methodParentType: type;
-methodRef: methodParentType JUNCTION methodName genericParameterList? PARAM_BEGIN type* PARAM_END;
+methodRef: methodParentType JUNCTION methodName genericParameterList? PARAM_BEGIN ((type COMMA)* type)? PARAM_END;
 
 //Field
 fieldDef: KEY_FIELD modifierAccess modifierLife MODIFIER_THREAD_LOCAL? (MODIFIER_VOLATILE | MODIFIER_CONSTANT | MODIFIER_READONLY)? type IDENTIFIER;
