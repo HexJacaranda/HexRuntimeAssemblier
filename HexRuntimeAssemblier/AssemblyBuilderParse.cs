@@ -668,7 +668,8 @@ namespace HexRuntimeAssemblier
                         string fqn = $"{methodFullyQualifiedName}~{mConstant.ThisArgument}";
                         var thisArgument = new ArgumentMD()
                         {
-                            TypeRefToken = mResolver.QueryTypeReference(null, typeFullyQualifiedName, _ => Token.Null),
+                            TypeRefToken = mResolver.QueryTypeReference(null, typeFullyQualifiedName, 
+                                defToken => GetReferenceTokenOfType(null, typeFullyQualifiedName, defToken)),
                             NameToken = GetTokenFromString(mConstant.ThisArgument),
                             DefaultStringValueToken = Token.Null
                         };
