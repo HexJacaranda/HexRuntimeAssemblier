@@ -156,8 +156,8 @@ IL_NOP: '.nop';
 
 STRING: '"'.*?'"';
 HEX: '0x'[0-9a-fA-F]+;
-INT: [0-9]+;
-NUMBER: [0-9]+('.'[0-9]+)?;
+INT: '-'?[0-9]+;
+NUMBER: '-'?[0-9]+('.'[0-9]+)?;
 GUID: [0-9a-fA-F]+ '-' ([0-9a-fA-F]+ '-')+ [0-9a-fA-F]+;
 
 IDENTIFIER: [a-zA-Z_@][a-zA-Z0-9_]*;
