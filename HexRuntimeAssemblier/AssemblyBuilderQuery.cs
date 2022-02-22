@@ -26,7 +26,7 @@ namespace HexRuntimeAssemblier
             => MethodDefTable.GetDefinitionToken(fullyQualifiedName, () => new MethodMD());
         public MDToken TryDefineType(string fullyQualifiedName)
             => TypeDefTable.GetDefinitionToken(fullyQualifiedName, () => new TypeMD());
-        public MDToken GetReferenceTokenOfType(string assembly, string fullyQualifiedName, MDToken defToken, MDRecordKinds kind = MDRecordKinds.TypeRef)
+        public MDToken GetReferenceTokenOfType(string assembly, string fullyQualifiedName, MDToken defToken, MDRecordKinds kind = MDRecordKinds.TypeDef)
             => TypeReferenceTable.GetReferenceToken(fullyQualifiedName, () => new TypeRefMD()
             {
                 DefKind = kind,
