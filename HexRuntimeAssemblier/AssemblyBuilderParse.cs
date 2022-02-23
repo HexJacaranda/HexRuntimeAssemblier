@@ -809,9 +809,6 @@ namespace HexRuntimeAssemblier
             else if (context.ExistToken(Assemblier.KEY_INTERFACE))
                 flag |= TypeFlag.Interface;
 
-            //Set flag
-            type.Flags = flag;
-
             //Accessbility
             var accessToken = context.modifierAccess()
                 .GetUnderlyingTokenType();
@@ -835,7 +832,12 @@ namespace HexRuntimeAssemblier
                             () => new GenericParamterMD { NameToken = GetTokenFromString(fullyQualifiedName) });
                     })
                     .ToArray();
+
+                flag |= TypeFlag.Generic;
             }
+
+            //Set flag
+            type.Flags = flag;
 
             //Inherit
             var inheritContext = context.typeInherit();
