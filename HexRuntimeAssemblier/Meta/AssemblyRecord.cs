@@ -100,8 +100,8 @@ namespace HexRuntimeAssemblier.Meta
 
 	public class GenericInstantiationMD
 	{
-		public MDToken CanonicalTypeDefToken;
-		public MDToken[] GenericParameterTokens;
+		public MDToken CanonicalTypeRefToken;
+		public MDToken[] TypeArgumentTokens;
 	};
 
 	[Flags]

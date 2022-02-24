@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestLib\**" />
+    <EmbeddedResource Remove="TestLib\**" />
+    <None Remove="TestLib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
@@ -18,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HexRuntimeAssemblier\HexRuntimeAssemblier.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TestLib\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties testbuild_4buildcore_1json__JsonSchema="https://appsemble.app/api.json" /></VisualStudio></ProjectExtensions>

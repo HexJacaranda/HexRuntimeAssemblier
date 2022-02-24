@@ -59,6 +59,7 @@ namespace HexRuntimeAssemblier.Reference
             string fullyQualifiedName,
             Func<MDToken, MDToken> referenceTokenGenerator)
             => referenceTokenGenerator(QueryTypeDefinition(assembly, fullyQualifiedName));
+
         public MDToken QueryMethodReference(
             string assembly,
             string fullyQualifiedName,

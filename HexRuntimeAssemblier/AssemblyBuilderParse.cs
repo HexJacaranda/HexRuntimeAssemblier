@@ -90,23 +90,21 @@ namespace HexRuntimeAssemblier
         };
         public uint GetTokenFromString(string value)
             => mStringTable.GetTokenFromString(value);
-        private uint GetArrayCanonicalDefToken()
+        private uint GetArrayCanonicalRefToken()
         {
-            string assembly = null;
+            string assembly = mConstant.AssemblyStandardName;
             string fullyQualifiedName = $"{mConstant.Array}<{CanonicalPlaceHolder}>";
-            if (mOptions.CoreLibrary)
-                assembly = mConstant.AssemblyStandardName;
 
-            return mResolver.QueryTypeDefinition(assembly, fullyQualifiedName);
+            var defToken = mResolver.QueryTypeDefinition(assembly, fullyQualifiedName);
+            return GetReferenceTokenOfType(assembly, fullyQualifiedName, defToken);
         }
-        private uint GetInteriorReferenceCanonicalDefToken()
+        private uint GetInteriorReferenceCanonicalRefToken()
         {
             string assembly = null;
             string fullyQualifiedName = $"{mConstant.InteriorReference}<{CanonicalPlaceHolder}>";
-            if (mOptions.CoreLibrary)
-                assembly = mConstant.AssemblyStandardName;
 
-            return mResolver.QueryTypeDefinition(assembly, fullyQualifiedName);
+            var defToken = mResolver.QueryTypeDefinition(assembly, fullyQualifiedName);
+            return GetReferenceTokenOfType(assembly, fullyQualifiedName, defToken);
         }
         private string CanonicalPlaceHolder => mConstant.CanonicalPlaceholder;
         #endregion
@@ -479,7 +477,7 @@ namespace HexRuntimeAssemblier
 
             var arrayCanonicalDefToken = uint.MaxValue;
             if (!mOptions.DisableCoreType)
-                arrayCanonicalDefToken = GetArrayCanonicalDefToken();
+                arrayCanonicalDefToken = GetArrayCanonicalRefToken();
 
             var elementType = context.type();
             var elementRefToken = ResolveType(elementType);
@@ -490,8 +488,8 @@ namespace HexRuntimeAssemblier
                 () => new GenericInstantiationMD
                 {
                     //Multidimension-Array generic ref, need to get from the core library
-                    CanonicalTypeDefToken = arrayCanonicalDefToken,
-                    GenericParameterTokens = new uint[] { elementRefToken }
+                    CanonicalTypeRefToken = arrayCanonicalDefToken,
+                    TypeArgumentTokens = new MDToken[] { elementRefToken }
                 });
 
             return GetReferenceTokenOfType(
@@ -506,9 +504,9 @@ namespace HexRuntimeAssemblier
             if (mOptions.CoreLibrary)
                 assemblyName = mConstant.AssemblyStandardName;
 
-            var arrayCanonicalDefToken = uint.MaxValue;
+            var arrayCanonicalRefToken = uint.MaxValue;
             if (!mOptions.DisableCoreType)
-                arrayCanonicalDefToken = GetArrayCanonicalDefToken();
+                arrayCanonicalRefToken = GetArrayCanonicalRefToken();
 
             var elementType = context.type();
             var elementRefToken = ResolveType(elementType);
@@ -519,14 +517,15 @@ namespace HexRuntimeAssemblier
                 () => new GenericInstantiationMD
                 {
                     //Array generic ref, need to get from the core library
-                    CanonicalTypeDefToken = arrayCanonicalDefToken,
-                    GenericParameterTokens = new uint[] { elementRefToken }
+                    CanonicalTypeRefToken = arrayCanonicalRefToken,
+                    TypeArgumentTokens = new uint[] { elementRefToken }
                 });
 
             return GetReferenceTokenOfType(
                 assemblyName,
                 fullyQualifiedName,
-                genericInstDefToken,MDRecordKinds.GenericInstantiationDef);
+                genericInstDefToken,
+                MDRecordKinds.GenericInstantiationDef);
         }
         public uint ResolveInteriorRefType(Assemblier.InteriorRefTypeContext context)
         {
@@ -534,9 +533,9 @@ namespace HexRuntimeAssemblier
             if (mOptions.CoreLibrary)
                 assemblyName = mConstant.AssemblyStandardName;
 
-            var interiorCanonicalDefToken = uint.MaxValue;
+            var interiorCanonicalRefToken = uint.MaxValue;
             if (!mOptions.DisableCoreType)
-                interiorCanonicalDefToken = GetInteriorReferenceCanonicalDefToken();
+                interiorCanonicalRefToken = GetInteriorReferenceCanonicalRefToken();
 
             var internalType = context.GetChild(0);
             var internalRefToken = ResolveUnknownTypeForm(internalType);
@@ -547,8 +546,8 @@ namespace HexRuntimeAssemblier
                 () => new GenericInstantiationMD
                 {
                     //interior generic ref, need to get from the core library
-                    CanonicalTypeDefToken = interiorCanonicalDefToken,
-                    GenericParameterTokens = new uint[] { internalRefToken }
+                    CanonicalTypeRefToken = interiorCanonicalRefToken,
+                    TypeArgumentTokens = new uint[] { internalRefToken }
                 });
 
             return GetReferenceTokenOfType(
@@ -929,7 +928,7 @@ namespace HexRuntimeAssemblier
         }
         /// <summary>
         /// Type reference should be TypeRef { Assembly, TypeDef }
-        /// or TypeRef { Assembly, GenericInst } -> GenericInst { TypeDef, TypeRef... }
+        /// or TypeRef { Assembly, GenericInst } -> GenericInst { TypeRef, TypeRef... }
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -942,8 +941,9 @@ namespace HexRuntimeAssemblier
 
             string fullyQualifiedName = GetFullyQualifiedName(context);
             var canonicalDef = mResolver.QueryTypeDefinition(assemblyName, canonicalFullyQualifiedName);
+            var canonicalRef = GetReferenceTokenOfType(assemblyName, fullyQualifiedName, canonicalDef);
             if (genericParamTokens.Count == 0)
-                return GetReferenceTokenOfType(assemblyName, fullyQualifiedName, canonicalDef);
+                return canonicalRef;
             else
             {
                 //For generic instantiation, we need a GenericInstantiation
@@ -951,8 +951,8 @@ namespace HexRuntimeAssemblier
                     fullyQualifiedName,
                     () => new GenericInstantiationMD
                     {
-                        CanonicalTypeDefToken = canonicalDef,
-                        GenericParameterTokens = genericParamTokens.ToArray()
+                        CanonicalTypeRefToken = canonicalRef,
+                        TypeArgumentTokens = genericParamTokens.ToArray()
                     });
 
                 return GetReferenceTokenOfType(
@@ -975,9 +975,17 @@ namespace HexRuntimeAssemblier
 
             var methodCanonicalName = GetCanonicalFullyQualifiedName(context, out string sourceAssemblyName);
             var methodFullyQualifiedName = GetFullyQualifiedName(context);
+
             var methodDefToken = mResolver.QueryMethodDefinition(sourceAssemblyName, methodCanonicalName);
 
             short memberDefKind = (short)MDRecordKinds.MethodRef;
+            var methodRefToken = MemberReferenceTable.GetReferenceToken(methodFullyQualifiedName, () => new MemberRefMD()
+            {
+                MemberDefKind = memberDefKind,
+                MemberDefToken = methodDefToken,
+                TypeRefToken = typeRefToken
+            });
+                  
             var genericList = context.genericParameterList();
             if (genericList != null)
             {
@@ -985,20 +993,18 @@ namespace HexRuntimeAssemblier
                 var genericInstantiationToken = GenericInstantiationDefTable.GetDefinitionToken(methodFullyQualifiedName,
                     () => new GenericInstantiationMD()
                     {
-                        CanonicalTypeDefToken = methodDefToken,
-                        GenericParameterTokens = typeTokens
+                        CanonicalTypeRefToken = methodRefToken,
+                        TypeArgumentTokens = typeTokens
                     });
                 methodDefToken = genericInstantiationToken;
                 //Set highest bit
                 memberDefKind |= unchecked((short)0x8000);
             }
 
-            return MemberReferenceTable.GetReferenceToken(methodFullyQualifiedName, () => new MemberRefMD()
-            {
-                MemberDefKind = memberDefKind,
-                MemberDefToken = methodDefToken,
-                TypeRefToken = typeRefToken
-            });
+            //Set def kind then
+            MemberReferenceTable.GetMeta<MemberRefMD>(methodRefToken).MemberDefKind = memberDefKind;
+
+            return methodRefToken;
         }
         public uint ResolveFieldRef(Assemblier.FieldRefContext context)
         {
@@ -1011,7 +1017,7 @@ namespace HexRuntimeAssemblier
 
             return MemberReferenceTable.GetReferenceToken(fieldFullyQualifiedName, () => new MemberRefMD()
             {
-                MemberDefKind = (int)MDRecordKinds.FieldRef,
+                MemberDefKind = (short)MDRecordKinds.FieldRef,
                 MemberDefToken = fieldDefToken,
                 TypeRefToken = parentRefToken
             });
