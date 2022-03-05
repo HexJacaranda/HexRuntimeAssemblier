@@ -48,6 +48,10 @@
         "value": "0x0C"
     },
     {
+        "name": "LdInd",
+        "value": "0x0D"
+    },
+    {
         "name": "StFld",
         "value": "0x20"
     },

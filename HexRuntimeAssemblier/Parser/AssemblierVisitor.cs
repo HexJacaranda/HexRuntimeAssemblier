@@ -410,6 +410,12 @@ public interface IAssemblierVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitOpLdElemA([NotNull] Assemblier.OpLdElemAContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="Assemblier.opLdInd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOpLdInd([NotNull] Assemblier.OpLdIndContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Assemblier.opLdStr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

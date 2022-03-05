@@ -161,6 +161,8 @@ opLdArgA: IL_LDARGA IDENTIFIER;
 opLdElem: IL_LDELEM;
 opLdElemA: IL_LDELEMA;
 
+opLdInd: IL_LDIND;
+
 opLdStr: IL_LDSTR STRING;
 
 opConstant: INT | HEX | NUMBER | KEY_TRUE | KEY_FALSE;
@@ -228,6 +230,7 @@ ilInstruction: opLabel |
         opLdStr | 
         opLdC | 
         opLdFn | 
+        opLdInd |
         opLdNull |
         opStFld |
         opStLoc |

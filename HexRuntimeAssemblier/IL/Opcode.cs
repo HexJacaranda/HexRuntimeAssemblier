@@ -14,6 +14,7 @@ namespace HexRuntimeAssemblier.IL
         LdC = 0x0A,
         LdFn = 0x0B,
         LdNull = 0x0C,
+        LdInd = 0x0D,
         StFld = 0x20,
         StLoc = 0x21,
         StArg = 0x22,

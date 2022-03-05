@@ -112,6 +112,7 @@ IL_LDSTR: '.ldstr';
 IL_LDC: '.ldc';
 IL_LDFN: '.ldfn';
 IL_LDNULL: '.ldnull';
+IL_LDIND: '.ldind';
 
 IL_STFLD: '.stfld';
 IL_STLOC: '.stloc';

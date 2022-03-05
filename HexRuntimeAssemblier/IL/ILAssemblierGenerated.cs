@@ -22,6 +22,7 @@ namespace HexRuntimeAssemblier.IL
                     case Assemblier.OpLdCContext @ldc: ParseLdC(@ldc); break;
                     case Assemblier.OpLdFnContext @ldfn: ParseLdFn(@ldfn); break;
                     case Assemblier.OpLdNullContext @ldnull: ParseLdNull(@ldnull); break;
+                    case Assemblier.OpLdIndContext @ldind: ParseLdInd(@ldind); break;
                     case Assemblier.OpStFldContext @stfld: ParseStFld(@stfld); break;
                     case Assemblier.OpStLocContext @stloc: ParseStLoc(@stloc); break;
                     case Assemblier.OpStArgContext @starg: ParseStArg(@starg); break;
@@ -105,6 +106,10 @@ namespace HexRuntimeAssemblier.IL
         {
             mILWriter.Write((byte)OpCode.LdArgA);
             mILWriter.Write(mArgumentMap[context.IDENTIFIER().GetText()]);
+        }
+        private void ParseLdInd(Assemblier.OpLdIndContext context)
+        {
+            mILWriter.Write((byte)OpCode.LdInd);
         }
         private void ParseLdElem(Assemblier.OpLdElemContext _)
         {

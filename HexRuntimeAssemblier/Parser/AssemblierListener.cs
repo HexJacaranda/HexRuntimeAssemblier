@@ -661,6 +661,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitOpLdElemA([NotNull] Assemblier.OpLdElemAContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdInd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpLdInd([NotNull] Assemblier.OpLdIndContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdInd"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpLdInd([NotNull] Assemblier.OpLdIndContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opLdStr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

@@ -791,6 +791,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitOpLdElemA([NotNull] Assemblier.OpLdElemAContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opLdInd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpLdInd([NotNull] Assemblier.OpLdIndContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opLdInd"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpLdInd([NotNull] Assemblier.OpLdIndContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opLdStr"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
