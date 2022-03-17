@@ -12,6 +12,11 @@
       "commandName": "Project",
       "commandLineArgs": ".\\MetaTest.json",
       "workingDirectory": "C:\\Users\\Hex\\source\\repos\\HexRuntime\\RuntimeTest\\TestIL"
+    },
+    "CoreTestCompile": {
+      "commandName": "Project",
+      "commandLineArgs": ".\\Core.json",
+      "workingDirectory": "C:\\Users\\Hex\\source\\repos\\HexRuntime\\RuntimeTest\\TestIL"
     }
   }
 }

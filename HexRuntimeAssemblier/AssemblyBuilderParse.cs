@@ -100,7 +100,7 @@ namespace HexRuntimeAssemblier
         }
         private uint GetInteriorReferenceCanonicalRefToken()
         {
-            string assembly = null;
+            string assembly = mConstant.AssemblyStandardName;
             string fullyQualifiedName = $"{mConstant.InteriorReference}<{CanonicalPlaceHolder}>";
 
             var defToken = mResolver.QueryTypeDefinition(assembly, fullyQualifiedName);
@@ -232,7 +232,7 @@ namespace HexRuntimeAssemblier
                 Assemblier.ArrayTypeContext array => GetFullyQualifiedName(array),
                 _ => throw new UnexpectedParseRuleException("Unexpected interior reference child")
             };
-            return $"{internalQualifiedName}&";
+            return $"{mConstant.InteriorReference}<{internalQualifiedName}>";
         }
         private string GetFullyQualifiedName(Assemblier.ArrayTypeContext context)
             => context.GetChild(0) switch
