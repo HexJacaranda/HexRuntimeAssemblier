@@ -82,7 +82,9 @@ namespace HexRuntimeAssemblier.Interfaces
                 ["[Core][global]Float"] = CoreTypes.R4,
                 ["[Core][global]Double"] = CoreTypes.R8,
                 ["[Core][global]String"] = CoreTypes.String,
-                ["[Core][global]Object"] = CoreTypes.Object
+                ["[Core][global]Object"] = CoreTypes.Object,
+                ["[Core][global]Interior<Canon>"] = CoreTypes.InteriorRef,
+                ["[Core][global]Array<Canon>"] = CoreTypes.Array
             },
             CanonicalPlaceholder = "Canon",
             Array = "[Core][global]Array",
