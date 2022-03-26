@@ -131,6 +131,8 @@ IL_XOR: '.xor';
 IL_NOT: '.not';
 IL_NEG: '.neg';
 IL_CONV: '.conv';
+IL_SHL: '.shl';
+IL_SHR: '.shr';
 
 IL_CALL: '.call';
 IL_CALLVIRT: '.callvirt';
@@ -143,6 +145,7 @@ IL_TRY: '.try';
 IL_CATCH: '.catch';
 IL_FINALLY: '.finally';
 
+IL_VOLATILE: '.volatile';
 IL_ARC: '.arc';
 IL_NEW: '.new';
 IL_NEWARRAY: '.newarr';
@@ -150,6 +153,7 @@ IL_NEWARRAY: '.newarr';
 IL_CAST: '.cast';
 IL_BOX: '.box';
 IL_UNBOX: '.unbox';
+IL_IS: '.is';
 
 IL_DUP: '.dup';
 IL_POP: '.pop';

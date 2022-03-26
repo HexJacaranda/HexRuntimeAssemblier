@@ -31,6 +31,8 @@ namespace HexRuntimeAssemblier.IL
         Not = 0x38,
         Neg = 0x39,
         Conv = 0x3A,
+        Shl = 0x3B,
+        Shr = 0x3C,
         Call = 0x40,
         CallVirt = 0x41,
         Ret = 0x42,

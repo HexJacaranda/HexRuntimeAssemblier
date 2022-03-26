@@ -39,6 +39,8 @@ namespace HexRuntimeAssemblier.IL
                     case Assemblier.OpNotContext @not: ParseNot(@not); break;
                     case Assemblier.OpNegContext @neg: ParseNeg(@neg); break;
                     case Assemblier.OpConvContext @conv: ParseConv(@conv); break;
+                    case Assemblier.OpShlContext @shl: ParseShl(@shl); break;
+                    case Assemblier.OpShrContext @shr: ParseShr(@shr); break;
                     case Assemblier.OpCallContext @call: ParseCall(@call); break;
                     case Assemblier.OpCallVirtContext @callvirt: ParseCallVirt(@callvirt); break;
                     case Assemblier.OpRetContext @ret: ParseRet(@ret); break;
@@ -49,6 +51,8 @@ namespace HexRuntimeAssemblier.IL
                     case Assemblier.OpTryContext @try: ParseTry(@try); break;
                     case Assemblier.OpCatchContext @catch: ParseCatch(@catch); break;
                     case Assemblier.OpFinallyContext @finally: ParseFinally(@finally); break;
+                    case Assemblier.OpArcContext @arc: ParseArC(@arc); break;
+                    case Assemblier.OpVolatileContext @volatile: ParseVolatile(@volatile); break;
                     case Assemblier.OpNewContext @new: ParseNew(@new); break;
                     case Assemblier.OpNewArrContext @newarr: ParseNewArr(@newarr); break;
                     case Assemblier.OpCastContext @cast: ParseCast(@cast); break;
@@ -287,6 +291,14 @@ namespace HexRuntimeAssemblier.IL
                     throw new UnknownTokenException("Convert primitive type invalid");
             }
         }
+        private void ParseShl(Assemblier.OpShlContext _)
+        {
+            mILWriter.Write((byte)OpCode.Shl);
+        }
+        private void ParseShr(Assemblier.OpShrContext _)
+        {
+            mILWriter.Write((byte)OpCode.Shr);
+        }
         private void ParseCall(Assemblier.OpCallContext context)
         {
             mILWriter.Write((byte)OpCode.Call);
@@ -353,6 +365,14 @@ namespace HexRuntimeAssemblier.IL
         {
             //TODO
             mILWriter.Write((byte)OpCode.Finally);
+        }
+        private void ParseArC(Assemblier.OpArcContext context)
+        {
+            mILWriter.Write ((byte)OpCode.ArC);
+        }
+        private void ParseVolatile(Assemblier.OpVolatileContext context)
+        {
+            mILWriter.Write((byte)OpCode.Volatile);
         }
         private void ParseNew(Assemblier.OpNewContext context)
         {

@@ -1043,6 +1043,30 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitOpNeg([NotNull] Assemblier.OpNegContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opShl"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpShl([NotNull] Assemblier.OpShlContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opShl"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpShl([NotNull] Assemblier.OpShlContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opShr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpShr([NotNull] Assemblier.OpShrContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opShr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpShr([NotNull] Assemblier.OpShrContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opConv"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -1090,6 +1114,30 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitOpRet([NotNull] Assemblier.OpRetContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opArc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpArc([NotNull] Assemblier.OpArcContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opArc"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpArc([NotNull] Assemblier.OpArcContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opVolatile"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpVolatile([NotNull] Assemblier.OpVolatileContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opVolatile"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpVolatile([NotNull] Assemblier.OpVolatileContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -1246,6 +1294,18 @@ public partial class AssemblierBaseListener : IAssemblierListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitOpUnBox([NotNull] Assemblier.OpUnBoxContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opIs"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOpIs([NotNull] Assemblier.OpIsContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opIs"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOpIs([NotNull] Assemblier.OpIsContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opDup"/>.
 	/// <para>The default implementation does nothing.</para>

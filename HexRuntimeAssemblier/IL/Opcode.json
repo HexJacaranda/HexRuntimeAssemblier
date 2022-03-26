@@ -116,6 +116,14 @@
         "value": "0x3A"
     },
     {
+        "name": "Shl",
+        "value": "0x3B"
+    },
+    {
+        "name": "Shr",
+        "value": "0x3C"
+    },
+    {
         "name": "Call",
         "value": "0x40"
     },

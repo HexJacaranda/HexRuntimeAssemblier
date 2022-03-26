@@ -871,6 +871,26 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitOpNeg([NotNull] Assemblier.OpNegContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opShl"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpShl([NotNull] Assemblier.OpShlContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opShl"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpShl([NotNull] Assemblier.OpShlContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opShr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpShr([NotNull] Assemblier.OpShrContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opShr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpShr([NotNull] Assemblier.OpShrContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opConv"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -910,6 +930,26 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitOpRet([NotNull] Assemblier.OpRetContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opArc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpArc([NotNull] Assemblier.OpArcContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opArc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpArc([NotNull] Assemblier.OpArcContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opVolatile"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpVolatile([NotNull] Assemblier.OpVolatileContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opVolatile"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpVolatile([NotNull] Assemblier.OpVolatileContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opCmpCond"/>.
 	/// </summary>
@@ -1040,6 +1080,16 @@ public interface IAssemblierListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitOpUnBox([NotNull] Assemblier.OpUnBoxContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Assemblier.opIs"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOpIs([NotNull] Assemblier.OpIsContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Assemblier.opIs"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOpIs([NotNull] Assemblier.OpIsContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="Assemblier.opDup"/>.
 	/// </summary>

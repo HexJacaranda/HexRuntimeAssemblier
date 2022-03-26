@@ -177,10 +177,10 @@ opStArg: IL_STARG IDENTIFIER;
 opStElem: IL_STELEM;
 opStTA: IL_STTA;
 
-opAdd: IL_ARC? IL_ADD;
-opSub: IL_ARC? IL_SUB;
-opMul: IL_ARC? IL_MUL;
-opDiv: IL_ARC? IL_DIV;
+opAdd: IL_ADD;
+opSub: IL_SUB;
+opMul: IL_MUL;
+opDiv: IL_DIV;
 
 opMod: IL_MOD;
 opAnd: IL_AND;
@@ -189,12 +189,17 @@ opXor: IL_XOR;
 opNot: IL_NOT;
 opNeg: IL_NEG;
 
+opShl: IL_SHL;
+opShr: IL_SHR;
+
 opConv: IL_CONV primitiveType;
 
 opCall: IL_CALL methodRef;
 opCallVirt: IL_CALLVIRT methodRef;
 opRet: IL_RET;
 
+opArc: IL_ARC;
+opVolatile: IL_VOLATILE;
 
 opCmpCond: IL_CMP_EQ | IL_CMP_NE | IL_CMP_GE | IL_CMP_GT | IL_CMP_LE | IL_CMP_LT;
 opCmp: IL_CMP opCmpCond;
@@ -213,6 +218,7 @@ opNewArr: IL_NEWARRAY typeRef;
 opCast: IL_CAST typeRef;
 opBox: IL_BOX;
 opUnBox: IL_UNBOX typeRef;
+opIs: IL_IS typeRef;
 
 opDup: IL_DUP;
 opPop: IL_POP;
@@ -247,6 +253,8 @@ ilInstruction: opLabel |
         opXor |
         opNot |
         opNeg |
+        opShl |
+        opShr |
         opConv |
         opCall |
         opCallVirt |
@@ -258,6 +266,8 @@ ilInstruction: opLabel |
         opTry |
         opCatch |
         opFinally |
+        opArc |
+        opVolatile |
         opNew |
         opNewArr |
         opDup |
